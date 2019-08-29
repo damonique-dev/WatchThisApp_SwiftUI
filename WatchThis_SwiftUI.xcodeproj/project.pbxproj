@@ -28,6 +28,7 @@
 		54AAA3ED23133BA50092A11E /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA3EC23133BA50092A11E /* Buttons.swift */; };
 		54AAA3EF23133C7D0092A11E /* ShowHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA3EE23133C7D0092A11E /* ShowHomeView.swift */; };
 		54AAA3F1231349B20092A11E /* ShowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA3F0231349B20092A11E /* ShowCell.swift */; };
+		54AAA3F9231798760092A11E /* SwiftUIFlux in Resources */ = {isa = PBXBuildFile; fileRef = 54AAA3F8231798750092A11E /* SwiftUIFlux */; };
 		59EE87300C83B4F8B2BD97CA /* Pods_WatchThis_SwiftUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A01A40AB8286BA9094668234 /* Pods_WatchThis_SwiftUITests.framework */; };
 		C81878A817D9534933E7AE0B /* Pods_WatchThis_SwiftUIUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E82368593181E32A6FB47190 /* Pods_WatchThis_SwiftUIUITests.framework */; };
 		F348B248C59CACA818C34A44 /* Pods_WatchThis_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7174350BA5E629424B8CBA26 /* Pods_WatchThis_SwiftUI.framework */; };
@@ -78,6 +79,7 @@
 		54AAA3EC23133BA50092A11E /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		54AAA3EE23133C7D0092A11E /* ShowHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHomeView.swift; sourceTree = "<group>"; };
 		54AAA3F0231349B20092A11E /* ShowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCell.swift; sourceTree = "<group>"; };
+		54AAA3F8231798750092A11E /* SwiftUIFlux */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SwiftUIFlux; sourceTree = "<group>"; };
 		6060183C0BFCC0CF7C33F67E /* Pods-WatchThis_SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchThis_SwiftUI.release.xcconfig"; path = "Target Support Files/Pods-WatchThis_SwiftUI/Pods-WatchThis_SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		6C3ECBBA47DEA4F9076B7FD6 /* Pods-WatchThis_SwiftUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchThis_SwiftUITests.debug.xcconfig"; path = "Target Support Files/Pods-WatchThis_SwiftUITests/Pods-WatchThis_SwiftUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7174350BA5E629424B8CBA26 /* Pods_WatchThis_SwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WatchThis_SwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -244,6 +246,7 @@
 		54AAA3F4231781260092A11E /* redux */ = {
 			isa = PBXGroup;
 			children = (
+				54AAA3F8231798750092A11E /* SwiftUIFlux */,
 				54AAA3F72317814D0092A11E /* State */,
 				54AAA3F6231781350092A11E /* Reducers */,
 				54AAA3F52317812E0092A11E /* Actions */,
@@ -406,6 +409,7 @@
 				54197A8622FBB064000CE4D2 /* LaunchScreen.storyboard in Resources */,
 				54486B4722FBB75400F9E869 /* TestTVShowDetailJson.json in Resources */,
 				54197A8322FBB064000CE4D2 /* Preview Assets.xcassets in Resources */,
+				54AAA3F9231798760092A11E /* SwiftUIFlux in Resources */,
 				54197A8022FBB064000CE4D2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

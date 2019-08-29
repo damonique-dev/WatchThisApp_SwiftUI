@@ -9,3 +9,9 @@
 import UIKit
 
 let imageCache = NSCache<NSString, NSData>()
+
+enum APIError: Error {
+    case noResponse
+    case jsonDecodingError(error: Error)
+    case networkError(error: Error)
+}

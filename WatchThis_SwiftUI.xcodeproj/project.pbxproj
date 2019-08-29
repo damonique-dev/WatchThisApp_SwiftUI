@@ -38,6 +38,14 @@
 		54AAA413231799060092A11E /* AsyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA409231799050092A11E /* AsyncAction.swift */; };
 		54AAA414231799060092A11E /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA40A231799050092A11E /* Middleware.swift */; };
 		54AAA415231799060092A11E /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA40B231799050092A11E /* Action.swift */; };
+		54AAA417231799740092A11E /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA416231799740092A11E /* AppState.swift */; };
+		54AAA419231799BD0092A11E /* TVShowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA418231799BD0092A11E /* TVShowState.swift */; };
+		54AAA41B231799FF0092A11E /* PeopleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA41A231799FF0092A11E /* PeopleState.swift */; };
+		54AAA41D23179B6C0092A11E /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA41C23179B6C0092A11E /* AppReducer.swift */; };
+		54AAA41F23179B770092A11E /* TVShowReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA41E23179B770092A11E /* TVShowReducer.swift */; };
+		54AAA42123179B830092A11E /* PeopleReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA42023179B830092A11E /* PeopleReducer.swift */; };
+		54AAA42323179CDA0092A11E /* TVShowActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA42223179CDA0092A11E /* TVShowActions.swift */; };
+		54AAA42523179CEC0092A11E /* PeopleActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA42423179CEC0092A11E /* PeopleActions.swift */; };
 		59EE87300C83B4F8B2BD97CA /* Pods_WatchThis_SwiftUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A01A40AB8286BA9094668234 /* Pods_WatchThis_SwiftUITests.framework */; };
 		C81878A817D9534933E7AE0B /* Pods_WatchThis_SwiftUIUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E82368593181E32A6FB47190 /* Pods_WatchThis_SwiftUIUITests.framework */; };
 		F348B248C59CACA818C34A44 /* Pods_WatchThis_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7174350BA5E629424B8CBA26 /* Pods_WatchThis_SwiftUI.framework */; };
@@ -98,6 +106,14 @@
 		54AAA409231799050092A11E /* AsyncAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncAction.swift; sourceTree = "<group>"; };
 		54AAA40A231799050092A11E /* Middleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
 		54AAA40B231799050092A11E /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		54AAA416231799740092A11E /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		54AAA418231799BD0092A11E /* TVShowState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowState.swift; sourceTree = "<group>"; };
+		54AAA41A231799FF0092A11E /* PeopleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleState.swift; sourceTree = "<group>"; };
+		54AAA41C23179B6C0092A11E /* AppReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReducer.swift; sourceTree = "<group>"; };
+		54AAA41E23179B770092A11E /* TVShowReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowReducer.swift; sourceTree = "<group>"; };
+		54AAA42023179B830092A11E /* PeopleReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleReducer.swift; sourceTree = "<group>"; };
+		54AAA42223179CDA0092A11E /* TVShowActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowActions.swift; sourceTree = "<group>"; };
+		54AAA42423179CEC0092A11E /* PeopleActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleActions.swift; sourceTree = "<group>"; };
 		6060183C0BFCC0CF7C33F67E /* Pods-WatchThis_SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchThis_SwiftUI.release.xcconfig"; path = "Target Support Files/Pods-WatchThis_SwiftUI/Pods-WatchThis_SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		6C3ECBBA47DEA4F9076B7FD6 /* Pods-WatchThis_SwiftUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchThis_SwiftUITests.debug.xcconfig"; path = "Target Support Files/Pods-WatchThis_SwiftUITests/Pods-WatchThis_SwiftUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7174350BA5E629424B8CBA26 /* Pods_WatchThis_SwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WatchThis_SwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -275,6 +291,8 @@
 		54AAA3F52317812E0092A11E /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				54AAA42223179CDA0092A11E /* TVShowActions.swift */,
+				54AAA42423179CEC0092A11E /* PeopleActions.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -282,6 +300,9 @@
 		54AAA3F6231781350092A11E /* Reducers */ = {
 			isa = PBXGroup;
 			children = (
+				54AAA41C23179B6C0092A11E /* AppReducer.swift */,
+				54AAA41E23179B770092A11E /* TVShowReducer.swift */,
+				54AAA42023179B830092A11E /* PeopleReducer.swift */,
 			);
 			path = Reducers;
 			sourceTree = "<group>";
@@ -289,6 +310,9 @@
 		54AAA3F72317814D0092A11E /* State */ = {
 			isa = PBXGroup;
 			children = (
+				54AAA416231799740092A11E /* AppState.swift */,
+				54AAA418231799BD0092A11E /* TVShowState.swift */,
+				54AAA41A231799FF0092A11E /* PeopleState.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -585,15 +609,21 @@
 				5446B94C22FD11E00001C6DF /* TMDBClient.swift in Sources */,
 				54AAA3ED23133BA50092A11E /* Buttons.swift in Sources */,
 				54AAA40C231799060092A11E /* AsyncActionsMiddleware.swift in Sources */,
+				54AAA42523179CEC0092A11E /* PeopleActions.swift in Sources */,
 				54AAA3E5231262810092A11E /* GridView.swift in Sources */,
 				54486B4522FBB16100F9E869 /* UserModels.swift in Sources */,
 				54AAA3F1231349B20092A11E /* ShowCell.swift in Sources */,
 				54AAA414231799060092A11E /* Middleware.swift in Sources */,
+				54AAA42323179CDA0092A11E /* TVShowActions.swift in Sources */,
 				54AAA40E231799060092A11E /* StoreConnector.swift in Sources */,
+				54AAA419231799BD0092A11E /* TVShowState.swift in Sources */,
 				54197A7C22FBB061000CE4D2 /* SceneDelegate.swift in Sources */,
 				54AAA411231799060092A11E /* Reducer.swift in Sources */,
+				54AAA41B231799FF0092A11E /* PeopleState.swift in Sources */,
+				54AAA41D23179B6C0092A11E /* AppReducer.swift in Sources */,
 				5446B95922FD15C90001C6DF /* GlobalHelper.swift in Sources */,
 				54AAA3EF23133C7D0092A11E /* ShowHomeView.swift in Sources */,
+				54AAA42123179B830092A11E /* PeopleReducer.swift in Sources */,
 				54486B4422FBB16100F9E869 /* PeopleModels.swift in Sources */,
 				54AAA413231799060092A11E /* AsyncAction.swift in Sources */,
 				5446B95A22FD15C90001C6DF /* Extensions.swift in Sources */,
@@ -602,6 +632,8 @@
 				54AAA3EB23133B2F0092A11E /* BlurredBackground.swift in Sources */,
 				54AAA412231799060092A11E /* FluxState.swift in Sources */,
 				54197A7E22FBB061000CE4D2 /* TVShowDetailView.swift in Sources */,
+				54AAA417231799740092A11E /* AppState.swift in Sources */,
+				54AAA41F23179B770092A11E /* TVShowReducer.swift in Sources */,
 				54486B4322FBB16100F9E869 /* TVShowModels.swift in Sources */,
 				54AAA40F231799060092A11E /* ConnectedView.swift in Sources */,
 			);

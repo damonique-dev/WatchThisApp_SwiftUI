@@ -10,9 +10,9 @@ import Foundation
 
 // The basic information of a TV show
 struct TVShow: Codable, Identifiable {
-    var id: Int?
+    let id: Int
+    let name: String
     var genre_ids: [Int]?
-    var name: String?
     var popularity: Float?
     var first_air_date: String?
     var backdrop_path: String?
@@ -23,8 +23,8 @@ struct TVShow: Codable, Identifiable {
 
 // The detail information of a TV show
 struct TVShowDetails: Codable, Identifiable {
-    var id: Int?
-    var name: String?
+    let id: Int
+    let name: String
     var popularity: Float?
     var first_air_date: String?
     var backdrop_path: String?
@@ -84,6 +84,22 @@ struct Video: Codable, Identifiable {
 struct Genre: Codable, Identifiable {
     var id: Int?
     var name: String?
+}
+
+struct TraktList: Codable {
+    let title: String
+    let ids: Ids
+}
+
+struct Ids: Codable {
+    var trakt: Int?
+    var tmdb: Int?
+    var imdb: String?
+}
+
+enum TVShowList: String, Codable {
+    case Popular
+    case Trending
 }
 
 //struct Forecast: Codable, Identifiable {

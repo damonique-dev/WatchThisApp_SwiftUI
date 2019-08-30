@@ -11,9 +11,8 @@ import Foundation
 func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
     var state = state
     switch(action) {
-        case let action as TVShowActions.SetTVShows:
-            state.popularShows = action.tvShows.map({$0.id!})
-            state = mergeTVShows(state: state, tvShows: action.tvShows)
+        case let action as TVShowActions.SetTVShowList:
+            state.tvLists[action.list] = action.ids
         case let action as TVShowActions.SetTVShowDetail:
             state.tvShowDetail[action.id] = action.tvShowDetail
         case let action as TVShowActions.SetTVShowSeason:
@@ -37,8 +36,8 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
 private func mergeTVShows(state: TVShowState, tvShows: [TVShow]) -> TVShowState {
     var state = state
     for tvShow in tvShows {
-        if state.tvShow[tvShow.id!] == nil {
-            state.tvShow[tvShow.id!] = tvShow
+        if state.tvShow[tvShow.id] == nil {
+            state.tvShow[tvShow.id] = tvShow
         }
     }
     return state

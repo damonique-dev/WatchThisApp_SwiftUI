@@ -105,7 +105,7 @@ struct TVDetailHeader: View {
                 }
                     
                 HStack {
-                    Text("\(showDetail.name!)")
+                    Text("\(showDetail.name)")
                         .font(Font.system(.title, design: .rounded))
                         .fontWeight(.bold)
                         .foregroundColor(.white)

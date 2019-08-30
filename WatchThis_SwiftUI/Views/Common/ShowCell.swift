@@ -13,9 +13,7 @@ struct ShowCell: View {
     
     init(tvShow: TVShow) {
         self.tvShow = tvShow
-        if let name = tvShow.name {
-            showName = name
-        }
+        showName = tvShow.name
         if let path = tvShow.poster_path {
             imagePath = path
         }

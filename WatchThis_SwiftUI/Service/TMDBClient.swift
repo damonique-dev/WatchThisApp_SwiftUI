@@ -79,26 +79,4 @@ class TMDBClient {
             }
         }
     }
-    
-    func getImageData(urlString: String, targetSize: CGSize?=nil, completionHandler: @escaping (NSData?) -> Void) {
-        guard let url = NSURL(string: urlString) else {
-            completionHandler(nil)
-            return
-        }
-
-        if let imageDataFromCache = imageCache.object(forKey: urlString as NSString) {
-            completionHandler(imageDataFromCache)
-            return
-        }
-        URLSession.shared.dataTask(with: url as URL, completionHandler: { (data, respones, error) in
-            if error != nil {
-                #if DEBUG
-                print("Error: \(String(describing: error))")
-                #endif
-                completionHandler(nil)
-                return
-            }
-            completionHandler(data as NSData?)
-        }).resume()
-    }
 }

@@ -13,7 +13,7 @@ struct PeopleActions {
     struct FetchPersonDetails: AsyncAction {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Person_Details(id: id), params: parameters)
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Person_Details(id: id), params: TMDB_Parameters)
             {
                 (result: Result<Person, APIError>) in
                 switch result {
@@ -31,7 +31,7 @@ struct PeopleActions {
     struct FetchPersonCombinedCredit: AsyncAction {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Person_Combined_Credits(id: id), params: parameters)
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Person_Combined_Credits(id: id), params: TMDB_Parameters)
             {
                 (result: Result<[TVShow], APIError>) in
                 switch result {

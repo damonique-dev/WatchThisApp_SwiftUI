@@ -17,6 +17,6 @@ struct TVShowState: FluxState, Codable {
     
     // [TVShowId: [SeasonId: Season]]
     var tvShowSeasons: [Int: [Int: Season]] = [:]
-    
-    var popularShows: [Int] = []
+        
+    var tvLists: [TVShowList : [Int]] = [:]
 }

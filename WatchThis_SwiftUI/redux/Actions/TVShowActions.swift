@@ -8,18 +8,21 @@
 
 import Foundation
 
-var parameters = [TMDBClient.ParameterKeys.APIKey : TMDBClient.ParameterValues.APIKey]
+var TMDB_Parameters = [TMDBClient.ParameterKeys.APIKey : TMDBClient.ParameterValues.APIKey]
+var Trakt_Parameters = [TraktApiClient.ParameterKeys.Extended : "full"]
 
 struct TVShowActions {
-    struct FetchPopularTVShows: AsyncAction {
+    struct FetchTraktShowList: AsyncAction {
         let id: Int
+        let endpoint: TraktApiClient.Endpoint
+        let showList: TVShowList
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.TV_Popular, params: parameters)
+            TraktApiClient.sharedInstance().GetShowList(endpoint: endpoint, params: Trakt_Parameters)
             {
-                (result: Result<[TVShow], APIError>) in
+                (result: Result<[TraktList], APIError>) in
                 switch result {
                 case let .success(response):
-                    dispatch(SetTVShows(tvShows: response))
+                    dispatch(FetchTMDBShowsFromTrakt(list: response, showList: self.showList))
                 case let .failure(error):
                     print(error)
                     break
@@ -28,11 +31,26 @@ struct TVShowActions {
         }
     }
     
+    struct FetchTMDBShowsFromTrakt: AsyncAction {
+        let list: [TraktList]
+        let showList: TVShowList
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            var ids = [Int]()
+            for trakt in list {
+                if let tmdbId = trakt.ids.tmdb {
+                    ids.append(contentsOf: ids)
+                    dispatch(FetchTVShowDetails(id: tmdbId))
+                }
+            }
+            dispatch(SetTVShowList(list: self.showList, ids: ids))
+        }
+    }
+    
     struct FetchTVShowDetails: AsyncAction {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.Video
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.TV_ShowDetails(id: id), params: parameters)
+            TMDB_Parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.Video
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.TV_ShowDetails(id: id), params: TMDB_Parameters)
             {
                 (result: Result<TVShowDetails, APIError>) in
                 switch result {
@@ -50,8 +68,8 @@ struct TVShowActions {
         let id: Int
         let seasonId: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.Video
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.TV_Seasons_Details(id: id, seasonNum: seasonId), params: parameters)
+            TMDB_Parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.Video
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.TV_Seasons_Details(id: id, seasonNum: seasonId), params: TMDB_Parameters)
             {
                 (result: Result<Season, APIError>) in
                 switch result {
@@ -68,7 +86,7 @@ struct TVShowActions {
     struct FetchTVShowCredits: AsyncAction {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.TV_ShowCredits(id: id), params: parameters)
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.TV_ShowCredits(id: id), params: TMDB_Parameters)
             {
                 (result: Result<[Person], APIError>) in
                 switch result {
@@ -85,8 +103,8 @@ struct TVShowActions {
     struct SearchTVShows: AsyncAction {
         let query: String
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            parameters[TMDBClient.ParameterKeys.SearchQuery] = query
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Search_TV, params: parameters)
+            TMDB_Parameters[TMDBClient.ParameterKeys.SearchQuery] = query
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Search_TV, params: TMDB_Parameters)
             {
                 (result: Result<[TVShow], APIError>) in
                 switch result {
@@ -103,7 +121,7 @@ struct TVShowActions {
     struct FetchSimilarTVShows: AsyncAction {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Similar_TV(id: id), params: parameters)
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Similar_TV(id: id), params: TMDB_Parameters)
             {
                 (result: Result<[TVShow], APIError>) in
                 switch result {
@@ -117,8 +135,9 @@ struct TVShowActions {
         }
     }
     
-    struct SetTVShows: Action {
-        let tvShows: [TVShow]
+    struct SetTVShowList: Action {
+        let list: TVShowList
+        let ids: [Int]
     }
     
     struct SetTVShowCast: Action {

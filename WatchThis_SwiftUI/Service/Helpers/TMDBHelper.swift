@@ -62,12 +62,6 @@ extension TMDBClient {
         }
     }
     
-    struct PosterSize {
-        static let Original = "original"
-        static let Thumbnail = "w92"
-        static let Detail = "w500"
-    }
-    
     func subtituteKeyInMethod(method: String, key: String, value: String) -> String? {
         if method.range(of:"{\(key)}") != nil {
             return method.replacingOccurrences(of: "{\(key)}", with: value)
@@ -90,9 +84,5 @@ extension TMDBClient {
         }
         
         return components.url!.absoluteString
-    }
-    
-    func getOriginalImageUrl(imagePath: String) -> String {
-        return Constants.ImageURL + PosterSize.Original + imagePath
     }
 }

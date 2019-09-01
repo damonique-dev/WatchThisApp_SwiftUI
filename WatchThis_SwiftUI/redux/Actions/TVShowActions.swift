@@ -12,17 +12,35 @@ var TMDB_Parameters = [TMDBClient.ParameterKeys.APIKey : TMDBClient.ParameterVal
 var Trakt_Parameters = [TraktApiClient.ParameterKeys.Extended : "full"]
 
 struct TVShowActions {
-    struct FetchTraktShowList: AsyncAction {
-        let id: Int
+    struct FetchTraktPopularShowList: AsyncAction {
         let endpoint: TraktApiClient.Endpoint
         let showList: TVShowList
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TraktApiClient.sharedInstance().GetShowList(endpoint: endpoint, params: Trakt_Parameters)
+            TraktApiClient.sharedInstance().GetShowList(endpoint: endpoint, params: [:])
             {
                 (result: Result<[TraktList], APIError>) in
                 switch result {
                 case let .success(response):
                     dispatch(FetchTMDBShowsFromTrakt(list: response, showList: self.showList))
+                case let .failure(error):
+                    print(error)
+                    break
+                }
+            }
+        }
+    }
+    
+    struct FetchTraktTrendingShowList: AsyncAction {
+        let endpoint: TraktApiClient.Endpoint
+        let showList: TVShowList
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            TraktApiClient.sharedInstance().GetShowList(endpoint: endpoint, params: [:])
+            {
+                (result: Result<[TraktListResults], APIError>) in
+                switch result {
+                case let .success(response):
+                    let list = response.compactMap {$0.show}
+                    dispatch(FetchTMDBShowsFromTrakt(list: list, showList: self.showList))
                 case let .failure(error):
                     print(error)
                     break
@@ -37,8 +55,8 @@ struct TVShowActions {
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             var ids = [Int]()
             for trakt in list {
-                if let tmdbId = trakt.ids.tmdb {
-                    ids.append(contentsOf: ids)
+                if let tmdbId = trakt.ids?.tmdb {
+                    ids.append(tmdbId)
                     dispatch(FetchTVShowDetails(id: tmdbId))
                 }
             }
@@ -55,6 +73,12 @@ struct TVShowActions {
                 (result: Result<TVShowDetails, APIError>) in
                 switch result {
                 case let .success(response):
+                    if let posterPath = response.poster_path {
+                        dispatch(AppActions.FetchImage(urlPath: posterPath, size: .original))
+                    }
+                    if let backgroundPath = response.backdrop_path {
+                        dispatch(AppActions.FetchImage(urlPath: backgroundPath, size: .original))
+                    }
                     dispatch(SetTVShowDetail(id: self.id, tvShowDetail: response))
                 case let .failure(error):
                     print(error)
@@ -75,23 +99,6 @@ struct TVShowActions {
                 switch result {
                 case let .success(response):
                     dispatch(SetTVShowSeason(id: self.id, seasonId: self.seasonId, season: response))
-                case let .failure(error):
-                    print(error)
-                    break
-                }
-            }
-        }
-    }
-    
-    struct FetchTVShowCredits: AsyncAction {
-        let id: Int
-        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.TV_ShowCredits(id: id), params: TMDB_Parameters)
-            {
-                (result: Result<[Person], APIError>) in
-                switch result {
-                case let .success(response):
-                    dispatch(SetTVShowCast(id: self.id, cast: response))
                 case let .failure(error):
                     print(error)
                     break
@@ -123,10 +130,10 @@ struct TVShowActions {
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Similar_TV(id: id), params: TMDB_Parameters)
             {
-                (result: Result<[TVShow], APIError>) in
+                (result: Result<TVShowResults, APIError>) in
                 switch result {
                 case let .success(response):
-                    dispatch(SetSimilarTVShows(id: self.id, tvShows: response))
+                    dispatch(SetSimilarTVShows(id: self.id, tvShows: response.results))
                 case let .failure(error):
                     print(error)
                     break
@@ -135,14 +142,43 @@ struct TVShowActions {
         }
     }
     
+    struct FetchShowCast: AsyncAction {
+        let id: Int
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.TV_ShowCredits(id: id), params: TMDB_Parameters)
+            {
+                (result: Result<Credits, APIError>) in
+                switch result {
+                case let .success(response):
+                    dispatch(SetShowCast(id: self.id, cast: response.cast, crew: response.crew))
+                case let .failure(error):
+                    print(error)
+                    break
+                }
+            }
+        }
+    }
+    
+    struct FetchShowDetailsFromIds: AsyncAction {
+        let idList: Set<Int>
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            for id in idList {
+                dispatch(FetchTVShowDetails(id: id))
+            }
+        }
+    }
+    
+    struct AddShowToFavorites: Action {
+        let showId: Int
+    }
+    
+    struct RemoveShowFromFavorites: Action {
+        let showId: Int
+    }
+    
     struct SetTVShowList: Action {
         let list: TVShowList
         let ids: [Int]
-    }
-    
-    struct SetTVShowCast: Action {
-        let id: Int
-        let cast: [Person]
     }
     
     struct SetTVShowDetail: Action {
@@ -163,6 +199,12 @@ struct TVShowActions {
     
     struct SetSimilarTVShows: Action {
         let id: Int
-        let tvShows: [TVShow]
+        let tvShows: [TVShowDetails]
+    }
+    
+    struct SetShowCast: Action {
+        let id: Int
+        let cast: [Cast]
+        let crew: [Crew]
     }
 }

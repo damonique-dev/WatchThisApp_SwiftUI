@@ -31,7 +31,7 @@ struct TVShowDetails: Codable, Identifiable {
     var vote_average: Float?
     var overview: String?
     var poster_path: String?
-    var created_by: Person?
+    var created_by: [Person]?
     var episode_run_time: [Int]?
     var genres: [Genre]?
     var in_production: Bool?
@@ -46,7 +46,14 @@ struct TVShowDetails: Codable, Identifiable {
     var status: String?
     var type: String?
     var cast: [Person]?
-    var videos: [Video]?
+    var videos: VideoResults?
+}
+
+struct TVShowResults: Codable  {
+    let results: [TVShowDetails]
+    let page: Int
+    let total_results: Int
+    let total_pages: Int
 }
 
 struct Season: Codable, Identifiable {
@@ -72,8 +79,12 @@ struct Episode: Codable, Identifiable {
     var show_id: Int?
 }
 
+struct VideoResults: Codable {
+    var results: [Video]?
+}
+
 struct Video: Codable, Identifiable {
-    var id: Int?
+    var id: String?
     var name: String?
     var site: String?
     var key: String?
@@ -86,9 +97,14 @@ struct Genre: Codable, Identifiable {
     var name: String?
 }
 
+struct TraktListResults: Codable {
+    var show: TraktList?
+}
+
 struct TraktList: Codable {
-    let title: String
-    let ids: Ids
+    var title: String?
+    var year: Int?
+    var ids: Ids?
 }
 
 struct Ids: Codable {

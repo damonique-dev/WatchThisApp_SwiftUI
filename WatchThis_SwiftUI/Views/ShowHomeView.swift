@@ -9,30 +9,57 @@
 import SwiftUI
 
 struct ShowHomeView: View {
-    var shows: [TVShow] = [TVShow(id: 1, name: "Grey's Anatomy", poster_path: "testTvShowImage"),TVShow(id: 2, name: "Grey's Anatomy", poster_path: "testTvShowImage"),TVShow(id: 3, name: "Grey's Anatomy", poster_path: "testTvShowImage"),TVShow(id: 4, name: "Grey's Anatomy", poster_path: "testTvShowImage"),TVShow(id: 5, name: "Grey's Anatomy", poster_path: "testTvShowImage")]
+    @EnvironmentObject var store: Store<AppState>
     
-    init() {
-        UINavigationBar.appearance().backgroundColor = .darkGray
+    private var popularShows: [TVShowDetails] {
+        let showState = store.state.tvShowState
+        return showState.tvLists[.Popular]?.compactMap {showState.tvShowDetail[$0]} ?? [TVShowDetails]()
+    }
+    
+    private var trendingShows: [TVShowDetails] {
+        let showState = store.state.tvShowState
+        return showState.tvLists[.Trending]?.compactMap {showState.tvShowDetail[$0]} ?? [TVShowDetails]()
+    }
+    
+    private var favoriteShows: [TVShowDetails] {
+        let showState = store.state.tvShowState
+        return showState.favoriteShows.compactMap {showState.tvShowDetail[$0]} 
+    }
+        
+    // MARK: - Fetch
+    func fetchShowLists() {
+        store.dispatch(action: TVShowActions.FetchTraktPopularShowList( endpoint: .TV_Popular, showList: .Popular))
+        store.dispatch(action: TVShowActions.FetchTraktTrendingShowList( endpoint: .TV_Trending, showList: .Trending))
+        store.dispatch(action: TVShowActions.FetchShowDetailsFromIds(idList: store.state.tvShowState.favoriteShows))
     }
     
     var body: some View {
-        ZStack(alignment: .top) {
-            BlurredBackground(imagePath: "appBackground")
-            
-            ScrollView(.vertical) {
-                VStack {
-                    CategoryRow(title: "My Shows", shows: shows)
-                    CategoryRow(title: "Trending Shows", shows: shows)
-                    CategoryRow(title: "Popular Shows", shows: shows)
+        NavigationView {
+            ZStack {
+                BlurredBackground(image: UIImage(named: "appBackground")!)
+                
+                ScrollView(.vertical) {
+                    VStack {
+                        if !favoriteShows.isEmpty {
+                            CategoryRow(title: "My Shows", shows: favoriteShows)
+                        }
+                        CategoryRow(title: "Trending Shows", shows: trendingShows)
+                        CategoryRow(title: "Popular Shows", shows: popularShows)
+                    }
                 }
-            }.padding(.top, 44)
+                .padding(.vertical, 44)                
+            }
+            .navigationBarTitle(Text("Hot Shows"), displayMode: .inline)
+            .onAppear() {
+                self.fetchShowLists()
+            }
         }
     }
 }
 
 struct CategoryRow: View {
     let title: String
-    let shows: [TVShow]
+    let shows: [TVShowDetails]
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -44,7 +71,9 @@ struct CategoryRow: View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(shows, id: \.id) { show in
-                        ShowCell(tvShow: show)
+                        NavigationLink(destination: TVShowDetailView(showDetail: show)) {
+                            ShowCell(tvShow: show, height: CGFloat(200))
+                        }
                     }
                 }
             }.frame(height: 200)
@@ -57,7 +86,7 @@ struct CategoryRow: View {
 #if DEBUG
 struct ShowHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowHomeView()
+        ShowHomeView().environmentObject(sampleStore)
     }
 }
 #endif

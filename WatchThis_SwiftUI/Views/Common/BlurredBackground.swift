@@ -9,10 +9,11 @@
 import SwiftUI
 
 struct BlurredBackground: View {
-    let imagePath: String
+    let image: UIImage
+
     var body: some View {
         ZStack {
-            Image(imagePath)
+            Image(uiImage: image)
                 .resizable()
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                 .blur(radius: 20)
@@ -25,7 +26,7 @@ struct BlurredBackground: View {
 #if DEBUG
 struct BlurredBackground_Previews: PreviewProvider {
     static var previews: some View {
-        BlurredBackground(imagePath: "testTvShowImage")
+        BlurredBackground(image: UIImage(named: "testTvShowImage")!)
     }
 }
 #endif

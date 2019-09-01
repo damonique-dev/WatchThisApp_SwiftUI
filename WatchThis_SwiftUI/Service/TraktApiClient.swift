@@ -26,12 +26,12 @@ class TraktApiClient {
     }
     
     func GetShowList<T: Codable>(endpoint: Endpoint, params: [String: String]?, completionHandler: @escaping (Result<T, APIError>) -> Void) {
-        let endpoint = URLFromParameters(endpoint: endpoint, parameters: params as [String : AnyObject]?)
-        AF.request(endpoint, headers: header).responseJSON { response in
+        let url = URLFromParameters(endpoint: endpoint, parameters: params as [String : AnyObject]?)
+        AF.request(url, headers: header).responseJSON { response in
             switch response.result {
                 case .success(let result):
                     do {
-                        let data = try JSONSerialization.data(withJSONObject: result as? [String: AnyObject] ?? [:])
+                        let data = try JSONSerialization.data(withJSONObject: result)
                         let object = try self.decoder.decode(T.self, from: data)
                         DispatchQueue.main.async {
                             completionHandler(.success(object))
@@ -39,7 +39,7 @@ class TraktApiClient {
                     } catch let error {
                         DispatchQueue.main.async {
                             #if DEBUG
-                            print("JSON Decoding Error: \(error)")
+                            print("GetShowList - JSON Decoding Error: \(error)")
                             #endif
                             completionHandler(.failure(.jsonDecodingError(error: error)))
                         }

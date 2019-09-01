@@ -8,9 +8,28 @@
 
 import Foundation
 
+struct Credits: Codable, Identifiable {
+    let id: Int
+    let cast: [Cast]
+    let crew: [Crew]
+}
+
+struct Cast: Codable, Identifiable {
+    let id: Int
+    let name: String
+    let character: String
+    let profile_path: String
+}
+
+struct Crew: Codable, Identifiable {
+    let id: Int
+    let name: String
+    let job: String
+    let profile_path: String
+}
+
 // The basic information about a Person
 struct Person: Codable, Identifiable {
-    
     var character: String?
     var credit_id: String?
     var id: Int?

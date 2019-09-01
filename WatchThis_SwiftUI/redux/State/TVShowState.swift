@@ -11,12 +11,15 @@ import Foundation
 struct TVShowState: FluxState, Codable {
     var tvShow: [Int: TVShow] = [:]
     var tvShowDetail: [Int: TVShowDetails] = [:]
-    var tvShowCast: [Int: [Person]] = [:]
+    var tvShowCast: [Int: [Cast]] = [:]
+    var tvShowCrew: [Int: [Crew]] = [:]
     var tvShowSearch: [String: [TVShow]] = [:]
-    var similarShows: [Int: [TVShow]] = [:]
+    var similarShows: [Int: [TVShowDetails]] = [:]
     
     // [TVShowId: [SeasonId: Season]]
     var tvShowSeasons: [Int: [Int: Season]] = [:]
         
     var tvLists: [TVShowList : [Int]] = [:]
+    
+    var favoriteShows: Set<Int> = Set()
 }

@@ -20,12 +20,17 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
                 state.tvShowSeasons[action.id] = [:]
             }
             state.tvShowSeasons[action.id]![action.seasonId] = action.season
-        case let action as TVShowActions.SetTVShowCast:
-            state.tvShowCast[action.id] = action.cast
         case let action as TVShowActions.SetTVShowSearch:
             state.tvShowSearch[action.query] = action.tvShows
         case let action as TVShowActions.SetSimilarTVShows:
             state.similarShows[action.id] = action.tvShows
+        case let action as TVShowActions.SetShowCast:
+            state.tvShowCast[action.id] = action.cast
+            state.tvShowCrew[action.id] = action.crew
+        case let action as TVShowActions.AddShowToFavorites:
+            state.favoriteShows.insert(action.showId)
+        case let action as TVShowActions.RemoveShowFromFavorites:
+            state.favoriteShows.remove(action.showId)
         default:
             break
     }

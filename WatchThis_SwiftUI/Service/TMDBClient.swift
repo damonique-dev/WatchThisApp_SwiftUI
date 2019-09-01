@@ -21,8 +21,8 @@ class TMDBClient {
     }
     
     func GET<T: Codable>(endpoint: Endpoint, params: [String: String]?, completionHandler: @escaping (Result<T, APIError>) -> Void) {
-        let endpoint = URLFromParameters(endpoint: endpoint, parameters: params as [String : AnyObject]?)
-        AF.request(endpoint).responseJSON { response in
+        let url = URLFromParameters(endpoint: endpoint, parameters: params as [String : AnyObject]?)
+        AF.request(url).responseJSON { response in
             switch response.result {
                 case .success(let result):
                     do {
@@ -34,7 +34,7 @@ class TMDBClient {
                     } catch let error {
                         DispatchQueue.main.async {
                             #if DEBUG
-                            print("JSON Decoding Error: \(error)")
+                            print("TMDB - JSON Decoding Error: \(error)")
                             #endif
                             completionHandler(.failure(.jsonDecodingError(error: error)))
                         }
@@ -48,34 +48,6 @@ class TMDBClient {
                         completionHandler(.failure(.networkError(error: error)))
                     }
                     return
-            }
-        }
-    }
-    
-    func getShowsFromIdList(ids: [Int], completionHandler: @escaping (Result<[TVShowDetails], APIError>) -> Void) {
-        var shows = [TVShowDetails?](repeating: nil, count: ids.count)
-        let dispatchGroup = DispatchGroup()
-        for id in ids {
-            dispatchGroup.enter()
-//            getShowDetails(id: id) { result in
-//                switch result {
-//                case .success(let showDetails):
-//                    let index = ids.firstIndex(of: showDetails.id!)
-//                    if index != nil {
-//                        shows[index!] = showDetails
-//                    }
-//                    dispatchGroup.leave()
-//                    return
-//                case .failure(let error):
-//                    completionHandler(.failure(error))
-//                    dispatchGroup.leave()
-//                    return
-//                }
-//            }
-        }
-        dispatchGroup.notify(queue: .main) {
-            if let returnedShows = shows.filter({$0 != nil}) as? [TVShowDetails] {
-                completionHandler(.success(returnedShows))
             }
         }
     }

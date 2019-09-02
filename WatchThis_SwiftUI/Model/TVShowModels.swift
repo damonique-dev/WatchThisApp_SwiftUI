@@ -116,6 +116,7 @@ struct Ids: Codable {
 enum TVShowList: String, Codable {
     case Popular
     case Trending
+    case MostWatchedWeekly
 }
 
 //struct Forecast: Codable, Identifiable {

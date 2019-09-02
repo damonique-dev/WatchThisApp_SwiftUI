@@ -25,11 +25,10 @@ struct ShowHomeView: View {
         let showState = store.state.tvShowState
         return showState.favoriteShows.compactMap {showState.tvShowDetail[$0]} 
     }
-        
-    // MARK: - Fetch
+            
     func fetchShowLists() {
-        store.dispatch(action: TVShowActions.FetchTraktPopularShowList( endpoint: .TV_Popular, showList: .Popular))
-        store.dispatch(action: TVShowActions.FetchTraktTrendingShowList( endpoint: .TV_Trending, showList: .Trending))
+        store.dispatch(action: TVShowActions.FetchTraktPopularShowList(endpoint: .TV_Popular, showList: .Popular))
+        store.dispatch(action: TVShowActions.FetchTraktTrendingShowList(endpoint: .TV_Trending, showList: .Trending))
         store.dispatch(action: TVShowActions.FetchShowDetailsFromIds(idList: store.state.tvShowState.favoriteShows))
     }
     

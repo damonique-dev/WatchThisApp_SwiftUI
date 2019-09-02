@@ -42,7 +42,7 @@ extension TraktApiClient {
     enum Endpoint {
         case TV_Popular
         case TV_Trending
-        case TV_MostWatched(period: Period)
+        case TV_MostWatched(period: String)
         
         struct Period {
             static let weekly = "weekly"

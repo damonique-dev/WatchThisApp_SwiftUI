@@ -41,7 +41,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.makeKeyAndVisible()
         }
     }
-
+    
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        store.state.archiveState()
+    }
 }
 
 let store = Store<AppState>(reducer: appStateReducer,

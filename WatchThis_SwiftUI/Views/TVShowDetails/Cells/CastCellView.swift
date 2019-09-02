@@ -18,14 +18,16 @@ struct CastCellView: View {
     }
     
     private var image: UIImage {
-        if let data = store.state.images[person.profile_path]?[.original] {
+        if let imagePath = person.profile_path,  let data = store.state.images[imagePath]?[.original] {
             return UIImage(data: data)!
         }
         return UIImage()
     }
     
     private func fetchImages() {
-        store.dispatch(action: AppActions.FetchImage(urlPath: person.profile_path, size: .original))
+        if let imagePath = person.profile_path {
+            store.dispatch(action: AppActions.FetchImage(urlPath: imagePath, size: .original))
+        }
     }
     
     var body: some View {

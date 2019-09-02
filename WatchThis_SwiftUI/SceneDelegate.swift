@@ -21,11 +21,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         UINavigationBar.appearance().titleTextAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor(named: "Orange")!,
-            NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 32)!]
+            NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 24)!]
         
         UIBarButtonItem.appearance().setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: UIColor(named: "Orange")!,
-            NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 32)!],
+            NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 24)!],
                                                             for: .normal)
 
         // Use a UIHostingController as window root view controller

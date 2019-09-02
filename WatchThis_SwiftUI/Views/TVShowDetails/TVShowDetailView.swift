@@ -58,60 +58,64 @@ struct TVShowDetailView: View {
     }
         
     var body: some View {
-        NavigationView {
-            ZStack {
-                BlurredBackground(image: image)
-                
-                VStack {
-                    TVDetailHeader(showDetail: showDetail, isFavorite: $isFavorite)
-                    HStack {
-                        DetailTabButton(selectedTab: $selectedTab, text: "Overview", buttonIndex: 0)
-                        DetailTabButton(selectedTab: $selectedTab, text: "Cast", buttonIndex: 1)
-                        DetailTabButton(selectedTab: $selectedTab, text: "Seasons", buttonIndex: 2)
-                        DetailTabButton(selectedTab: $selectedTab, text: "Similar", buttonIndex: 3)
-                    }.padding(.top, 16)
-                    ZStack {
-                        if selectedTab == 0 {
-                            ShowOverviewDetailView(showDetail: showDetail)
-                        }
-                        if selectedTab == 1 {
-                            GridView(cast, columns: 3) { CastCellView(person: $0) }
-                        }
-                        if selectedTab == 2 {
-                            GridView(seasons, columns: 2) { SeasonCellView(season: $0) }
-                        }
-                        if selectedTab == 3 {
-                            GridView(similarShows, columns: 3) {ShowCell(tvShow: $0, height: CGFloat(125))}
-                        }
-                        
-                    }.frame(height: UIScreen.main.bounds.height - 620)
-                    Spacer()
-                }
-                VStack(alignment: .leading) {
-                    HStack {
-                        FavoriteButton(isFavorite: $isFavorite, action: {
-                            self.isFavorite.toggle()
-                            if self.isFavorite {
-                                self.store.dispatch(action: TVShowActions.AddShowToFavorites(showId: self.showDetail.id))
-                            } else {
-                                self.store.dispatch(action: TVShowActions.RemoveShowFromFavorites(showId: self.showDetail.id))
+        ZStack {
+            BlurredBackground(image: image)
+            
+            VStack {
+                TVDetailHeader(showDetail: showDetail, isFavorite: $isFavorite)
+                HStack {
+                    DetailTabButton(selectedTab: $selectedTab, text: "Overview", buttonIndex: 0)
+                    DetailTabButton(selectedTab: $selectedTab, text: "Cast", buttonIndex: 1)
+                    DetailTabButton(selectedTab: $selectedTab, text: "Seasons", buttonIndex: 2)
+                    DetailTabButton(selectedTab: $selectedTab, text: "Similar", buttonIndex: 3)
+                }.padding(.top, CGFloat(16))
+                ZStack {
+                    if selectedTab == 0 {
+                        ShowOverviewDetailView(showDetail: showDetail)
+                    }
+                    if selectedTab == 1 {
+                        GridView(cast, columns: 3) { CastCellView(person: $0) }
+                    }
+                    if selectedTab == 2 {
+                        GridView(seasons, columns: 2) { SeasonCellView(season: $0) }
+                    }
+                    if selectedTab == 3 {
+                        GridView(similarShows, columns: 3) { show in
+                            NavigationLink(destination: TVShowDetailView(showDetail: show, fetchDetails: true)) {
+                                ShowCell(tvShow: show, height: CGFloat(125))
                             }
-                        })
-                        Spacer()
-                    }.padding(.leading, UIScreen.main.bounds.width / 2 - UIScreen.main.bounds.width/6 - 40)
+                        }
+                    }
+                    
+                }.frame(height: UIScreen.main.bounds.height - 620)
+                Spacer()
+            }
+            VStack(alignment: .leading) {
+                HStack {
+                    FavoriteButton(isFavorite: $isFavorite, action: {
+                        self.isFavorite.toggle()
+                        if self.isFavorite {
+                            self.store.dispatch(action: TVShowActions.AddShowToFavorites(showId: self.showDetail.id))
+                        } else {
+                            self.store.dispatch(action: TVShowActions.RemoveShowFromFavorites(showId: self.showDetail.id))
+                        }
+                    })
                     Spacer()
-                }.padding(.top, 310)
-                VStack(alignment: .leading) {
-                    HStack {
-                        WatchThisButton(text: "Watch Trailer")
-                        Spacer()
-                    }.padding(.leading, UIScreen.main.bounds.width / 2 + UIScreen.main.bounds.width/6 + 10)
+                }.padding(.leading, UIScreen.main.bounds.width / 2 - UIScreen.main.bounds.width/6 - 40)
+                Spacer()
+            }.padding(.top, 310)
+            VStack(alignment: .leading) {
+                HStack {
+                    WatchThisButton(text: "Watch Trailer")
                     Spacer()
-                }.padding(.top, 310)
-            }.padding(.vertical, 44)
-        }.navigationBarTitle(Text("\(showDetail.name)"))
-            .onAppear() {
-                self.fetchShowDetails()
+                }.padding(.leading, UIScreen.main.bounds.width / 2 + UIScreen.main.bounds.width/6 + 10)
+                Spacer()
+            }.padding(.top, 310)
+        }
+        .padding(.vertical, 44)
+        .navigationBarTitle(Text("\(showDetail.name)"))
+        .onAppear() {
+            self.fetchShowDetails()
         }
     }
 }
@@ -202,18 +206,22 @@ struct ShowOverviewDetailView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("\(showDetail.overview!)")
-                .font(Font.system(.body, design: .rounded))
-                .foregroundColor(.white)
-                .lineLimit(nil)
-            DetailsLabel(title: "Airs:", detail: showDetail.last_air_date)
-            DetailsLabel(title: "First Air Date:", detail: showDetail.first_air_date)
-            DetailsLabel(title: "Runtime:", detail:  getRuntime())
-            DetailsLabel(title: "Genres:", detail: getGenreList())
-            Spacer()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("\(showDetail.overview!)")
+                    .font(Font.system(.body, design: .rounded))
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .foregroundColor(.white)
+                    .lineLimit(5)
+                    .layoutPriority(1)
+                DetailsLabel(title: "Airs:", detail: showDetail.last_air_date)
+                DetailsLabel(title: "First Air Date:", detail: showDetail.first_air_date)
+                DetailsLabel(title: "Runtime:", detail:  getRuntime())
+                DetailsLabel(title: "Genres:", detail: getGenreList())
+                Spacer()
+            }
+            .padding(8)
         }
-        .padding(8)
     }
 }
 

@@ -32,14 +32,14 @@ class ImageService {
         case decodingError(error: Error)
     }
     
-    func fetchImage(urlPath: String, size: Size, completionHandler: @escaping (Result<Data, ImageError>) -> Void) {
+    func fetchImage(urlPath: String, size: Size) -> AnyPublisher<UIImage?, Never> {
         let url = size.path(urlPath: urlPath)
-        let task = URLSession.shared.dataTask(with: url) { (data, respones, error) in
-            if error != nil {
-                completionHandler(.failure(.decodingError(error: error!)))
-            }
-            completionHandler(.success(data!))
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .tryMap { (data, response) -> UIImage? in
+                return UIImage(data: data)
+        }.catch { error in
+            return Just(nil)
         }
-        task.resume()
+        .eraseToAnyPublisher()
     }
 }

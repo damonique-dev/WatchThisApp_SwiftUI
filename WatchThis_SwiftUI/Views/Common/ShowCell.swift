@@ -16,48 +16,20 @@ struct ShowCell: View {
     init(tvShow: TVShowDetails, height: CGFloat) {
         self.tvShow = tvShow
         self.height = height
-        showName = tvShow.name
-        if let path = tvShow.poster_path {
-            imagePath = path
-        }
-        
     }
-    
-    private var showName: String
-    private var imagePath = ""
-    private var image: UIImage? {
-        if let data = store.state.images[imagePath]?[.original] {
-            return UIImage(data: data)!
-        }
-        return nil
-    }
-    
-    private func fetchImages() {
-        if store.state.images[imagePath]?[.original] == nil {
-            store.dispatch(action: AppActions.FetchImage(urlPath: imagePath, size: .original))
-        }
-    }
-    
+
     var body: some View {
         ZStack {
-            Text(showName)
+            Text(tvShow.name)
                 .font(Font.system(.headline, design: .rounded))
                 .fontWeight(.semibold)
                 .frame(width: height * 8/11, height: height)
                 .foregroundColor(.white)
                 .lineLimit(nil)
-            if image != nil {
-                Image(uiImage: image!)
-                    .resizable()
-                    .renderingMode(.original)
-                    .frame(width: height * 8/11, height: height)
-                    .cornerRadius(15)
-            } else {
-                RoundedRectangle(cornerRadius: 15)
-                    .frame(width: height * 8/11, height: height)
-                    .foregroundColor(Color.black.opacity(0))
-                    .border(Color.white)
-            }
+            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: tvShow.poster_path,
+                                                                                     size: .original))
+                .frame(width: height * 8/11, height: height)
+                .cornerRadius(15)
         }
     }
 }

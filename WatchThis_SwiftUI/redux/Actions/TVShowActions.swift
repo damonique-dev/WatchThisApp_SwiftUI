@@ -73,12 +73,6 @@ struct TVShowActions {
                 (result: Result<TVShowDetails, APIError>) in
                 switch result {
                 case let .success(response):
-                    if let posterPath = response.poster_path {
-                        dispatch(AppActions.FetchImage(urlPath: posterPath, size: .original))
-                    }
-                    if let backgroundPath = response.backdrop_path {
-                        dispatch(AppActions.FetchImage(urlPath: backgroundPath, size: .original))
-                    }
                     dispatch(SetTVShowDetail(id: self.id, tvShowDetail: response))
                 case let .failure(error):
                     print(error)

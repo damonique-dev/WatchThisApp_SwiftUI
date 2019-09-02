@@ -23,6 +23,8 @@
 		54486B4322FBB16100F9E869 /* TVShowModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54486B3F22FBB16100F9E869 /* TVShowModels.swift */; };
 		54486B4422FBB16100F9E869 /* PeopleModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54486B4022FBB16100F9E869 /* PeopleModels.swift */; };
 		54486B4522FBB16100F9E869 /* UserModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54486B4122FBB16100F9E869 /* UserModels.swift */; };
+		54605C1B231C97F40016F065 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54605C1A231C97F40016F065 /* ImageLoader.swift */; };
+		54605C1D231C9DDD0016F065 /* ImageLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54605C1C231C9DDD0016F065 /* ImageLoaderView.swift */; };
 		54AAA3E5231262810092A11E /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA3E4231262810092A11E /* GridView.swift */; };
 		54AAA3EB23133B2F0092A11E /* BlurredBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA3EA23133B2F0092A11E /* BlurredBackground.swift */; };
 		54AAA3ED23133BA50092A11E /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA3EC23133BA50092A11E /* Buttons.swift */; };
@@ -46,7 +48,6 @@
 		54AAA42123179B830092A11E /* PeopleReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA42023179B830092A11E /* PeopleReducer.swift */; };
 		54AAA42323179CDA0092A11E /* TVShowActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA42223179CDA0092A11E /* TVShowActions.swift */; };
 		54AAA42523179CEC0092A11E /* PeopleActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA42423179CEC0092A11E /* PeopleActions.swift */; };
-		54AAA4272318B83E0092A11E /* AppActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA4262318B83E0092A11E /* AppActions.swift */; };
 		54AAA4292318B8B60092A11E /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA4282318B8B60092A11E /* ImageService.swift */; };
 		54AAA42B2318C27A0092A11E /* TraktApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA42A2318C27A0092A11E /* TraktApiClient.swift */; };
 		54AAA42D2318C2BD0092A11E /* TraktApiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA42C2318C2BD0092A11E /* TraktApiHelper.swift */; };
@@ -73,6 +74,8 @@
 		54486B3F22FBB16100F9E869 /* TVShowModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TVShowModels.swift; sourceTree = "<group>"; };
 		54486B4022FBB16100F9E869 /* PeopleModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeopleModels.swift; sourceTree = "<group>"; };
 		54486B4122FBB16100F9E869 /* UserModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModels.swift; sourceTree = "<group>"; };
+		54605C1A231C97F40016F065 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		54605C1C231C9DDD0016F065 /* ImageLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoaderView.swift; sourceTree = "<group>"; };
 		54AAA3E4231262810092A11E /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		54AAA3EA23133B2F0092A11E /* BlurredBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredBackground.swift; sourceTree = "<group>"; };
 		54AAA3EC23133BA50092A11E /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -96,7 +99,6 @@
 		54AAA42023179B830092A11E /* PeopleReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleReducer.swift; sourceTree = "<group>"; };
 		54AAA42223179CDA0092A11E /* TVShowActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowActions.swift; sourceTree = "<group>"; };
 		54AAA42423179CEC0092A11E /* PeopleActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleActions.swift; sourceTree = "<group>"; };
-		54AAA4262318B83E0092A11E /* AppActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppActions.swift; sourceTree = "<group>"; };
 		54AAA4282318B8B60092A11E /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		54AAA42A2318C27A0092A11E /* TraktApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktApiClient.swift; sourceTree = "<group>"; };
 		54AAA42C2318C2BD0092A11E /* TraktApiHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktApiHelper.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				5446B95322FD15C90001C6DF /* GlobalHelper.swift */,
 				5446B95622FD15C90001C6DF /* TMDBHelper.swift */,
 				54AAA42C2318C2BD0092A11E /* TraktApiHelper.swift */,
+				54605C1A231C97F40016F065 /* ImageLoader.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				54AAA3EC23133BA50092A11E /* Buttons.swift */,
 				54AAA3F0231349B20092A11E /* ShowCell.swift */,
 				540CB410231BB2C4001C8CC4 /* Labels.swift */,
+				54605C1C231C9DDD0016F065 /* ImageLoaderView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -264,7 +268,6 @@
 			children = (
 				54AAA42223179CDA0092A11E /* TVShowActions.swift */,
 				54AAA42423179CEC0092A11E /* PeopleActions.swift */,
-				54AAA4262318B83E0092A11E /* AppActions.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -477,11 +480,12 @@
 				54AAA42523179CEC0092A11E /* PeopleActions.swift in Sources */,
 				54AAA3E5231262810092A11E /* GridView.swift in Sources */,
 				54486B4522FBB16100F9E869 /* UserModels.swift in Sources */,
-				54AAA4272318B83E0092A11E /* AppActions.swift in Sources */,
+				54605C1D231C9DDD0016F065 /* ImageLoaderView.swift in Sources */,
 				54AAA3F1231349B20092A11E /* ShowCell.swift in Sources */,
 				54AAA414231799060092A11E /* Middleware.swift in Sources */,
 				54AAA42323179CDA0092A11E /* TVShowActions.swift in Sources */,
 				54AAA4292318B8B60092A11E /* ImageService.swift in Sources */,
+				54605C1B231C97F40016F065 /* ImageLoader.swift in Sources */,
 				54AAA42D2318C2BD0092A11E /* TraktApiHelper.swift in Sources */,
 				54AAA42B2318C27A0092A11E /* TraktApiClient.swift in Sources */,
 				54AAA40E231799060092A11E /* StoreConnector.swift in Sources */,

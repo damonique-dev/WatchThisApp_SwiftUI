@@ -17,27 +17,13 @@ struct CastCellView: View {
         self.person = person
     }
     
-    private var image: UIImage {
-        if let imagePath = person.profile_path,  let data = store.state.images[imagePath]?[.original] {
-            return UIImage(data: data)!
-        }
-        return UIImage()
-    }
-    
-    private func fetchImages() {
-        if let imagePath = person.profile_path {
-            store.dispatch(action: AppActions.FetchImage(urlPath: imagePath, size: .original))
-        }
-    }
-    
     var body: some View {
         ZStack {
             VStack {
-                Image(uiImage: image)
-                    .resizable()
-                    .frame(width: 90, height: 90, alignment: .center)
-                    .aspectRatio(contentMode: .fit)
-                    .clipShape(Circle())
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: person.profile_path,
+                                                                                         size: .original), contentMode: .fit)
+                .frame(width: 90, height: 90, alignment: .center)
+                .clipShape(Circle())
                 Text(person.name)
                     .font(Font.system(.callout, design: .rounded))
                     .fontWeight(.bold)
@@ -50,8 +36,5 @@ struct CastCellView: View {
             }
         }.frame(width: UIScreen.main.bounds.width/3 - 20, height: UIScreen.main.bounds.width/3 - 5)
             .cornerRadius(10)
-            .onAppear() {
-                self.fetchImages()
-        }
     }
 }

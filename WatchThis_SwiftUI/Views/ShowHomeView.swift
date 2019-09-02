@@ -36,7 +36,7 @@ struct ShowHomeView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                BlurredBackground(image: UIImage(named: "appBackground")!)
+                BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
                 
                 ScrollView(.vertical) {
                     VStack {

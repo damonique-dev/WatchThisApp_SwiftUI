@@ -41,13 +41,6 @@ struct TVShowDetailView: View {
     private var imagePath = ""
     private var backgroundImagePath = ""
     
-    private var image: UIImage {
-        if let data = store.state.images[imagePath]?[.original] {
-            return UIImage(data: data)!
-        }
-        return UIImage()
-    }
-    
     private func fetchShowDetails() {
         isFavorite = store.state.tvShowState.favoriteShows.contains(showDetail.id)
         if fetchDetails {
@@ -59,7 +52,7 @@ struct TVShowDetailView: View {
         
     var body: some View {
         ZStack {
-            BlurredBackground(image: image)
+            BlurredBackground(image: nil, imagePath: imagePath)
             
             VStack {
                 TVDetailHeader(showDetail: showDetail, isFavorite: $isFavorite)
@@ -128,16 +121,7 @@ struct TVDetailHeader: View {
     init(showDetail: TVShowDetails, isFavorite: Binding<Bool>) {
         self.showDetail = showDetail
         self._isFavorite = isFavorite
-        if let path = showDetail.poster_path {
-            imagePath = path
-        }
-        if let backgroundPath = showDetail.backdrop_path {
-            backgroundImagePath = backgroundPath
-        }
     }
-    
-    private var imagePath = ""
-    private var backgroundImagePath = ""
     
     private let screenWidth = UIScreen.main.bounds.width
     private let screenHeight = UIScreen.main.bounds.height
@@ -146,35 +130,19 @@ struct TVDetailHeader: View {
     private let showImageHeight = (UIScreen.main.bounds.width/3) * 11/8
     private let showImageTop = (UIScreen.main.bounds.height/3) - (((UIScreen.main.bounds.width/3) * 11/8)/2)
     
-    private var image: UIImage {
-        if let data = store.state.images[imagePath]?[.original] {
-            return UIImage(data: data)!
-        }
-        return UIImage()
-    }
-    
-    private var backgroundImage: UIImage {
-        if let data = store.state.images[backgroundImagePath]?[.original] {
-            return UIImage(data: data)!
-        }
-        return UIImage()
-    }
-    
     var body: some View {
         ZStack {
             VStack {
-                Image(uiImage: backgroundImage)
-                    .resizable()
-                    .frame(width: screenWidth, height: backgroundImageHeight, alignment: .center)
-                    .aspectRatio(contentMode: .fill)
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: showDetail.backdrop_path,
+                                                                                         size: .original), contentMode: .fill)
+                .frame(width: screenWidth, height: backgroundImageHeight, alignment: .center)
                 Spacer()
             }
             VStack {
                 HStack {
-                    Image(uiImage: image)
-                        .resizable()
-                        .frame(width: showImageWidth, height: showImageHeight, alignment: .center)
-                        .aspectRatio(contentMode: .fill)
+                    ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: showDetail.poster_path,
+                                                                                             size: .original), contentMode: .fill)
+                    .frame(width: showImageWidth, height: showImageHeight, alignment: .center)
                 }
                     
                 HStack {

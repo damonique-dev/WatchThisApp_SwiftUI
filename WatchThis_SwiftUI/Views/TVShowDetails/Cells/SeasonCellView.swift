@@ -17,37 +17,21 @@ struct SeasonCellView: View {
         if let name = season.name {
             seasonName = name
         }
-        if let path = season.poster_path {
-            imagePath = path
-        }
         if let count = season.episode_count {
             episodeCount = "\(count) Episodes"
         }
     }
     
-    private var imagePath = ""
     private var seasonName = ""
     private var episodeCount = ""
-    
-    private var image: UIImage {
-        if let data = store.state.images[imagePath]?[.original] {
-            return UIImage(data: data)!
-        }
-        return UIImage()
-    }
-    
-    private func fetchImages() {
-        store.dispatch(action: AppActions.FetchImage(urlPath: imagePath, size: .original))
-    }
     
     var body: some View {
         ZStack {
             Color("LightGrey")
             HStack {
-                Image(uiImage: image)
-                    .resizable()
-                    .frame(width: 60 * 8/11, height: 60, alignment: .center)
-                    .aspectRatio(contentMode: .fill)
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: season.poster_path,
+                                                                                         size: .original), contentMode: .fill)
+                .frame(width: 60 * 8/11, height: 60, alignment: .center)
                 VStack(alignment: .leading) {
                     Text(seasonName)
                         .font(Font.system(.callout, design: .rounded))
@@ -61,8 +45,5 @@ struct SeasonCellView: View {
             }.padding(.leading, 8)
         }.frame(width: UIScreen.main.bounds.width/2 - 20, height: UIScreen.main.bounds.width/5)
             .cornerRadius(10)
-            .onAppear() {
-                self.fetchImages()
-        }
     }
 }

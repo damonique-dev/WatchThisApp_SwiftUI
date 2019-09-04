@@ -21,7 +21,7 @@ struct CastCellView: View {
         ZStack {
             VStack {
                 ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: person.profile_path,
-                                                                                         size: .original), contentMode: .fit)
+                                                                                         size: .original), contentMode: .fill)
                 .frame(width: 90, height: 90, alignment: .center)
                 .clipShape(Circle())
                 Text(person.name)

@@ -18,10 +18,7 @@ struct TVShowDetailView: View {
     init(showDetail: TVShowDetails, fetchDetails: Bool = false) {
         self.showDetail = showDetail
         self.fetchDetails = fetchDetails
-        
-        if let showSeasons = showDetail.seasons {
-            seasons = showSeasons
-        }
+
         if let path = showDetail.poster_path {
             imagePath = path
         }
@@ -36,8 +33,10 @@ struct TVShowDetailView: View {
     private var similarShows: [TVShowDetails] {
         return store.state.tvShowState.similarShows[showDetail.id] ?? []
     }
+    private var seasons: [Season] {
+        return store.state.tvShowState.tvShowDetail[showDetail.id]?.seasons ?? []
+    }
     
-    private var seasons = [Season]()
     private var imagePath = ""
     private var backgroundImagePath = ""
     
@@ -80,7 +79,8 @@ struct TVShowDetailView: View {
                         }
                     }
                     
-                }.frame(height: UIScreen.main.bounds.height - 620)
+                }
+                .frame(height: UIScreen.main.bounds.height - 550)
                 Spacer()
             }
             VStack(alignment: .leading) {
@@ -157,33 +157,37 @@ struct TVDetailHeader: View {
 }
 
 struct ShowOverviewDetailView: View {
+    @EnvironmentObject var store: Store<AppState>
     let showDetail: TVShowDetails
     
+    private var updatedShowDetail: TVShowDetails {
+        return store.state.tvShowState.tvShowDetail[showDetail.id] ?? showDetail
+    }
+    
     func getRuntime() -> String {
-        if let runtime = showDetail.episode_run_time?.first {
+        if let runtime = updatedShowDetail.episode_run_time?.first {
             return "\(runtime) minutes"
         }
         return ""
     }
     
     func getGenreList() -> String {
-        if let genres = showDetail.genres {
+        if let genres = updatedShowDetail.genres {
             return genres.map({$0.name!}).joined(separator: ", ")
         }
         return ""
     }
     
     var body: some View {
-        ScrollView {
+        ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("\(showDetail.overview!)")
-                    .font(Font.system(.body, design: .rounded))
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .foregroundColor(.white)
-                    .lineLimit(5)
-                    .layoutPriority(1)
-                DetailsLabel(title: "Airs:", detail: showDetail.last_air_date)
-                DetailsLabel(title: "First Air Date:", detail: showDetail.first_air_date)
+                if updatedShowDetail.overview != nil {
+                    Text(updatedShowDetail.overview!)
+                        .font(.body)
+                        .foregroundColor(.white)
+                }
+                DetailsLabel(title: "Airs:", detail: updatedShowDetail.last_air_date)
+                DetailsLabel(title: "First Air Date:", detail: updatedShowDetail.first_air_date)
                 DetailsLabel(title: "Runtime:", detail:  getRuntime())
                 DetailsLabel(title: "Genres:", detail: getGenreList())
                 Spacer()

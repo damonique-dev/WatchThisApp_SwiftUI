@@ -21,6 +21,7 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
             }
             state.tvShowSeasons[action.id]![action.seasonId] = action.season
         case let action as TVShowActions.SetTVShowSearch:
+            state = addToSearchList(state: state, query: action.query)
             state.tvShowSearch[action.query] = action.tvShows
         case let action as TVShowActions.SetSimilarTVShows:
             state.similarShows[action.id] = action.tvShows
@@ -45,5 +46,21 @@ private func mergeTVShows(state: TVShowState, tvShows: [TVShow]) -> TVShowState 
             state.tvShow[tvShow.id] = tvShow
         }
     }
+    return state
+}
+
+private func addToSearchList(state: TVShowState, query: String) -> TVShowState {
+    var state = state
+    var existingQueries = state.searchQueries
+    let index = existingQueries.firstIndex(of: query)
+    if index != nil {
+        existingQueries.remove(at: index!)
+    }
+    existingQueries.insert(query, at: 0)
+    if (existingQueries.count > 5) {
+        existingQueries =  Array(existingQueries.prefix(upTo: 5))
+    }
+    
+    state.searchQueries =  existingQueries
     return state
 }

@@ -45,12 +45,11 @@ struct ShowHomeView: View {
                         CategoryRow(title: "Trending Shows", shows: trendingShows)
                         CategoryRow(title: "Popular Shows", shows: popularShows)
                     }
-                }
-                .padding(.vertical, 44)                
+                }.padding(.vertical, 44)
             }
             .navigationBarTitle(Text("Hot Shows"), displayMode: .inline)
-            .onAppear() {
-                self.fetchShowLists()
+                .onAppear() {
+                    self.fetchShowLists()
             }
         }
     }

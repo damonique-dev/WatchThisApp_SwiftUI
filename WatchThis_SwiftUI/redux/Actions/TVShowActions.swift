@@ -107,10 +107,10 @@ struct TVShowActions {
             TMDB_Parameters[TMDBClient.ParameterKeys.SearchQuery] = query
             TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Search_TV, params: TMDB_Parameters)
             {
-                (result: Result<[TVShow], APIError>) in
+                (result: Result<TVShowResults, APIError>) in
                 switch result {
                 case let .success(response):
-                    dispatch(SetTVShowSearch(query: self.query, tvShows: response))
+                    dispatch(SetTVShowSearch(query: self.query, tvShows: response.results))
                 case let .failure(error):
                     print(error)
                     break
@@ -188,7 +188,7 @@ struct TVShowActions {
     
     struct SetTVShowSearch: Action {
         let query: String
-        let tvShows: [TVShow]
+        let tvShows: [TVShowDetails]
     }
     
     struct SetSimilarTVShows: Action {

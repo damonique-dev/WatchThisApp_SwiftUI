@@ -45,6 +45,7 @@ struct AppState: FluxState, Codable {
         var savingState = AppState()
         savingState.tvShowState.tvShow = shows
         savingState.tvShowState.favoriteShows = tvShowState.favoriteShows
+        savingState.tvShowState.searchQueries = tvShowState.searchQueries
         guard let data = try? encoder.encode(savingState) else {
             return
         }

@@ -12,7 +12,7 @@ struct TabbedView: View {
     @State var selectedTab = Tab.showList
     
     enum Tab: Int {
-        case showList, calendar, myShows
+        case showList, calendar, myShows, search
     }
     
     func tabbarItem(image: String) -> some View {
@@ -33,6 +33,9 @@ struct TabbedView: View {
             Text("My Shows").tabItem{
                 self.tabbarItem(image: "profile_icon")
             }.tag(Tab.myShows)
+            SearchView().tabItem{
+                self.tabbarItem(image: "search_icon")
+            }.tag(Tab.search)
         }
         .edgesIgnoringSafeArea(.top)
         .accentColor(.orange)

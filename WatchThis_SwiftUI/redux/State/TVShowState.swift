@@ -13,7 +13,7 @@ struct TVShowState: FluxState, Codable {
     var tvShowDetail: [Int: TVShowDetails] = [:]
     var tvShowCast: [Int: [Cast]] = [:]
     var tvShowCrew: [Int: [Crew]] = [:]
-    var tvShowSearch: [String: [TVShow]] = [:]
+    var tvShowSearch: [String: [TVShowDetails]] = [:]
     var similarShows: [Int: [TVShowDetails]] = [:]
     
     // [TVShowId: [SeasonId: Season]]
@@ -22,4 +22,5 @@ struct TVShowState: FluxState, Codable {
     var tvLists: [TVShowList : [Int]] = [:]
     
     var favoriteShows: Set<Int> = Set()
+    var searchQueries: [String] = []
 }

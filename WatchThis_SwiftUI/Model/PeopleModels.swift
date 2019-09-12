@@ -18,26 +18,26 @@ struct Cast: Codable, Identifiable {
     let id: Int
     let name: String
     let character: String
-    var profile_path: String?
+    var profilePath: String?
 }
 
 struct Crew: Codable, Identifiable {
     let id: Int
     let name: String
     var job: String?
-    var profile_path: String?
+    var profilePath: String?
 }
 
 // The basic information about a Person
 struct Person: Codable, Identifiable {
     var character: String?
-    var credit_id: String?
+    var creditId: String?
     var id: Int?
     var name: String?
     var gender: Int?
-    var profile_path: String?
+    var profilePath: String?
     var biography: String?
-    var place_of_birth: String?
+    var placeOfBirth: String?
     var birthday: String?
     var deathday: String?
     var homepage: String?
@@ -46,7 +46,7 @@ struct Person: Codable, Identifiable {
 struct Network: Codable {
     var id: Int?
     var name: String?
-    var logo_path: String?
+    var logoPath: String?
 }
 
 #if DEBUG

@@ -12,29 +12,22 @@ struct TabbedView: View {
     @State var selectedTab = Tab.showList
     
     enum Tab: Int {
-        case showList, calendar, myShows, search
-    }
-    
-    func tabbarItem(image: String) -> some View {
-        HStack() {
-            Image(image)
-                
-        }
+        case showList, movieList, myShows, search
     }
     
     var body: some View {
         TabView(selection: $selectedTab) {
             ShowHomeView().tabItem{
-                self.tabbarItem(image: "fire_icon")
+                Image(systemName: "tv.fill").font(.system(size: 30))
             }.tag(Tab.showList)
-            Text("Calender").tabItem{
-                self.tabbarItem(image: "calendar_icon")
-            }.tag(Tab.calendar)
+            Text("Movies").tabItem{
+                Image(systemName: "film.fill").font(.system(size: 30))
+            }.tag(Tab.movieList)
             Text("My Shows").tabItem{
-                self.tabbarItem(image: "profile_icon")
+                Image(systemName: "person.fill").font(.system(size: 30))
             }.tag(Tab.myShows)
             SearchView().tabItem{
-                self.tabbarItem(image: "search_icon")
+                Image(systemName: "magnifyingglass").font(.system(size: 30))
             }.tag(Tab.search)
         }
         .edgesIgnoringSafeArea(.top)

@@ -18,14 +18,14 @@ struct BlurredBackground: View {
                 Image(uiImage: image!)
                     .resizable()
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                    .blur(radius: 20)
+                    .blur(radius: 15)
             } else {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: imagePath,
+            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: imagePath,
                                                                                          size: .original))
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                    .blur(radius: 20)
+                    .blur(radius: 15)
             }
-            Color(.black).opacity(0.8)
+            Color(.black).opacity(0.75)
         }.edgesIgnoringSafeArea(.all)
         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
     }

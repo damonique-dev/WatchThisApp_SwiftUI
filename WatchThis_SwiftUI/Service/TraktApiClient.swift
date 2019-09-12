@@ -34,6 +34,7 @@ class TraktApiClient {
                 case .success(let result):
                     do {
                         let data = try JSONSerialization.data(withJSONObject: result)
+                        self.decoder.keyDecodingStrategy = .convertFromSnakeCase
                         let object = try self.decoder.decode(T.self, from: data)
                         DispatchQueue.main.async {
                             completionHandler(.success(object))

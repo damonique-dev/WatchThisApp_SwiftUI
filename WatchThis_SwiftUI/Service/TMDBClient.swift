@@ -9,6 +9,8 @@
 import Foundation
 import Alamofire
 
+var TMDB_Parameters = [TMDBClient.ParameterKeys.APIKey : TMDBClient.ParameterValues.APIKey]
+
 class TMDBClient {
     var parameters = [ParameterKeys.APIKey : ParameterValues.APIKey]
     let decoder = JSONDecoder()
@@ -27,6 +29,7 @@ class TMDBClient {
                 case .success(let result):
                     do {
                         let data = try JSONSerialization.data(withJSONObject: result as? [String: AnyObject] ?? [:])
+                        self.decoder.keyDecodingStrategy = .convertFromSnakeCase
                         let object = try self.decoder.decode(T.self, from: data)
                         DispatchQueue.main.async {
                             completionHandler(.success(object))

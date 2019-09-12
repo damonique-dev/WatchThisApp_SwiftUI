@@ -22,5 +22,5 @@ struct TVShowState: FluxState, Codable {
     var tvLists: [TVShowList : [Int]] = [:]
     
     var favoriteShows: Set<Int> = Set()
-    var searchQueries: [String] = []
+    var tvSearchQueries: [String] = []
 }

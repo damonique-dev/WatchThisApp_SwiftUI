@@ -14,11 +14,11 @@ struct TVShow: Codable, Identifiable {
     let name: String
     var genre_ids: [Int]?
     var popularity: Float?
-    var first_air_date: String?
-    var backdrop_path: String?
-    var vote_average: Float?
+    var firstAirDate: String?
+    var backdropPath: String?
+    var voteAverage: Float?
     var overview: String?
-    var poster_path: String?
+    var posterPath: String?
 }
 
 // The detail information of a TV show
@@ -26,57 +26,58 @@ struct TVShowDetails: Codable, Identifiable {
     let id: Int
     let name: String
     var popularity: Float?
-    var first_air_date: String?
-    var backdrop_path: String?
-    var vote_average: Float?
+    var firstAirDate: String?
+    var backdropPath: String?
+    var voteAverage: Float?
     var overview: String?
-    var poster_path: String?
-    var created_by: [Person]?
-    var episode_run_time: [Int]?
+    var posterPath: String?
+    var createdBy: [Person]?
+    var episodeRunTime: [Int]?
     var genres: [Genre]?
-    var in_production: Bool?
+    var inProduction: Bool?
     var languages: [String]?
-    var last_air_date: String?
-    var last_episode_to_air: Episode?
-    var next_episode_to_air: Episode?
+    var lastAirDate: String?
+    var lastEpisodeToAir: Episode?
+    var nextEpisodeToAir: Episode?
     var networks: [Network]?
-    var number_of_episodes: Int?
-    var number_of_seasons: Int?
+    var numberOfEpisodes: Int?
+    var numberOfSeasons: Int?
     var seasons: [Season]?
     var status: String?
     var type: String?
-    var cast: [Person]?
+    var credits: Credits?
     var videos: VideoResults?
+    var similar: TVShowResults?
 }
 
 struct TVShowResults: Codable  {
     let results: [TVShowDetails]
     let page: Int
-    let total_results: Int
-    let total_pages: Int
+    let totalResults: Int
+    let totalPages: Int
 }
 
 struct Season: Codable, Identifiable {
-    var last_air_date: String?
-    var episode_count: Int?
+    var lastAirDate: String?
+    var episodeCount: Int?
     var id: Int?
     var name: String?
     var overview: String?
-    var poster_path: String?
-    var season_number: Int?
+    var posterPath: String?
+    var seasonNumber: Int?
     var episodes: [Episode]?
     var videos: [Video]?
 }
 
 struct Episode: Codable, Identifiable {
-    var air_date: String?
-    var episode_number: Int?
+    var airDate: String?
+    var episodeNumber: Int?
     var id: Int?
     var name: String?
     var overview: String?
-    var still_path: String?
-    var season_number: Int?
-    var show_id: Int?
+    var stillPath: String?
+    var seasonNumber: Int?
+    var showId: Int?
 }
 
 struct VideoResults: Codable {
@@ -97,22 +98,6 @@ struct Genre: Codable, Identifiable {
     var name: String?
 }
 
-struct TraktListResults: Codable {
-    var show: TraktList?
-}
-
-struct TraktList: Codable {
-    var title: String?
-    var year: Int?
-    var ids: Ids?
-}
-
-struct Ids: Codable {
-    var trakt: Int?
-    var tmdb: Int?
-    var imdb: String?
-}
-
 enum TVShowList: String, Codable {
     case Popular
     case Trending
@@ -129,19 +114,19 @@ let testTVShowDetail = TVShowDetails(
     id: 1416,
     name:"Grey's Anatomy",
     popularity: 124.38,
-    first_air_date: "2005-03-27",
-    backdrop_path: "/y6JABtgWMVYPx84Rvy7tROU5aNH.jpg",
+    firstAirDate: "2005-03-27",
+    backdropPath: "/y6JABtgWMVYPx84Rvy7tROU5aNH.jpg",
     overview: "Follows the personal and professional lives of a group of doctors at Seattle’s Grey Sloan Memorial Hospital.",
-    poster_path: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg",
-    number_of_episodes: 341,
-    number_of_seasons: 15
+    posterPath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg",
+    numberOfEpisodes: 341,
+    numberOfSeasons: 15
 )
 
 let testSeasons: [Season] = [
-    Season(episode_count: 3, name: "Specials"),
-    Season(episode_count: 5, name: "Season 1"),
-    Season(episode_count: 7, name: "Season 2"),
-    Season(episode_count: 9, name: "Season 3"),
-    Season(episode_count: 12, name: "Season 4"),
+    Season(episodeCount: 3, name: "Specials"),
+    Season(episodeCount: 5, name: "Season 1"),
+    Season(episodeCount: 7, name: "Season 2"),
+    Season(episodeCount: 9, name: "Season 3"),
+    Season(episodeCount: 12, name: "Season 4"),
 ]
 #endif

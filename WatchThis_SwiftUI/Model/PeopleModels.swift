@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct Credits: Codable, Identifiable {
-    let id: Int
-    let cast: [Cast]
-    let crew: [Crew]
+struct Credits: Codable {
+    var id: Int?
+    var cast: [Cast]?
+    var crew: [Crew]?
 }
 
 struct Cast: Codable, Identifiable {

@@ -19,19 +19,19 @@ struct TVShowDetailView: View {
         self.showDetail = showDetail
         self.fetchDetails = fetchDetails
 
-        if let path = showDetail.poster_path {
+        if let path = showDetail.posterPath {
             imagePath = path
         }
-        if let backgroundPath = showDetail.backdrop_path {
+        if let backgroundPath = showDetail.backdropPath {
             backgroundImagePath = backgroundPath
         }
     }
     
     private var cast: [Cast] {
-        return store.state.tvShowState.tvShowCast[showDetail.id] ?? []
+        return store.state.tvShowState.tvShowDetail[showDetail.id]?.credits?.cast ?? []
     }
     private var similarShows: [TVShowDetails] {
-        return store.state.tvShowState.similarShows[showDetail.id] ?? []
+        return store.state.tvShowState.tvShowDetail[showDetail.id]?.similar?.results ?? []
     }
     private var seasons: [Season] {
         return store.state.tvShowState.tvShowDetail[showDetail.id]?.seasons ?? []
@@ -45,8 +45,6 @@ struct TVShowDetailView: View {
         if fetchDetails {
             store.dispatch(action: TVShowActions.FetchTVShowDetails(id: showDetail.id))
         }
-        store.dispatch(action: TVShowActions.FetchShowCast(id: showDetail.id))
-        store.dispatch(action: TVShowActions.FetchSimilarTVShows(id: showDetail.id))
     }
         
     var body: some View {
@@ -133,14 +131,14 @@ struct TVDetailHeader: View {
     var body: some View {
         ZStack {
             VStack {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: showDetail.backdrop_path,
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: showDetail.backdropPath,
                                                                                          size: .original), contentMode: .fill)
                 .frame(width: screenWidth, height: backgroundImageHeight, alignment: .center)
                 Spacer()
             }
             VStack {
                 HStack {
-                    ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: showDetail.poster_path,
+                    ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: showDetail.posterPath,
                                                                                              size: .original), contentMode: .fill)
                     .frame(width: showImageWidth, height: showImageHeight, alignment: .center)
                 }
@@ -165,7 +163,7 @@ struct ShowOverviewDetailView: View {
     }
     
     func getRuntime() -> String {
-        if let runtime = updatedShowDetail.episode_run_time?.first {
+        if let runtime = updatedShowDetail.episodeRunTime?.first {
             return "\(runtime) minutes"
         }
         return ""
@@ -186,8 +184,8 @@ struct ShowOverviewDetailView: View {
                         .font(.body)
                         .foregroundColor(.white)
                 }
-                DetailsLabel(title: "Airs:", detail: updatedShowDetail.last_air_date)
-                DetailsLabel(title: "First Air Date:", detail: updatedShowDetail.first_air_date)
+                DetailsLabel(title: "Airs:", detail: updatedShowDetail.lastAirDate)
+                DetailsLabel(title: "First Air Date:", detail: updatedShowDetail.firstAirDate)
                 DetailsLabel(title: "Runtime:", detail:  getRuntime())
                 DetailsLabel(title: "Genres:", detail: getGenreList())
                 Spacer()

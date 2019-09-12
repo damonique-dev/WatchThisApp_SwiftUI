@@ -9,7 +9,6 @@
 import Foundation
 
 extension TraktApiClient {
-
     struct Constants {
         static let ApiScheme = "https"
         static let ApiHost = "api.trakt.tv"
@@ -40,9 +39,17 @@ extension TraktApiClient {
     
     
     enum Endpoint {
+        // TV Enpoints
         case TV_Popular
         case TV_Trending
         case TV_MostWatched(period: String)
+        
+        // Movie Endpoints
+        case Movie_Trending
+        case Movie_Popular
+        case Movie_TopGrossing // In US Box office from past weekend
+        case Movie_Anticipated
+        case Movie_MostWatched(period: String)
         
         struct Period {
             static let weekly = "weekly"
@@ -59,6 +66,16 @@ extension TraktApiClient {
                     return "/shows/trending"
                 case let .TV_MostWatched(period):
                     return "shows/watched/\(period)"
+                case .Movie_Trending:
+                        return "/movies/trending"
+                case .Movie_Popular:
+                    return "/movies/popular"
+                case .Movie_TopGrossing:
+                    return "/movies/boxoffice"
+                case .Movie_Anticipated:
+                    return "/movies/anticipated"
+                case let .Movie_MostWatched(period):
+                    return "/movies/watched/\(period)"
             }
         }
     }

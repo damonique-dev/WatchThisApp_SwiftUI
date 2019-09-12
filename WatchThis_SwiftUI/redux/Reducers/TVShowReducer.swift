@@ -51,7 +51,7 @@ private func mergeTVShows(state: TVShowState, tvShows: [TVShow]) -> TVShowState 
 
 private func addToSearchList(state: TVShowState, query: String) -> TVShowState {
     var state = state
-    var existingQueries = state.searchQueries
+    var existingQueries = state.tvSearchQueries
     let index = existingQueries.firstIndex(of: query)
     if index != nil {
         existingQueries.remove(at: index!)
@@ -61,6 +61,6 @@ private func addToSearchList(state: TVShowState, query: String) -> TVShowState {
         existingQueries =  Array(existingQueries.prefix(upTo: 5))
     }
     
-    state.searchQueries =  existingQueries
+    state.tvSearchQueries =  existingQueries
     return state
 }

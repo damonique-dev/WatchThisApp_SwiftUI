@@ -17,7 +17,7 @@ struct SeasonCellView: View {
         if let name = season.name {
             seasonName = name
         }
-        if let count = season.episode_count {
+        if let count = season.episodeCount {
             episodeCount = "\(count) Episodes"
         }
     }
@@ -29,7 +29,7 @@ struct SeasonCellView: View {
         ZStack {
             Color("LightGrey")
             HStack {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: season.poster_path,
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: season.posterPath,
                                                                                          size: .original), contentMode: .fill)
                 .frame(width: 60 * 8/11, height: 60, alignment: .center)
                 VStack(alignment: .leading) {

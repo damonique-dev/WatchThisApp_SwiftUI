@@ -54,6 +54,11 @@
 		54AAA42B2318C27A0092A11E /* TraktApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA42A2318C27A0092A11E /* TraktApiClient.swift */; };
 		54AAA42D2318C2BD0092A11E /* TraktApiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA42C2318C2BD0092A11E /* TraktApiHelper.swift */; };
 		54AAA4312318D6D30092A11E /* TabbedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA4302318D6D30092A11E /* TabbedView.swift */; };
+		54AEB75F2329DE010013CAFD /* MovieModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AEB75E2329DE010013CAFD /* MovieModels.swift */; };
+		54AEB7612329DEB00013CAFD /* TraktModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AEB7602329DEB00013CAFD /* TraktModels.swift */; };
+		54AEB7632329E6600013CAFD /* MovieState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AEB7622329E6600013CAFD /* MovieState.swift */; };
+		54AEB7652329FE8A0013CAFD /* MovieActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AEB7642329FE8A0013CAFD /* MovieActions.swift */; };
+		54AEB767232A0E740013CAFD /* MovieReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AEB766232A0E740013CAFD /* MovieReducer.swift */; };
 		F348B248C59CACA818C34A44 /* Pods_WatchThis_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7174350BA5E629424B8CBA26 /* Pods_WatchThis_SwiftUI.framework */; };
 /* End PBXBuildFile section */
 
@@ -107,6 +112,11 @@
 		54AAA42A2318C27A0092A11E /* TraktApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktApiClient.swift; sourceTree = "<group>"; };
 		54AAA42C2318C2BD0092A11E /* TraktApiHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktApiHelper.swift; sourceTree = "<group>"; };
 		54AAA4302318D6D30092A11E /* TabbedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedView.swift; sourceTree = "<group>"; };
+		54AEB75E2329DE010013CAFD /* MovieModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModels.swift; sourceTree = "<group>"; };
+		54AEB7602329DEB00013CAFD /* TraktModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktModels.swift; sourceTree = "<group>"; };
+		54AEB7622329E6600013CAFD /* MovieState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieState.swift; sourceTree = "<group>"; };
+		54AEB7642329FE8A0013CAFD /* MovieActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieActions.swift; sourceTree = "<group>"; };
+		54AEB766232A0E740013CAFD /* MovieReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieReducer.swift; sourceTree = "<group>"; };
 		6060183C0BFCC0CF7C33F67E /* Pods-WatchThis_SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchThis_SwiftUI.release.xcconfig"; path = "Target Support Files/Pods-WatchThis_SwiftUI/Pods-WatchThis_SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		6C3ECBBA47DEA4F9076B7FD6 /* Pods-WatchThis_SwiftUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchThis_SwiftUITests.debug.xcconfig"; path = "Target Support Files/Pods-WatchThis_SwiftUITests/Pods-WatchThis_SwiftUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7174350BA5E629424B8CBA26 /* Pods_WatchThis_SwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WatchThis_SwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,6 +244,8 @@
 				54486B3F22FBB16100F9E869 /* TVShowModels.swift */,
 				54486B4122FBB16100F9E869 /* UserModels.swift */,
 				54605C20231F73C50016F065 /* SearchModel.swift */,
+				54AEB75E2329DE010013CAFD /* MovieModels.swift */,
+				54AEB7602329DEB00013CAFD /* TraktModels.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -274,6 +286,7 @@
 			children = (
 				54AAA42223179CDA0092A11E /* TVShowActions.swift */,
 				54AAA42423179CEC0092A11E /* PeopleActions.swift */,
+				54AEB7642329FE8A0013CAFD /* MovieActions.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -284,6 +297,7 @@
 				54AAA41C23179B6C0092A11E /* AppReducer.swift */,
 				54AAA41E23179B770092A11E /* TVShowReducer.swift */,
 				54AAA42023179B830092A11E /* PeopleReducer.swift */,
+				54AEB766232A0E740013CAFD /* MovieReducer.swift */,
 			);
 			path = Reducers;
 			sourceTree = "<group>";
@@ -294,6 +308,7 @@
 				54AAA416231799740092A11E /* AppState.swift */,
 				54AAA418231799BD0092A11E /* TVShowState.swift */,
 				54AAA41A231799FF0092A11E /* PeopleState.swift */,
+				54AEB7622329E6600013CAFD /* MovieState.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -485,10 +500,13 @@
 				54AAA40C231799060092A11E /* AsyncActionsMiddleware.swift in Sources */,
 				54AAA42523179CEC0092A11E /* PeopleActions.swift in Sources */,
 				54AAA3E5231262810092A11E /* GridView.swift in Sources */,
+				54AEB7632329E6600013CAFD /* MovieState.swift in Sources */,
 				54486B4522FBB16100F9E869 /* UserModels.swift in Sources */,
 				54605C1D231C9DDD0016F065 /* ImageLoaderView.swift in Sources */,
+				54AEB7612329DEB00013CAFD /* TraktModels.swift in Sources */,
 				54AAA3F1231349B20092A11E /* ShowCell.swift in Sources */,
 				54AAA414231799060092A11E /* Middleware.swift in Sources */,
+				54AEB7652329FE8A0013CAFD /* MovieActions.swift in Sources */,
 				54AAA42323179CDA0092A11E /* TVShowActions.swift in Sources */,
 				54AAA4292318B8B60092A11E /* ImageService.swift in Sources */,
 				54605C1F231CD4ED0016F065 /* SearchView.swift in Sources */,
@@ -499,6 +517,7 @@
 				54AAA419231799BD0092A11E /* TVShowState.swift in Sources */,
 				54197A7C22FBB061000CE4D2 /* SceneDelegate.swift in Sources */,
 				540CB411231BB2C4001C8CC4 /* Labels.swift in Sources */,
+				54AEB75F2329DE010013CAFD /* MovieModels.swift in Sources */,
 				540CB40D231BB25B001C8CC4 /* SeasonCellView.swift in Sources */,
 				54AAA411231799060092A11E /* Reducer.swift in Sources */,
 				54AAA4312318D6D30092A11E /* TabbedView.swift in Sources */,
@@ -517,6 +536,7 @@
 				54AAA412231799060092A11E /* FluxState.swift in Sources */,
 				54197A7E22FBB061000CE4D2 /* TVShowDetailView.swift in Sources */,
 				54605C21231F73C50016F065 /* SearchModel.swift in Sources */,
+				54AEB767232A0E740013CAFD /* MovieReducer.swift in Sources */,
 				54AAA417231799740092A11E /* AppState.swift in Sources */,
 				54AAA41F23179B770092A11E /* TVShowReducer.swift in Sources */,
 				54486B4322FBB16100F9E869 /* TVShowModels.swift in Sources */,

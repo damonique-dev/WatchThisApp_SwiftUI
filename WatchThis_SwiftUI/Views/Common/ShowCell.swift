@@ -26,7 +26,7 @@ struct ShowCell: View {
                 .frame(width: height * 8/11, height: height)
                 .foregroundColor(.white)
                 .lineLimit(nil)
-            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: tvShow.poster_path,
+            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: tvShow.posterPath,
                                                                                      size: .original))
                 .frame(width: height * 8/11, height: height)
                 .cornerRadius(15)

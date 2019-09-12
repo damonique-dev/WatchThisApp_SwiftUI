@@ -20,7 +20,7 @@ struct SearchView: View {
     
     private var previousSearches: [String] {
         let showState = store.state.tvShowState
-        return showState.searchQueries 
+        return showState.tvSearchQueries 
     }
     
     var body: some View {
@@ -104,7 +104,7 @@ struct SearchViewRow: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: tvShow.poster_path,
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: tvShow.posterPath,
                                                                                          size: .original), contentMode: .fill)
                     .frame(width: 100 * 8/11, height: 100)
                 VStack(alignment: .leading) {

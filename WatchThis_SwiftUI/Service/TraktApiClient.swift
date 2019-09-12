@@ -9,6 +9,8 @@
 import Foundation
 import Alamofire
 
+var Trakt_Parameters = [TraktApiClient.ParameterKeys.Extended : "full"]
+
 class TraktApiClient {
     let decoder = JSONDecoder()
     
@@ -25,7 +27,7 @@ class TraktApiClient {
         return Singleton.sharedInstance
     }
     
-    func GetShowList<T: Codable>(endpoint: Endpoint, params: [String: String]?, completionHandler: @escaping (Result<T, APIError>) -> Void) {
+    func GetList<T: Codable>(endpoint: Endpoint, params: [String: String]?, completionHandler: @escaping (Result<T, APIError>) -> Void) {
         let url = URLFromParameters(endpoint: endpoint, parameters: params as [String : AnyObject]?)
         AF.request(url, headers: header).responseJSON { response in
             switch response.result {

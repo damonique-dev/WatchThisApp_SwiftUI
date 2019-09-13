@@ -183,6 +183,7 @@ struct ShowOverviewDetailView: View {
                     Text(updatedShowDetail.overview!)
                         .font(.body)
                         .foregroundColor(.white)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 DetailsLabel(title: "Airs:", detail: updatedShowDetail.lastAirDate)
                 DetailsLabel(title: "First Air Date:", detail: updatedShowDetail.firstAirDate)

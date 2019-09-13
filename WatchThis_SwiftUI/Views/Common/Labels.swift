@@ -23,6 +23,7 @@ struct DetailsLabel: View {
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.leading)
+            Spacer()
         }
     }
 }

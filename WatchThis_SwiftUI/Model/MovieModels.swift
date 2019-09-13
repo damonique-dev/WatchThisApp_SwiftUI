@@ -12,7 +12,7 @@ struct MovieDetails: Details {
     let id: Int
     let title: String
     var posterPath: String?
-    var backgroundPath: String?
+    var backdropPath: String?
     var overview: String?
     var genres: [Genre]?
     var releaseDate: String?
@@ -49,3 +49,15 @@ enum MovieList: String, Codable {
     case NowShowing
     case Anticipated
 }
+
+#if DEBUG
+let testMovieDetails = MovieDetails(
+    id: 474350,
+    title:"It Chapter Two",
+    posterPath: "/zfE0R94v1E8cuKAerbskfD3VfUt.jpg",
+    backdropPath: "/p15fLYp0X04mS8cbHVj7mZ6PBBE.jpg",
+    overview: "27 years after overcoming the malevolent supernatural entity Pennywise, the former members of the Losers' Club, who have grown up and moved away from Derry, are brought back together by a devastating phone call.",
+    revenue: 185000000
+)
+#endif
+

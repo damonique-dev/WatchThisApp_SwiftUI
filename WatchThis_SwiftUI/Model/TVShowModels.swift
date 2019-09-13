@@ -104,10 +104,10 @@ let testTVShowDetail = TVShowDetails(
 )
 
 let testSeasons: [Season] = [
-    Season(episodeCount: 3, name: "Specials"),
-    Season(episodeCount: 5, name: "Season 1"),
-    Season(episodeCount: 7, name: "Season 2"),
-    Season(episodeCount: 9, name: "Season 3"),
-    Season(episodeCount: 12, name: "Season 4"),
+    Season(episodeCount: 3, name: "Specials", posterPath: "/foM4ImvUXPrD2NvtkHyixq5vhPx.jpg"),
+    Season(episodeCount: 5, name: "Season 1", posterPath: "/foM4ImvUXPrD2NvtkHyixq5vhPx.jpg"),
+    Season(episodeCount: 7, name: "Season 2", posterPath: "/foM4ImvUXPrD2NvtkHyixq5vhPx.jpg"),
+    Season(episodeCount: 9, name: "Season 3", posterPath: "/foM4ImvUXPrD2NvtkHyixq5vhPx.jpg"),
+    Season(episodeCount: 12, name: "Season 4", posterPath: "/foM4ImvUXPrD2NvtkHyixq5vhPx.jpg"),
 ]
 #endif

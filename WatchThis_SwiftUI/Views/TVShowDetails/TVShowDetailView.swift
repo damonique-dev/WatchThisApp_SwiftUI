@@ -53,33 +53,58 @@ struct TVShowDetailView: View {
             
             VStack {
                 TVDetailHeader(showDetail: showDetail, isFavorite: $isFavorite)
-                HStack {
-                    DetailTabButton(selectedTab: $selectedTab, text: "Overview", buttonIndex: 0)
-                    DetailTabButton(selectedTab: $selectedTab, text: "Cast", buttonIndex: 1)
-                    DetailTabButton(selectedTab: $selectedTab, text: "Seasons", buttonIndex: 2)
-                    DetailTabButton(selectedTab: $selectedTab, text: "Similar", buttonIndex: 3)
-                }.padding(.top, CGFloat(16))
-                ZStack {
-                    if selectedTab == 0 {
+                ScrollView(.vertical) {
+                    VStack {
                         ShowOverviewDetailView(showDetail: showDetail)
-                    }
-                    if selectedTab == 1 {
-                        GridView(cast, columns: 3) { CastCellView(person: $0) }
-                    }
-                    if selectedTab == 2 {
-                        GridView(seasons, columns: 2) { SeasonCellView(season: $0) }
-                    }
-                    if selectedTab == 3 {
-                        GridView(similarShows, columns: 3) { show in
-                            NavigationLink(destination: TVShowDetailView(showDetail: show, fetchDetails: true)) {
-                                RoundedImageCell(item: show, height: CGFloat(125))
-                            }
+                        if cast.count > 0 {
+                            VStack(alignment: .leading) {
+                                Text("Cast")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.leading)
+                                ScrollView(.horizontal) {
+                                    HStack {
+                                        ForEach(cast) { cast in
+                                            CastCellView(person: cast)
+                                        }
+                                    }
+                                }
+                            }.padding(.top, 8)
+                        }
+                        if seasons.count > 0 {
+                            VStack(alignment: .leading) {
+                                Text("Seasons")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.leading)
+                                ScrollView(.horizontal) {
+                                    HStack {
+                                        ForEach(seasons) { season in
+                                            SeasonCell(season: season)
+                                        }
+                                    }
+                                }.padding(8)
+                            }.padding(.top, 8)
+                        }
+                        if similarShows.count > 0 {
+                            VStack(alignment: .leading) {
+                                Text("Similar Shows")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.leading)
+                                ScrollView(.horizontal) {
+                                    HStack(spacing: 16.0) {
+                                        ForEach(similarShows) { show in
+                                            NavigationLink(destination: TVShowDetailView(showDetail: show, fetchDetails: true)) {
+                                                RoundedImageCell(item: show, height: CGFloat(125))
+                                            }
+                                        }
+                                    }
+                                }
+                            }.padding(.top, 8)
                         }
                     }
-                    
-                }
-                .frame(height: UIScreen.main.bounds.height - 550)
-                Spacer()
+                }.padding(8)
             }
             VStack(alignment: .leading) {
                 HStack {
@@ -177,21 +202,18 @@ struct ShowOverviewDetailView: View {
     }
     
     var body: some View {
-        ScrollView(.vertical) {
-            VStack(alignment: .leading, spacing: 4) {
-                if updatedShowDetail.overview != nil {
-                    Text(updatedShowDetail.overview!)
-                        .font(.body)
-                        .foregroundColor(.white)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                DetailsLabel(title: "Airs:", detail: updatedShowDetail.lastAirDate)
-                DetailsLabel(title: "First Air Date:", detail: updatedShowDetail.firstAirDate)
-                DetailsLabel(title: "Runtime:", detail:  getRuntime())
-                DetailsLabel(title: "Genres:", detail: getGenreList())
-                Spacer()
+        VStack(alignment: .leading, spacing: 4) {
+            if updatedShowDetail.overview != nil {
+                Text(updatedShowDetail.overview!)
+                    .font(.body)
+                    .foregroundColor(.white)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(8)
+            DetailsLabel(title: "Airs:", detail: updatedShowDetail.lastAirDate)
+            DetailsLabel(title: "First Air Date:", detail: updatedShowDetail.firstAirDate)
+            DetailsLabel(title: "Runtime:", detail:  getRuntime())
+            DetailsLabel(title: "Genres:", detail: getGenreList())
+            Spacer()
         }
     }
 }
@@ -203,3 +225,33 @@ struct TVShowDetailView_Previews: PreviewProvider {
     }
 }
 #endif
+
+struct SeasonCell: View {
+    let season: Season
+    
+    var body: some View {
+        ZStack {
+            Text("\(season.name ?? "")")
+                .font(Font.system(.headline, design: .rounded))
+                .fontWeight(.semibold)
+                .frame(width: 125 * 8/11, height: 125)
+                .foregroundColor(.white)
+                .lineLimit(nil)
+            VStack {
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: season.posterPath,
+                                                                                         size: .original))
+                    .frame(width: 125 * 8/11, height: 125)
+                    .cornerRadius(15)
+                Text("\(season.name ?? "")")
+                    .font(Font.system(.callout, design: .rounded))
+                    .fontWeight(.bold)
+                    .foregroundColor(.orange)
+                    .lineLimit(2)
+                Text("\(season.episodeCount ?? 0) Episodes")
+                    .font(Font.system(.caption, design: .rounded))
+                    .foregroundColor(.white)
+                    .lineLimit(2)
+            }
+        }
+    }
+}

@@ -35,16 +35,10 @@ struct MovieDetailsView: View {
     }
     
     private var cast: [Cast] {
-//        return [Cast(id: 1, name: "Cast 1", character: "character 1", profilePath: "/oPIfGm3mf4lbmO5pWwMvfTt5BM1.jpg"),
-//        Cast(id: 1, name: "Cast 1", character: "character 1", profilePath: "/oPIfGm3mf4lbmO5pWwMvfTt5BM1.jpg"),
-//        Cast(id: 1, name: "Cast 1", character: "character 1", profilePath: "/oPIfGm3mf4lbmO5pWwMvfTt5BM1.jpg"),
-//        Cast(id: 1, name: "Cast 1", character: "character 1", profilePath: "/oPIfGm3mf4lbmO5pWwMvfTt5BM1.jpg"),
-//        Cast(id: 1, name: "Cast 1", character: "character 1", profilePath: "/oPIfGm3mf4lbmO5pWwMvfTt5BM1.jpg")]
         return store.state.movieState.movieDetails[movieDetails.id]?.credits?.cast ?? [Cast]()
     }
     
     private var similarMovies: [MovieDetails] {
-//        return [testMovieDetails, testMovieDetails, testMovieDetails, testMovieDetails]
         return store.state.movieState.movieDetails[movieDetails.id]?.similar?.results ?? [MovieDetails]()
     }
     

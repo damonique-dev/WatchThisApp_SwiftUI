@@ -72,7 +72,7 @@ struct TVShowDetailView: View {
                     if selectedTab == 3 {
                         GridView(similarShows, columns: 3) { show in
                             NavigationLink(destination: TVShowDetailView(showDetail: show, fetchDetails: true)) {
-                                ShowCell(tvShow: show, height: CGFloat(125))
+                                RoundedImageCell(item: show, height: CGFloat(125))
                             }
                         }
                     }

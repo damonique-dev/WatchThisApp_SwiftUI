@@ -47,6 +47,24 @@ struct MovieActions {
         }
     }
     
+    struct FetchNowShowingMovies: AsyncAction {
+        let id: Int
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            TMDB_Parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.AppendVideoCreditsSimilar
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Movie_NowPlaying, params: TMDB_Parameters)
+            {
+                (result: Result<[MovieDetails], APIError>) in
+                switch result {
+                case let .success(response):
+                    dispatch(SetNowShowingMovies(movies: response))
+                case let .failure(error):
+                    print(error)
+                    break
+                }
+            }
+        }
+    }
+    
     struct FetchMovieDetails: AsyncAction {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
@@ -68,6 +86,11 @@ struct MovieActions {
     struct SetMovieList: Action {
         let list: MovieList
         let ids: [Int]
+    }
+    
+    struct SetNowShowingMovies: Action {
+        let list = MovieList.NowShowing
+        let movies: [MovieDetails]
     }
     
     struct SetMovieDetail: Action {

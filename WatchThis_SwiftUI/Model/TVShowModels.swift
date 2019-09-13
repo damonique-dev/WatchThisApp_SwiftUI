@@ -22,7 +22,7 @@ struct TVShow: Codable, Identifiable {
 }
 
 // The detail information of a TV show
-struct TVShowDetails: Codable, Identifiable {
+struct TVShowDetails: Details, Identifiable {
     let id: Int
     let name: String
     var popularity: Float?
@@ -48,6 +48,10 @@ struct TVShowDetails: Codable, Identifiable {
     var credits: Credits?
     var videos: VideoResults?
     var similar: TVShowResults?
+    
+    var title: String {
+        return name
+    }
 }
 
 struct TVShowResults: Codable  {
@@ -80,34 +84,11 @@ struct Episode: Codable, Identifiable {
     var showId: Int?
 }
 
-struct VideoResults: Codable {
-    var results: [Video]?
-}
-
-struct Video: Codable, Identifiable {
-    var id: String?
-    var name: String?
-    var site: String?
-    var key: String?
-    var type: String?
-    var size: Int?
-}
-
-struct Genre: Codable, Identifiable {
-    var id: Int?
-    var name: String?
-}
-
 enum TVShowList: String, Codable {
     case Popular
     case Trending
     case MostWatchedWeekly
 }
-
-//struct Forecast: Codable, Identifiable {
-//    var date: String?
-//    var tvShows: [TVShow]?
-//}
 
 #if DEBUG
 let testTVShowDetail = TVShowDetails(

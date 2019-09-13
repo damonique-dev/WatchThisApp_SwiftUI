@@ -17,10 +17,10 @@ struct TabbedView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            ShowHomeView().tabItem{
+            TVShowListView().tabItem{
                 Image(systemName: "tv.fill").font(.system(size: 30))
             }.tag(Tab.showList)
-            Text("Movies").tabItem{
+            MovieListView().tabItem{
                 Image(systemName: "film.fill").font(.system(size: 30))
             }.tag(Tab.movieList)
             Text("My Shows").tabItem{

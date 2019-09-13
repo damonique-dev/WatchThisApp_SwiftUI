@@ -14,7 +14,7 @@ struct MovieState: FluxState, Codable {
     var movieCrew: [Int: [Crew]] = [:]
     var movieSearch: [String: [MovieDetails]] = [:]
     var similarMovies: [Int: [MovieDetails]] = [:]
-    
+    var nowShowingMovies: [MovieDetails] = []
     var movieLists: [MovieList : [Int]] = [:]
     
     var favoriteMovies: Set<Int> = Set()

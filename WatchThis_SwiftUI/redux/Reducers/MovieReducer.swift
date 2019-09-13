@@ -20,6 +20,8 @@ func movieReducer(state: MovieState, action: Action) -> MovieState {
             state.favoriteMovies.insert(action.movieId)
         case let action as MovieActions.RemoveMovieFromFavorites:
             state.favoriteMovies.remove(action.movieId)
+        case let action as MovieActions.SetNowShowingMovies:
+            state.nowShowingMovies = action.movies
         default:
             break
     }

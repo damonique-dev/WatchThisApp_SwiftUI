@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ShowHomeView: View {
+struct TVShowListView: View {
     @EnvironmentObject var store: Store<AppState>
     
     private var popularShows: [TVShowDetails] {
@@ -40,10 +40,10 @@ struct ShowHomeView: View {
                 ScrollView(.vertical) {
                     VStack {
                         if !favoriteShows.isEmpty {
-                            CategoryRow(title: "My Shows", shows: favoriteShows)
+                            TVCategoryRow(title: "My Shows", shows: favoriteShows)
                         }
-                        CategoryRow(title: "Trending Shows", shows: trendingShows)
-                        CategoryRow(title: "Popular Shows", shows: popularShows)
+                        TVCategoryRow(title: "Trending Shows", shows: trendingShows)
+                        TVCategoryRow(title: "Popular Shows", shows: popularShows)
                     }
                 }.padding(.vertical, 44)
             }
@@ -55,11 +55,11 @@ struct ShowHomeView: View {
     }
 }
 
-struct CategoryRow: View {
+struct TVCategoryRow: View {
     let title: String
     let shows: [TVShowDetails]
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: HorizontalAlignment.leading) {
             HStack {
                 Text(title)
                     .font(Font.system(.title, design: .rounded))
@@ -70,7 +70,7 @@ struct CategoryRow: View {
                 HStack {
                     ForEach(shows, id: \.id) { show in
                         NavigationLink(destination: TVShowDetailView(showDetail: show)) {
-                            ShowCell(tvShow: show, height: CGFloat(200))
+                            RoundedImageCell(item: show, height: CGFloat(200))
                         }
                     }
                 }
@@ -84,7 +84,7 @@ struct CategoryRow: View {
 #if DEBUG
 struct ShowHomeView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowHomeView().environmentObject(sampleStore)
+        TVShowListView().environmentObject(sampleStore)
     }
 }
 #endif

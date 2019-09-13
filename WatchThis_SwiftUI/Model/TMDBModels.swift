@@ -33,3 +33,10 @@ struct Genre: Codable, Identifiable {
     var id: Int?
     var name: String?
 }
+
+struct SearchResult:  Codable, Identifiable {
+    let id: Int
+    var title: String?
+    var overview: String?
+    var posterPath: String?
+}

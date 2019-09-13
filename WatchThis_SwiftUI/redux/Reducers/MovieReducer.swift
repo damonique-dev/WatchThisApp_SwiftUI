@@ -22,9 +22,28 @@ func movieReducer(state: MovieState, action: Action) -> MovieState {
             state.favoriteMovies.remove(action.movieId)
         case let action as MovieActions.SetNowShowingMovies:
             state.nowShowingMovies = action.movies
+        case let action as MovieActions.SetMovieSearch:
+            state.movieSearch[action.query] = action.movies
+            state = addToSearchList(state: state, query: action.query)
         default:
             break
     }
     
+    return state
+}
+
+private func addToSearchList(state: MovieState, query: String) -> MovieState {
+    var state = state
+    var existingQueries = state.movieSearchQueries
+    let index = existingQueries.firstIndex(of: query)
+    if index != nil {
+        existingQueries.remove(at: index!)
+    }
+    existingQueries.insert(query, at: 0)
+    if (existingQueries.count > 5) {
+        existingQueries =  Array(existingQueries.prefix(upTo: 5))
+    }
+    
+    state.movieSearchQueries =  existingQueries
     return state
 }

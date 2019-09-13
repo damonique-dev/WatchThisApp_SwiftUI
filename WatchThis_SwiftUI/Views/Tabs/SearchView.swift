@@ -8,19 +8,31 @@
 
 import SwiftUI
 
+enum SearchCategories {
+    case TVshows
+    case Movies
+}
+
 struct SearchView: View {
     @EnvironmentObject var store: Store<AppState>
     @State var searchModel = SearchModel()
     @State var isActiveBar = false
     
-    private var tvResults: [TVShowDetails] {
-        let showState = store.state.tvShowState
-        return showState.tvShowSearch[searchModel.searchQuery] ?? [TVShowDetails]()
+    private var tvResults: [TVShowDetails]  {
+        return store.state.tvShowState.tvShowSearch[searchModel.searchQuery] ?? [TVShowDetails]()
+    }
+    
+    private var movieResults: [MovieDetails]  {
+        return store.state.movieState.movieSearch[searchModel.searchQuery] ?? [MovieDetails]()
     }
     
     private var previousSearches: [String] {
-        let showState = store.state.tvShowState
-        return showState.tvSearchQueries 
+        switch searchModel.searchCategory {
+        case .TVshows:
+            return store.state.tvShowState.tvSearchQueries
+        case .Movies:
+            return store.state.movieState.movieSearchQueries
+        }
     }
     
     var body: some View {
@@ -28,17 +40,25 @@ struct SearchView: View {
             ZStack {
                 BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
                 VStack {
-                    SearchBar(searchModel: searchModel)
-                        .padding(.top, 25)
+                    SearchHeaderView(searchModel: searchModel)
                     ScrollView(.vertical) {
                         VStack {
                             if !searchModel.searchQuery.isEmpty {
-                                ForEach(tvResults, id: \.id) { show in
-                                    NavigationLink(destination: TVShowDetailView(showDetail: show, fetchDetails: true)) {
-                                        SearchViewRow(tvShow: show)
-                                        .frame(height: 120)
+                                if searchModel.searchCategory == .TVshows {
+                                    ForEach(tvResults) { show in
+                                        NavigationLink(destination: TVShowDetailView(showDetail: show, fetchDetails: true)) {
+                                            SearchViewRow(item: show)
+                                            .frame(height: 120)
+                                        }
                                     }
-                                    
+                                }
+                                if searchModel.searchCategory == .Movies {
+                                    ForEach(movieResults) { movie in
+                                        NavigationLink(destination: MovieDetailsView(movieDetails: movie, fetchDetails: true)) {
+                                            SearchViewRow(item: movie)
+                                            .frame(height: 120)
+                                        }
+                                    }
                                 }
                             } else {
                                 ForEach(previousSearches, id: \.self) { query in
@@ -98,22 +118,22 @@ struct SearchView_Previews: PreviewProvider {
 #endif
 
 
-struct SearchViewRow: View {
-    let tvShow: TVShowDetails
+struct SearchViewRow<T:Details>: View {
+    let item: T
     let rectangleWidth = UIScreen.main.bounds.width - (100 * 8/11) - 50
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: tvShow.posterPath,
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: item.posterPath,
                                                                                          size: .original), contentMode: .fill)
                     .frame(width: 100 * 8/11, height: 100)
                 VStack(alignment: .leading) {
-                    Text(tvShow.name)
+                    Text(item.title)
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                    if tvShow.overview != nil && !(tvShow.overview?.isEmpty ?? true) {
-                        Text(tvShow.overview!)
+                    if item.overview != nil && !(item.overview?.isEmpty ?? true) {
+                        Text(item.overview!)
                             .font(.body)
                             .foregroundColor(.white)
                             .lineLimit(3)
@@ -144,5 +164,22 @@ struct PreviousSearchRow: View {
             }.padding(.bottom)
             Divider().background(Color.white)
         }.padding(.bottom)
+    }
+}
+
+struct SearchHeaderView: View {
+    @ObservedObject var searchModel: SearchModel
+    
+    var body: some View {
+        VStack {
+            SearchBar(searchModel: searchModel)
+                .padding(.top, 25)
+            Picker(selection: $searchModel.searchCategory, label: Text("")) {
+                Text("TV Shows").tag(SearchCategories.TVshows)
+                Text("Movies").tag(SearchCategories.Movies)
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+        }
     }
 }

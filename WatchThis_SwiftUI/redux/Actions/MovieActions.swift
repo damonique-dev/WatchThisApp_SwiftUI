@@ -83,6 +83,25 @@ struct MovieActions {
         }
     }
     
+    struct SearchMovies: AsyncAction {
+        let query: String
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            TMDB_Parameters[TMDBClient.ParameterKeys.SearchQuery] = query
+            TMDB_Parameters["include_adult"] = "false"
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Search_Movies, params: TMDB_Parameters)
+            {
+                (result: Result<MovieResults, APIError>) in
+                switch result {
+                case let .success(response):
+                    dispatch(SetMovieSearch(query: self.query, movies: response.results))
+                case let .failure(error):
+                    print(error)
+                    break
+                }
+            }
+        }
+    }
+    
     struct SetMovieList: Action {
         let list: MovieList
         let ids: [Int]
@@ -104,5 +123,10 @@ struct MovieActions {
     
     struct RemoveMovieFromFavorites: Action {
         let movieId: Int
+    }
+    
+    struct SetMovieSearch: Action {
+        let query: String
+        let movies: [MovieDetails]
     }
 }

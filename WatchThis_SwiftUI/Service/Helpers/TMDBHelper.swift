@@ -47,6 +47,7 @@ extension TMDBClient {
         case Movie_Details(id: Int)
         case Movie_Credits(id: Int)
         case Movie_Similar(id: Int)
+        case Search_Movies
         
         func path() -> String {
             switch self {
@@ -78,6 +79,8 @@ extension TMDBClient {
                     return "/movie/\(id)/credits"
                 case let .Movie_Similar(id):
                     return "/movie/\(id)/similar"
+                case .Search_Movies:
+                    return "/search/movie"
             }
         }
     }

@@ -42,6 +42,7 @@ extension TMDBClient {
         case Person_Details(id: Int)
         case Person_Images(id: Int)
         case Person_Combined_Credits(id: Int)
+        case Search_People
         
         // Movie Endpoints
         case Movie_NowPlaying
@@ -71,6 +72,8 @@ extension TMDBClient {
                     return "/person/\(String(id))/images"
                 case let .Person_Combined_Credits(id):
                     return "/person/\(String(id))/combined_credits"
+                case .Search_People:
+                    return "/search/person"
                 
                 case .Movie_NowPlaying: //add region=US
                     return "/movie/now_playing"

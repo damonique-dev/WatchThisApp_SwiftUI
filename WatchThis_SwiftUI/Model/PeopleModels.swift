@@ -77,6 +77,13 @@ struct Network: Codable {
     var logoPath: String?
 }
 
+struct PeopleResults: Codable  {
+    let results: [PersonDetails]
+    let page: Int
+    let totalResults: Int
+    let totalPages: Int
+}
+
 #if DEBUG
 let testPeople: [Person] = [
     Person(character: "Meridith Grey", name: "Ellen Pompeo"),

@@ -46,6 +46,9 @@ class SearchModel: ObservableObject {
                 if searchContent.searchCategory == .Movies {
                     store.dispatch(action: MovieActions.SearchMovies(query: searchContent.searchQuery))
                 }
+                if searchContent.searchCategory == .People {
+                    store.dispatch(action: PeopleActions.SearchPeople(query: searchContent.searchQuery))
+                }
             })
     }
     

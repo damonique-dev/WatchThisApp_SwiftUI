@@ -46,6 +46,24 @@ struct PeopleActions {
         }
     }
     
+    struct SearchPeople: AsyncAction {
+        let query: String
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            TMDB_Parameters[TMDBClient.ParameterKeys.SearchQuery] = query
+            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Search_People, params: TMDB_Parameters)
+            {
+                (result: Result<PeopleResults, APIError>) in
+                switch result {
+                case let .success(response):
+                    dispatch(SetPersonSearch(query: self.query, people: response.results))
+                case let .failure(error):
+                    print(error)
+                    break
+                }
+            }
+        }
+    }
+    
     struct SetPersonDetail: Action {
         let id: Int
         let personDetail: PersonDetails
@@ -62,5 +80,10 @@ struct PeopleActions {
     
     struct RemovePersonFromFavorites: Action {
         let personId: Int
+    }
+    
+    struct SetPersonSearch: Action {
+        let query: String
+        let people: [PersonDetails]
     }
 }

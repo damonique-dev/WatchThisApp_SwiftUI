@@ -30,6 +30,14 @@ struct ShowOverviewDetailView: View {
         return ""
     }
     
+    func getNumberStringOf(_ number: Int?) -> String? {
+        if let number  = number {
+            return "\(number)"
+        }
+        
+        return nil
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             if updatedShowDetail.overview != nil {
@@ -40,6 +48,8 @@ struct ShowOverviewDetailView: View {
             }
             DetailsLabel(title: "Airs:", detail: updatedShowDetail.lastAirDate)
             DetailsLabel(title: "First Air Date:", detail: updatedShowDetail.firstAirDate)
+            DetailsLabel(title: "Number of Seasons:", detail: getNumberStringOf(updatedShowDetail.numberOfSeasons))
+            DetailsLabel(title: "Number of Episodes:", detail: getNumberStringOf(updatedShowDetail.numberOfEpisodes))
             DetailsLabel(title: "Runtime:", detail:  getRuntime())
             DetailsLabel(title: "Genres:", detail: getGenreList())
             Spacer()

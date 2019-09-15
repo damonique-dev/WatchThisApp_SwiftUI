@@ -21,18 +21,18 @@ struct MovieDetailsScrollView: View {
         return store.state.movieState.movieDetails[movieDetails.id]?.similar?.results ?? [MovieDetails]()
     }
     
-    private var movieRuntime: String {
+    private var movieRuntime: String? {
         if let runtime = movieDetails.runtime {
             return "\(runtime)"
         }
-        return "-"
+        return nil
     }
     
-    private var movieRevenue: String {
+    private var movieRevenue: String? {
         if let revenue = movieDetails.revenue {
             return formatLargeCurrency(currency: revenue)
         }
-        return "-"
+        return nil
     }
     
     var body: some View {

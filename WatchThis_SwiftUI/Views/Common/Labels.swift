@@ -13,17 +13,19 @@ struct DetailsLabel: View {
     let detail: String?
     var body: some View {
         HStack {
-            Text(title)
-                .font(Font.system(.headline, design: .rounded))
-                .fontWeight(.bold)
-                .foregroundColor(.green)
-                .multilineTextAlignment(.leading)
-            Text("\(detail ?? "")")
-                .font(Font.system(.subheadline, design: .rounded))
-                .fontWeight(.semibold)
-                .foregroundColor(.white)
-                .multilineTextAlignment(.leading)
-            Spacer()
+            if detail != nil {
+                Text(title)
+                    .font(Font.system(.headline, design: .rounded))
+                    .fontWeight(.bold)
+                    .foregroundColor(.green)
+                    .multilineTextAlignment(.leading)
+                Text("\(detail ?? "")")
+                    .font(Font.system(.subheadline, design: .rounded))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.leading)
+                Spacer()
+            }
         }
     }
 }

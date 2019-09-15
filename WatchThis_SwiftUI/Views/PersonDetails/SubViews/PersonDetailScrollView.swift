@@ -29,9 +29,7 @@ struct PersonDetailScrollView: View {
                 .fixedSize(horizontal: false, vertical: true)
             VStack(alignment: .leading) {
                 DetailsLabel(title: "Birthday:", detail: personDetails.birthday)
-                if personDetails.deathday != nil {
-                    DetailsLabel(title: "Deathday:", detail: personDetails.deathday)
-                }
+                DetailsLabel(title: "Deathday:", detail: personDetails.deathday)
                 DetailsLabel(title: "Place of Birth:", detail: personDetails.placeOfBirth)
             }.padding(.top, 8)
             if tvCredits.count > 0 {

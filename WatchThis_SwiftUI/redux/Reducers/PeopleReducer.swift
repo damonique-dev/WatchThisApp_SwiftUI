@@ -14,8 +14,10 @@ func peopleReducer(state: PeopleState, action: Action) -> PeopleState {
     switch(action) {
         case let action as PeopleActions.SetPersonDetail:
             state.people[action.id] = action.personDetail
-        case let action as PeopleActions.SetPersonCredits:
-            state.peopleCredits[action.id] = action.tvShows
+        case let action as PeopleActions.AddPersonToFavorites:
+            state.favoritePeople.insert(action.personId)
+        case let action as PeopleActions.RemovePersonFromFavorites:
+            state.favoritePeople.remove(action.personId)
         default:
             break
     }

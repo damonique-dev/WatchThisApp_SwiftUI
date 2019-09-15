@@ -68,8 +68,8 @@ struct MovieCategoryRow: View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(movies, id: \.id) { movie in
-                        NavigationLink(destination: MovieDetailsView(movieDetails: movie) ) {
-                            RoundedImageCell(item: movie, height: CGFloat(200))
+                        NavigationLink(destination: MovieDetailsView(movieId: movie.id) ) {
+                            RoundedImageCell(title: movie.title, posterPath: movie.posterPath, height: CGFloat(200))
                         }
                     }
                 }

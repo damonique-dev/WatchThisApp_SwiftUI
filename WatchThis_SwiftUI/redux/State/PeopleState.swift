@@ -9,6 +9,6 @@
 import Foundation
 
 struct PeopleState: FluxState, Codable {
-    var people: [Int: Person] = [:]
-    var peopleCredits: [Int: [TVShow]] = [:]
+    var people: [Int: PersonDetails] = [:]
+    var favoritePeople: Set<Int> = Set()
 }

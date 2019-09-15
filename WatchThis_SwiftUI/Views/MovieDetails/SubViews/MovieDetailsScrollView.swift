@@ -55,7 +55,9 @@ struct MovieDetailsScrollView: View {
                     ScrollView(.horizontal) {
                         HStack {
                             ForEach(cast) { cast in
-                                CastCellView(person: cast)
+                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+                                    CastCellView(person: cast)
+                                }
                             }
                         }
                     }
@@ -70,8 +72,8 @@ struct MovieDetailsScrollView: View {
                     ScrollView(.horizontal) {
                         HStack(spacing: 16.0) {
                             ForEach(similarMovies) { movie in
-                                NavigationLink(destination: MovieDetailsView(movieDetails: movie, fetchDetails: true)) {
-                                    RoundedImageCell(item: movie, height: CGFloat(125))
+                                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                                    RoundedImageCell(title: movie.title, posterPath: movie.posterPath, height: CGFloat(125))
                                 }
                             }
                         }

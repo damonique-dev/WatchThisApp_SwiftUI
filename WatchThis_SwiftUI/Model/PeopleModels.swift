@@ -43,6 +43,34 @@ struct Person: Codable, Identifiable {
     var homepage: String?
 }
 
+struct PersonDetails: Codable, Identifiable {
+    let id: Int
+    var birthday: String?
+    var deathday: String?
+    var movieCredits: PersonCredits?
+    var tvCredits: PersonCredits?
+    var name: String?
+    var biography: String?
+    var placeOfBirth: String?
+    var profilePath: String?
+}
+
+struct PersonCredits: Codable {
+    var cast: [PersonCredit]?
+}
+
+struct PersonCredit: Codable, Identifiable {
+    let id: Int
+    var posterPath: String?
+    var name: String? // TV credit
+    var title: String? // Movie credit
+    var character: String?
+    var episodeCount: Int?
+    var backdropPath: String?
+    var overview: String?
+    var creditId: String?
+}
+
 struct Network: Codable {
     var id: Int?
     var name: String?

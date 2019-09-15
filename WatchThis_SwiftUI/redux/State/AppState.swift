@@ -49,6 +49,10 @@ struct AppState: FluxState, Codable {
             let (key, _) = arg
             return movieState.favoriteMovies.contains(key)
         }
+        let people = peopleState.people.filter { (arg) -> Bool in
+            let (key, _) = arg
+            return peopleState.favoritePeople.contains(key)
+        }
         var savingState = AppState()
         // Save Shows
         savingState.tvShowState.tvShow = shows
@@ -59,6 +63,10 @@ struct AppState: FluxState, Codable {
         savingState.movieState.movieDetails = movies
         savingState.movieState.favoriteMovies = movieState.favoriteMovies
         savingState.movieState.movieSearchQueries = movieState.movieSearchQueries
+        
+        // Save People
+        savingState.peopleState.people = people
+        savingState.peopleState.favoritePeople = peopleState.favoritePeople
         
         guard let data = try? encoder.encode(savingState) else {
             return

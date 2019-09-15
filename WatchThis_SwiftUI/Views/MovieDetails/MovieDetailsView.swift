@@ -12,26 +12,29 @@ struct MovieDetailsView: View {
     @EnvironmentObject var store: Store<AppState>
     @State private var isFavorite = false
     
-    let movieDetails: MovieDetails
-    let fetchDetails: Bool
+    let movieId: Int
     
-    init(movieDetails: MovieDetails, fetchDetails: Bool = false) {
-        self.movieDetails = movieDetails
-        self.fetchDetails = fetchDetails
+    init(movieId: Int) {
+        self.movieId = movieId        
+    }
+    
+    private var movieDetails: MovieDetails {
+        return store.state.movieState.movieDetails[movieId] ?? MovieDetails(id: movieId, title: "")
     }
     
     private func fetchMovieDetails() {
-        isFavorite = store.state.movieState.favoriteMovies.contains(movieDetails.id)
-        if fetchDetails {
+        if store.state.movieState.movieDetails[movieId] == nil {
             store.dispatch(action: MovieActions.FetchMovieDetails(id: movieDetails.id))
         }
+        
+        isFavorite = store.state.movieState.favoriteMovies.contains(movieDetails.id)
     }
     
     var body: some View {
         ZStack {
             BlurredBackground(image: nil, imagePath: movieDetails.posterPath)
             VStack {
-                MovieDetailHeader(isFavorite: $isFavorite, movieDetail: movieDetails)
+                MovieDetailHeader(movieDetail: movieDetails)
                 MovieDetailsScrollView(movieDetails: movieDetails)
             }
             VStack(alignment: .leading) {
@@ -67,7 +70,7 @@ struct MovieDetailsView: View {
 #if DEBUG
 struct MovieDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        MovieDetailsView(movieDetails: testMovieDetails, fetchDetails: false).environmentObject(sampleStore)
+        MovieDetailsView(movieId: testMovieDetails.id).environmentObject(sampleStore)
     }
 }
 #endif

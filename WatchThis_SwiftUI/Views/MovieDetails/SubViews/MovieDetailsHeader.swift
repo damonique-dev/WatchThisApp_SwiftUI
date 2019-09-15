@@ -10,7 +10,6 @@ import SwiftUI
 
 struct MovieDetailHeader: View {
     @EnvironmentObject var store: Store<AppState>
-    @Binding var isFavorite: Bool
     let movieDetail: MovieDetails
     
     private let screenWidth = UIScreen.main.bounds.width

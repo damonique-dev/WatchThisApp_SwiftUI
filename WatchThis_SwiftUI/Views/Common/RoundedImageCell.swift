@@ -8,20 +8,21 @@
 
 import SwiftUI
 
-struct RoundedImageCell<T:Details>: View {
+struct RoundedImageCell: View {
     @EnvironmentObject var store: Store<AppState>
-    let item: T
+    let title: String
+    let posterPath: String?
     let height: CGFloat
 
     var body: some View {
         ZStack {
-            Text(item.title)
+            Text(title)
                 .font(Font.system(.headline, design: .rounded))
                 .fontWeight(.semibold)
                 .frame(width: height * 8/11, height: height)
                 .foregroundColor(.white)
                 .lineLimit(nil)
-            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: item.posterPath,
+            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: posterPath,
                                                                                      size: .original))
                 .frame(width: height * 8/11, height: height)
                 .cornerRadius(15)
@@ -32,7 +33,7 @@ struct RoundedImageCell<T:Details>: View {
 #if DEBUG
 struct ShowCell_Previews: PreviewProvider {
     static var previews: some View {
-        RoundedImageCell(item: testTVShowDetail, height: CGFloat(200)).environmentObject(sampleStore)
+        RoundedImageCell(title: testTVShowDetail.name, posterPath: testTVShowDetail.posterPath, height: CGFloat(200)).environmentObject(sampleStore)
     }
 }
 #endif

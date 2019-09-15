@@ -13,28 +13,27 @@ struct TVShowDetailView: View {
     @State private var isFavorite = false
     @State private var selectedTab = 0
     
-    let showDetail: TVShowDetails
-    let fetchDetails: Bool
-    init(showDetail: TVShowDetails, fetchDetails: Bool = false) {
-        self.showDetail = showDetail
-        self.fetchDetails = fetchDetails
-
-        if let path = showDetail.posterPath {
-            imagePath = path
-        }
-        if let backgroundPath = showDetail.backdropPath {
-            backgroundImagePath = backgroundPath
-        }
+    let showId: Int
+    
+    init(showId: Int) {
+        self.showId = showId
     }
     
-    private var imagePath = ""
-    private var backgroundImagePath = ""
+    private var imagePath: String {
+        return store.state.tvShowState.tvShowDetail[showId]?.posterPath ?? ""
+    }
+    private var backgroundImagePath: String {
+        return store.state.tvShowState.tvShowDetail[showId]?.backdropPath ?? ""
+    }
+    private var showDetail: TVShowDetails {
+        return store.state.tvShowState.tvShowDetail[showId] ?? TVShowDetails(id: showId, name: "")
+    }
     
     private func fetchShowDetails() {
-        isFavorite = store.state.tvShowState.favoriteShows.contains(showDetail.id)
-        if fetchDetails {
-            store.dispatch(action: TVShowActions.FetchTVShowDetails(id: showDetail.id))
+        if store.state.tvShowState.tvShowDetail[showId] == nil {
+            store.dispatch(action: TVShowActions.FetchTVShowDetails(id: showId))
         }
+        isFavorite = store.state.tvShowState.favoriteShows.contains(showDetail.id)
     }
         
     var body: some View {
@@ -42,7 +41,7 @@ struct TVShowDetailView: View {
             BlurredBackground(image: nil, imagePath: imagePath)
             
             VStack {
-                TVDetailHeader(showDetail: showDetail, isFavorite: $isFavorite)
+                TVDetailHeader(showDetail: showDetail)
                 TVDetailScrollView(showDetail: showDetail)
             }
             VStack(alignment: .leading) {
@@ -78,7 +77,7 @@ struct TVShowDetailView: View {
 #if DEBUG
 struct TVShowDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        TVShowDetailView(showDetail: testTVShowDetail).environmentObject(sampleStore)
+        TVShowDetailView(showId: testTVShowDetail.id).environmentObject(sampleStore)
     }
 }
 #endif

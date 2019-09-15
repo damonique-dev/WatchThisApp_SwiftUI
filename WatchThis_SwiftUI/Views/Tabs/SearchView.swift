@@ -46,7 +46,7 @@ struct SearchView: View {
                             if !searchModel.searchQuery.isEmpty {
                                 if searchModel.searchCategory == .TVshows {
                                     ForEach(tvResults) { show in
-                                        NavigationLink(destination: TVShowDetailView(showDetail: show, fetchDetails: true)) {
+                                        NavigationLink(destination: TVShowDetailView(showId: show.id)) {
                                             SearchViewRow(item: show)
                                             .frame(height: 120)
                                         }
@@ -54,7 +54,7 @@ struct SearchView: View {
                                 }
                                 if searchModel.searchCategory == .Movies {
                                     ForEach(movieResults) { movie in
-                                        NavigationLink(destination: MovieDetailsView(movieDetails: movie, fetchDetails: true)) {
+                                        NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
                                             SearchViewRow(item: movie)
                                             .frame(height: 120)
                                         }

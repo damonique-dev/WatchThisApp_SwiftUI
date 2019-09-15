@@ -13,9 +13,10 @@ struct PeopleActions {
     struct FetchPersonDetails: AsyncAction {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            TMDB_Parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.AppendAllCredits
             TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Person_Details(id: id), params: TMDB_Parameters)
             {
-                (result: Result<Person, APIError>) in
+                (result: Result<PersonDetails, APIError>) in
                 switch result {
                 case let .success(response):
                     dispatch(SetPersonDetail(id: self.id, personDetail: response))
@@ -47,11 +48,19 @@ struct PeopleActions {
     
     struct SetPersonDetail: Action {
         let id: Int
-        let personDetail: Person
+        let personDetail: PersonDetails
     }
     
     struct SetPersonCredits: Action {
         let id: Int
         let tvShows: [TVShow]
+    }
+    
+    struct AddPersonToFavorites: Action {
+        let personId: Int
+    }
+    
+    struct RemovePersonFromFavorites: Action {
+        let personId: Int
     }
 }

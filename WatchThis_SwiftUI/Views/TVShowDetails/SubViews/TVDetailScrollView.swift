@@ -33,7 +33,7 @@ struct TVDetailScrollView: View {
                         CastRow(cast: cast)
                     }
                     if seasons.count > 0 {
-                        TVSeasonsRow(seasons: seasons)
+                        TVSeasonsRow(seasons: seasons, showId: showDetail.id)
                     }
                     if similarShows.count > 0 {
                         TVSimilarShowsRow(similarShows: similarShows)

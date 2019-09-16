@@ -10,10 +10,16 @@ import SwiftUI
 
 struct CastRow: View {
     let cast: [Cast]
+    let rowHeader: String
+    
+    init(cast: [Cast], rowHeader: String = "Cast") {
+        self.cast = cast
+        self.rowHeader = rowHeader
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Cast")
+            Text(rowHeader)
                 .font(.headline)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.leading)

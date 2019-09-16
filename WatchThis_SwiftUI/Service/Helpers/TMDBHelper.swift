@@ -27,6 +27,7 @@ extension TMDBClient {
         static let Video = "videos"
         static let AppendVideoCreditsSimilar = "videos,credits,similar"
         static let AppendAllCredits = "tv_credits,movie_credits"
+        static let AppendSeasonDetails = "credits,videos,images"
     }
     
     enum Endpoint {

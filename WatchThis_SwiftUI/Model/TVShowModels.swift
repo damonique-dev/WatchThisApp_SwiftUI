@@ -64,24 +64,32 @@ struct TVShowResults: Codable  {
 struct Season: Codable, Identifiable {
     var lastAirDate: String?
     var episodeCount: Int?
-    var id: Int?
     var name: String?
     var overview: String?
     var posterPath: String?
     var seasonNumber: Int?
     var episodes: [Episode]?
-    var videos: [Video]?
+    var videos: VideoResults?
+    var credits: Credits?
+    
+    var id: Int {
+        return seasonNumber!
+    }
 }
 
 struct Episode: Codable, Identifiable {
     var airDate: String?
     var episodeNumber: Int?
-    var id: Int?
     var name: String?
     var overview: String?
     var stillPath: String?
     var seasonNumber: Int?
     var showId: Int?
+    var guestStars: [Cast]?
+    
+    var id: Int {
+        return episodeNumber!
+    }
 }
 
 enum TVShowList: String, Codable {

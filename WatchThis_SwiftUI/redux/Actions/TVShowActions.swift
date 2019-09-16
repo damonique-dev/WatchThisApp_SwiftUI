@@ -83,7 +83,7 @@ struct TVShowActions {
         let id: Int
         let seasonId: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TMDB_Parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.Video
+            TMDB_Parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.AppendSeasonDetails
             TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.TV_Seasons_Details(id: id, seasonNum: seasonId), params: TMDB_Parameters)
             {
                 (result: Result<Season, APIError>) in

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct TVSeasonsRow: View {
     let seasons: [Season]
+    let showId: Int
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -20,7 +21,9 @@ struct TVSeasonsRow: View {
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(seasons) { season in
-                        SeasonCell(season: season)
+                        NavigationLink(destination: SeasonDetailView(showId: self.showId, seasonId: season.id)) {
+                            SeasonCell(season: season)
+                        }
                     }
                 }
             }.padding(8)

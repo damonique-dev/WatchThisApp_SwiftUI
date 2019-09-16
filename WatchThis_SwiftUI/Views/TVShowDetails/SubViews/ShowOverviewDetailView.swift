@@ -53,7 +53,7 @@ struct ShowOverviewDetailView: View {
             DetailsLabel(title: "Runtime:", detail:  getRuntime())
             DetailsLabel(title: "Genres:", detail: getGenreList())
             Spacer()
-        }
+        }.padding(.horizontal, 8)
     }
 }
 

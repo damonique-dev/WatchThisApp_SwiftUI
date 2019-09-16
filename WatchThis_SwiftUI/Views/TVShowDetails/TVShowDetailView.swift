@@ -15,10 +15,6 @@ struct TVShowDetailView: View {
     
     let showId: Int
     
-    init(showId: Int) {
-        self.showId = showId
-    }
-    
     private var imagePath: String {
         return store.state.tvShowState.tvShowDetail[showId]?.posterPath ?? ""
     }
@@ -41,30 +37,8 @@ struct TVShowDetailView: View {
             BlurredBackground(image: nil, imagePath: imagePath)
             
             VStack {
-                TVDetailHeader(showDetail: showDetail)
-                TVDetailScrollView(showDetail: showDetail)
+                TVDetailScrollView(isFavorite: $isFavorite,showDetail: showDetail)
             }
-            VStack(alignment: .leading) {
-                HStack {
-                    FavoriteButton(isFavorite: $isFavorite, action: {
-                        self.isFavorite.toggle()
-                        if self.isFavorite {
-                            self.store.dispatch(action: TVShowActions.AddShowToFavorites(showId: self.showDetail.id))
-                        } else {
-                            self.store.dispatch(action: TVShowActions.RemoveShowFromFavorites(showId: self.showDetail.id))
-                        }
-                    })
-                    Spacer()
-                }.padding(.leading, UIScreen.main.bounds.width / 2 - UIScreen.main.bounds.width/6 - 40)
-                Spacer()
-            }.padding(.top, 310)
-            VStack(alignment: .leading) {
-                HStack {
-                    WatchThisButton(text: "Watch Trailer")
-                    Spacer()
-                }.padding(.leading, UIScreen.main.bounds.width / 2 + UIScreen.main.bounds.width/6 + 10)
-                Spacer()
-            }.padding(.top, 310)
         }
         .padding(.vertical, 44)
         .navigationBarTitle(Text("\(showDetail.name)"))

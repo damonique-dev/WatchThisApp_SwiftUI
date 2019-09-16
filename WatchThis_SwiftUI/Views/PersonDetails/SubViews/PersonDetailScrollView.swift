@@ -10,7 +10,7 @@ import SwiftUI
 
 struct PersonDetailScrollView: View {
     @EnvironmentObject var store: Store<AppState>
-    
+    @Binding var isFavorite: Bool
     let personDetails: PersonDetails
     
     private var tvCredits: [PersonCredit] {
@@ -23,20 +23,26 @@ struct PersonDetailScrollView: View {
     
     var body: some View {
         ScrollView(.vertical) {
-            Text("\(personDetails.biography ?? "")")
-                .font(.body)
-                .foregroundColor(.white)
-                .fixedSize(horizontal: false, vertical: true)
-            VStack(alignment: .leading) {
-                DetailsLabel(title: "Birthday:", detail: personDetails.birthday)
-                DetailsLabel(title: "Deathday:", detail: personDetails.deathday)
-                DetailsLabel(title: "Place of Birth:", detail: personDetails.placeOfBirth)
-            }.padding(.top, 8)
-            if tvCredits.count > 0 {
-                PersonTVCreditRow(tvCredits: tvCredits)
-            }
-            if movieCredits.count > 0 {
-                PersonMovieCreditRow(movieCredits: movieCredits)
+            ZStack {
+                VStack {
+                    PersonDetailsHeaderView(personDetails: personDetails)
+                    Text("\(personDetails.biography ?? "")")
+                        .font(.body)
+                        .foregroundColor(.white)
+                        .fixedSize(horizontal: false, vertical: true)
+                    VStack(alignment: .leading) {
+                        DetailsLabel(title: "Birthday:", detail: personDetails.birthday)
+                        DetailsLabel(title: "Deathday:", detail: personDetails.deathday)
+                        DetailsLabel(title: "Place of Birth:", detail: personDetails.placeOfBirth)
+                    }.padding(.top, 8)
+                    if tvCredits.count > 0 {
+                        PersonTVCreditRow(tvCredits: tvCredits)
+                    }
+                    if movieCredits.count > 0 {
+                        PersonMovieCreditRow(movieCredits: movieCredits)
+                    }
+                }
+                FavoriteButtonView(isFavorite: $isFavorite, addAction: PeopleActions.AddPersonToFavorites(personId: personDetails.id), removeAction: PeopleActions.RemovePersonFromFavorites(personId: personDetails.id))
             }
         }.padding(8)
     }

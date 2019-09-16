@@ -34,30 +34,8 @@ struct MovieDetailsView: View {
         ZStack {
             BlurredBackground(image: nil, imagePath: movieDetails.posterPath)
             VStack {
-                MovieDetailHeader(movieDetail: movieDetails)
-                MovieDetailsScrollView(movieDetails: movieDetails)
+                MovieDetailsScrollView(isFavorite: $isFavorite, movieDetails: movieDetails)
             }
-            VStack(alignment: .leading) {
-                HStack {
-                    FavoriteButton(isFavorite: $isFavorite, action: {
-                        self.isFavorite.toggle()
-                        if self.isFavorite {
-                            self.store.dispatch(action: MovieActions.AddMovieToFavorites(movieId: self.movieDetails.id))
-                        } else {
-                            self.store.dispatch(action: MovieActions.RemoveMovieFromFavorites(movieId: self.movieDetails.id))
-                        }
-                    })
-                    Spacer()
-                }.padding(.leading, UIScreen.main.bounds.width / 2 - UIScreen.main.bounds.width/6 - 40)
-                Spacer()
-            }.padding(.top, 310)
-            VStack(alignment: .leading) {
-                HStack {
-                    WatchThisButton(text: "Watch Trailer")
-                    Spacer()
-                }.padding(.leading, UIScreen.main.bounds.width / 2 + UIScreen.main.bounds.width/6 + 10)
-                Spacer()
-            }.padding(.top, 310)
         }
         .padding(.vertical, 44)
         .navigationBarTitle(Text("\(movieDetails.title)"))

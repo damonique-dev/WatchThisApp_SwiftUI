@@ -10,6 +10,7 @@ import SwiftUI
 
 struct TVDetailScrollView: View {
     @EnvironmentObject var store: Store<AppState>
+    @Binding var isFavorite: Bool
     let showDetail: TVShowDetails
     
     private var cast: [Cast] {
@@ -24,57 +25,22 @@ struct TVDetailScrollView: View {
     
     var body: some View {
         ScrollView(.vertical) {
-            VStack {
-                ShowOverviewDetailView(showDetail: showDetail)
-                if cast.count > 0 {
-                    VStack(alignment: .leading) {
-                        Text("Cast")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
-                        ScrollView(.horizontal) {
-                            HStack {
-                                ForEach(cast) { cast in
-                                    NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
-                                        CastCellView(person: cast)
-                                    }
-                                }
-                            }
-                        }
-                    }.padding(.top, 8)
+            ZStack {
+                VStack {
+                    TVDetailHeader(showDetail: showDetail)
+                    ShowOverviewDetailView(showDetail: showDetail)
+                    if cast.count > 0 {
+                        CastRow(cast: cast)
+                    }
+                    if seasons.count > 0 {
+                        TVSeasonsRow(seasons: seasons)
+                    }
+                    if similarShows.count > 0 {
+                        TVSimilarShowsRow(similarShows: similarShows)
+                    }
                 }
-                if seasons.count > 0 {
-                    VStack(alignment: .leading) {
-                        Text("Seasons")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
-                        ScrollView(.horizontal) {
-                            HStack {
-                                ForEach(seasons) { season in
-                                    SeasonCell(season: season)
-                                }
-                            }
-                        }.padding(8)
-                    }.padding(.top, 8)
-                }
-                if similarShows.count > 0 {
-                    VStack(alignment: .leading) {
-                        Text("Similar Shows")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
-                        ScrollView(.horizontal) {
-                            HStack(spacing: 16.0) {
-                                ForEach(similarShows) { show in
-                                    NavigationLink(destination: TVShowDetailView(showId: show.id)) {
-                                        RoundedImageCell(title: show.name, posterPath: show.posterPath, height: CGFloat(125))
-                                    }
-                                }
-                            }
-                        }
-                    }.padding(.top, 8)
-                }
+                FavoriteButtonView(isFavorite: $isFavorite, addAction: TVShowActions.AddShowToFavorites(showId: showDetail.id), removeAction: TVShowActions.RemoveShowFromFavorites(showId: showDetail.id))
+                WatchTrailerButton()
             }
         }.padding(8)
     }

@@ -11,6 +11,7 @@ import SwiftUI
 struct MovieDetailsScrollView: View {
     @EnvironmentObject var store: Store<AppState>
     
+    @Binding var isFavorite: Bool
     let movieDetails: MovieDetails
     
     private var cast: [Cast] {
@@ -36,49 +37,28 @@ struct MovieDetailsScrollView: View {
     }
     
     var body: some View {
-       ScrollView(.vertical) {
-            Text("\(movieDetails.overview ?? "")")
-                .font(.body)
-                .foregroundColor(.white)
-                .fixedSize(horizontal: false, vertical: true)
-            VStack(alignment: .leading) {
-                DetailsLabel(title: "Release Date:", detail: movieDetails.releaseDate)
-                DetailsLabel(title: "Runtime:", detail: movieRuntime)
-                DetailsLabel(title: "Revenue:", detail: movieRevenue)
-            }.padding(.top, 8)
-            if cast.count > 0 {
-                VStack(alignment: .leading) {
-                    Text("Cast")
-                        .font(.headline)
+        ScrollView(.vertical) {
+            ZStack {
+                VStack {
+                    MovieDetailHeader(movieDetail: movieDetails)
+                    Text("\(movieDetails.overview ?? "")")
+                        .font(.body)
                         .foregroundColor(.white)
-                        .multilineTextAlignment(.leading)
-                    ScrollView(.horizontal) {
-                        HStack {
-                            ForEach(cast) { cast in
-                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
-                                    CastCellView(person: cast)
-                                }
-                            }
-                        }
+                        .fixedSize(horizontal: false, vertical: true)
+                    VStack(alignment: .leading) {
+                        DetailsLabel(title: "Release Date:", detail: movieDetails.releaseDate)
+                        DetailsLabel(title: "Runtime:", detail: movieRuntime)
+                        DetailsLabel(title: "Revenue:", detail: movieRevenue)
+                    }.padding(.top, 8)
+                    if cast.count > 0 {
+                        CastRow(cast: cast)
                     }
-                }.padding(.top, 8)
-            }
-            if similarMovies.count > 0 {
-                VStack(alignment: .leading) {
-                    Text("Similar Movies")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.leading)
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 16.0) {
-                            ForEach(similarMovies) { movie in
-                                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                                    RoundedImageCell(title: movie.title, posterPath: movie.posterPath, height: CGFloat(125))
-                                }
-                            }
-                        }
+                    if similarMovies.count > 0 {
+                        SimilarMoviesRow(similarMovies: similarMovies)
                     }
-                }.padding(.top, 8)
+                }
+                FavoriteButtonView(isFavorite: $isFavorite, addAction: MovieActions.AddMovieToFavorites(movieId: self.movieDetails.id), removeAction: MovieActions.RemoveMovieFromFavorites(movieId: self.movieDetails.id))
+                WatchTrailerButton()
             }
         }.padding(8)
     }

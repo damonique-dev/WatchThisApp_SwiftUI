@@ -29,23 +29,8 @@ struct PersonDetailsView: View {
         ZStack {
             BlurredBackground(image: nil, imagePath: personDetails.profilePath)
             VStack {
-                PersonDetailsHeaderView(personDetails: personDetails)
-                PersonDetailScrollView(personDetails: personDetails)
+                PersonDetailScrollView(isFavorite: $isFavorite, personDetails: personDetails)
             }
-            VStack(alignment: .leading) {
-                HStack {
-                    FavoriteButton(isFavorite: $isFavorite, action: {
-                        self.isFavorite.toggle()
-                        if self.isFavorite {
-                            self.store.dispatch(action: PeopleActions.AddPersonToFavorites(personId: self.personId))
-                        } else {
-                            self.store.dispatch(action: PeopleActions.RemovePersonFromFavorites(personId: self.personId))
-                        }
-                    })
-                    Spacer()
-                }.padding(.leading, UIScreen.main.bounds.width / 2 - UIScreen.main.bounds.width/6 - 40)
-                Spacer()
-            }.padding(.top, 310)
         }
         .padding(.vertical, 44)
         .navigationBarTitle(Text(personName))

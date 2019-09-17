@@ -23,4 +23,5 @@ struct TVShowState: FluxState, Codable {
     
     var favoriteShows: Set<Int> = Set()
     var tvSearchQueries: [String] = []
+    var customTVLists: [UUID: CustomTVList] = [:]
 }

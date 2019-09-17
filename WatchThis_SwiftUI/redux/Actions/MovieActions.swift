@@ -129,4 +129,14 @@ struct MovieActions {
         let query: String
         let movies: [MovieDetails]
     }
+    
+    struct AddMovieToCustomList: Action {
+        let customListUUID: UUID
+        let movieId: Int
+    }
+    
+    struct RemoveMovieFromCustomList: Action {
+        let customListUUID: UUID
+        let movieId: Int
+    }
 }

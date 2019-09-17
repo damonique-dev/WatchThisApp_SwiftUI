@@ -32,41 +32,62 @@ struct AppState: FluxState, Codable {
             let savedState = try? decoder.decode(AppState.self, from: data) {
             self.tvShowState = savedState.tvShowState
             self.peopleState = savedState.peopleState
-             self.movieState = savedState.movieState
+            self.movieState = savedState.movieState
         } else {
             self.tvShowState = TVShowState()
             self.peopleState = PeopleState()
             self.movieState = MovieState()
         }
+        
+        print(tvShowState.customTVLists)
     }
     
     func archiveState() {
         let shows = tvShowState.tvShow.filter { (arg) -> Bool in
             let (key, _) = arg
+            for list in Array(tvShowState.customTVLists.values) {
+                if list.ids.contains(key) {
+                    return true
+                }
+            }
             return tvShowState.favoriteShows.contains(key)
         }
         let movies = movieState.movieDetails.filter { (arg) -> Bool in
             let (key, _) = arg
+            for list in Array(movieState.customMovieLists.values) {
+                if list.ids.contains(key) {
+                    return true
+                }
+            }
             return movieState.favoriteMovies.contains(key)
         }
         let people = peopleState.people.filter { (arg) -> Bool in
             let (key, _) = arg
+            for list in Array(peopleState.customPeopleLists.values) {
+                if list.ids.contains(key) {
+                    return true
+                }
+            }
             return peopleState.favoritePeople.contains(key)
         }
         var savingState = AppState()
+        
         // Save Shows
         savingState.tvShowState.tvShow = shows
         savingState.tvShowState.favoriteShows = tvShowState.favoriteShows
         savingState.tvShowState.tvSearchQueries = tvShowState.tvSearchQueries
+        savingState.tvShowState.customTVLists = tvShowState.customTVLists
         
         // Save Movies
         savingState.movieState.movieDetails = movies
         savingState.movieState.favoriteMovies = movieState.favoriteMovies
         savingState.movieState.movieSearchQueries = movieState.movieSearchQueries
+        savingState.movieState.customMovieLists = movieState.customMovieLists
         
         // Save People
         savingState.peopleState.people = people
         savingState.peopleState.favoritePeople = peopleState.favoritePeople
+        savingState.peopleState.customPeopleLists = peopleState.customPeopleLists
         
         guard let data = try? encoder.encode(savingState) else {
             return

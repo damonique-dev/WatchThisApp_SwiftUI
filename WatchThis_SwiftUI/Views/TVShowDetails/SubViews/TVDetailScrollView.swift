@@ -11,6 +11,7 @@ import SwiftUI
 struct TVDetailScrollView: View {
     @EnvironmentObject var store: Store<AppState>
     @Binding var isFavorite: Bool
+    @Binding var showActionSheet: Bool
     let showDetail: TVShowDetails
     
     private var cast: [Cast] {
@@ -40,8 +41,40 @@ struct TVDetailScrollView: View {
                     }
                 }
                 FavoriteButtonView(isFavorite: $isFavorite, addAction: TVShowActions.AddShowToFavorites(showId: showDetail.id), removeAction: TVShowActions.RemoveShowFromFavorites(showId: showDetail.id))
+                CustomListButtonView(showActionSheet: $showActionSheet)
                 WatchTrailerButton()
             }
         }.padding(8)
+    }
+}
+
+struct CustomListButtonView: View {
+    @Binding var showActionSheet: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                CustomListButton(action: {
+                    self.showActionSheet.toggle()
+                })
+                Spacer()
+            }.padding(.leading, UIScreen.main.bounds.width / 2 - UIScreen.main.bounds.width/6 - 80)
+            Spacer()
+        }.padding(.top, 310)
+    }
+}
+
+struct CustomListButton: View {
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: { self.action() } ) {
+            ZStack {
+                Circle().foregroundColor(.orange)
+                Image(systemName: "text.badge.plus")
+                    .imageScale(.large)
+                    .foregroundColor(.white)
+            }
+        }.frame(width: 30, height: 30)
     }
 }

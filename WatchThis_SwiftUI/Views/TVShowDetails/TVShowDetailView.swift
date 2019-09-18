@@ -13,8 +13,7 @@ struct TVShowDetailView: View {
     @State private var isFavorite = false
     @State private var showActionSheet = false
     @State private var selectedTab = 0
-    @State private var customListModel = TVCustomListModel()
-    @State private var alertInput = ""
+    @State private var customListModel = CustomListModel()
     @State private var showCustomListConfirmation = false
     
     let showId: Int
@@ -35,12 +34,12 @@ struct TVShowDetailView: View {
         }
     }
     
-    lazy var computedActionSheet: CustomListActionSheet<CustomTVList> = {
-        let customLists = Array(store.state.tvShowState.customTVLists.values)
-        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, customLists: customLists, objectName: showDetail.name, objectId: showId)
+    lazy var computedActionSheet: CustomListActionSheet = {
+        let customLists = Array(store.state.userState.customLists.values)
+        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, customLists: customLists, objectName: showDetail.name, objectId: showId, itemType: .TVShow)
     }()
     
-    private var actionSheet: CustomListActionSheet<CustomTVList> {
+    private var actionSheet: CustomListActionSheet {
         var mutatableSelf = self
         return mutatableSelf.computedActionSheet
     }
@@ -60,8 +59,8 @@ struct TVShowDetailView: View {
         .textFieldAlert(isShowing: $customListModel.response.shouldCreateNewList, title: Text("Create Custom List"), doneAction: { (newListName) in
             let newListUUID = UUID()
             self.customListModel.response.listName = newListName
-            self.store.dispatch(action: TVShowActions.CreateNewCustomList(listName: newListName, uuid: newListUUID))
-            self.store.dispatch(action: TVShowActions.AddTVShowToCustomList(customListUUID: newListUUID, tvShowId: self.showId))
+            self.store.dispatch(action: UserActions.CreateNewCustomList(listName: newListName, uuid: newListUUID))
+            self.store.dispatch(action: UserActions.AddToCustomList(customListUUID: newListUUID, itemType: .TVShow, itemId: self.showId))
             self.showCustomListConfirmation = true
         })
         .actionSheet(isPresented: $showActionSheet) {

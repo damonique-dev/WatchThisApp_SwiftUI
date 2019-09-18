@@ -13,5 +13,6 @@ func appStateReducer(state: AppState, action: Action) -> AppState {
     state.tvShowState = tvShowReducer(state: state.tvShowState, action: action)
     state.peopleState = peopleReducer(state: state.peopleState, action: action)
     state.movieState = movieReducer(state: state.movieState, action: action)
+    state.userState = userReducer(state: state.userState, action: action)
     return state
 }

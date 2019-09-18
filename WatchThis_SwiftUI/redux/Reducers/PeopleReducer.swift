@@ -21,10 +21,6 @@ func peopleReducer(state: PeopleState, action: Action) -> PeopleState {
         case let action as PeopleActions.SetPersonSearch:
             state = addToSearchList(state: state, query: action.query)
             state.peopleSearch[action.query] = action.people
-        case let action as PeopleActions.AddPersonToCustomList:
-            state.customPeopleLists[action.customListUUID]?.peopleIds.insert(action.personId)
-        case let action as PeopleActions.RemovePersonFromCustomList:
-           state.customPeopleLists[action.customListUUID]?.peopleIds.remove(action.personId)
         default:
             break
     }

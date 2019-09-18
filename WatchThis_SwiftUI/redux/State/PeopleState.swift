@@ -11,7 +11,6 @@ import Foundation
 struct PeopleState: FluxState, Codable {
     var people: [Int: PersonDetails] = [:]
     var favoritePeople: Set<Int> = Set()
-    var customPeopleLists: [UUID: CustomPeopleList] = [:]
     
     var peopleSearchQueries: [String] = []
     var peopleSearch: [String: [PersonDetails]] = [:]

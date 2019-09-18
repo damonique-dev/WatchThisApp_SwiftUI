@@ -32,12 +32,6 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
             state.favoriteShows.insert(action.showId)
         case let action as TVShowActions.RemoveShowFromFavorites:
             state.favoriteShows.remove(action.showId)
-        case let action as TVShowActions.AddTVShowToCustomList:
-            state.customTVLists[action.customListUUID]?.tvIds.insert(action.tvShowId)
-        case let action as TVShowActions.RemoveTVShowFromCustomList:
-            state.customTVLists[action.customListUUID]?.tvIds.remove(action.tvShowId)
-        case let action as TVShowActions.CreateNewCustomList:
-            state.customTVLists[action.uuid] = CustomTVList(id: action.uuid, listName: action.listName)
         default:
             break
     }

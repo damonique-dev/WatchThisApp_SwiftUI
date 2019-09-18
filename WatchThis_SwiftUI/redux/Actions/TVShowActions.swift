@@ -198,19 +198,4 @@ struct TVShowActions {
         let cast: [Cast]
         let crew: [Crew]
     }
-    
-    struct CreateNewCustomList: Action {
-        let listName: String
-        let uuid: UUID
-    }
-    
-    struct AddTVShowToCustomList: Action {
-        let customListUUID: UUID
-        let tvShowId: Int
-    }
-    
-    struct RemoveTVShowFromCustomList: Action {
-        let customListUUID: UUID
-        let tvShowId: Int
-    }
 }

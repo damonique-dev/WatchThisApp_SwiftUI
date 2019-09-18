@@ -8,38 +8,19 @@
 
 import Foundation
 
-protocol CustomList: Codable, Identifiable {
-    var id: UUID { get }
-    var listName: String { get set }
-    var ids: Set<Int> { get }
+struct CustomList: Codable, Identifiable {
+    var id: UUID
+    var listName: String
+    var items: [Int: ListItem] = [:]
 }
 
-struct CustomTVList: CustomList {
-    let id: UUID
-    var listName: String
-    var tvIds: Set<Int> = Set()
-    
-    var ids: Set<Int> {
-        return tvIds
-    }
+struct ListItem: Codable, Identifiable {
+    let id: Int
+    let itemType: ItemType
 }
 
-struct CustomMovieList: CustomList {
-    let id = UUID()
-    var listName: String
-    var movieIds: Set<Int> = Set()
-    
-    var ids: Set<Int> {
-        return movieIds
-    }
-}
-
-struct CustomPeopleList: CustomList {
-    let id = UUID()
-    var listName: String
-    var peopleIds: Set<Int> = Set()
-    
-    var ids: Set<Int> {
-        return peopleIds
-    }
+enum ItemType: String, Codable {
+    case TVShow
+    case Movie
+    case Person
 }

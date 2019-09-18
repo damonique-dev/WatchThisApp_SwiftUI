@@ -25,10 +25,6 @@ func movieReducer(state: MovieState, action: Action) -> MovieState {
         case let action as MovieActions.SetMovieSearch:
             state.movieSearch[action.query] = action.movies
             state = addToSearchList(state: state, query: action.query)
-        case let action as MovieActions.AddMovieToCustomList:
-            state.customMovieLists[action.customListUUID]?.movieIds.insert(action.movieId)
-        case let action as MovieActions.RemoveMovieFromCustomList:
-            state.customMovieLists[action.customListUUID]?.movieIds.remove(action.movieId)
         default:
             break
     }

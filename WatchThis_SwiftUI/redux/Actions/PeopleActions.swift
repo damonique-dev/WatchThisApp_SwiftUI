@@ -86,14 +86,4 @@ struct PeopleActions {
         let query: String
         let people: [PersonDetails]
     }
-    
-    struct AddPersonToCustomList: Action {
-        let customListUUID: UUID
-        let personId: Int
-    }
-    
-    struct RemovePersonFromCustomList: Action {
-        let customListUUID: UUID
-        let personId: Int
-    }
 }

@@ -43,51 +43,49 @@ struct SearchView: View {
     }
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
-                VStack {
-                    SearchHeaderView(searchModel: searchModel)
-                    ScrollView(.vertical) {
-                        VStack {
-                            if !searchModel.searchQuery.isEmpty {
-                                if searchModel.searchCategory == .TVshows {
-                                    ForEach(tvResults) { show in
-                                        NavigationLink(destination: TVShowDetailView(showId: show.id)) {
-                                            SearchViewRow(item: show)
+        ZStack {
+            BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
+            VStack {
+                SearchHeaderView(searchModel: searchModel)
+                ScrollView(.vertical) {
+                    VStack {
+                        if !searchModel.searchQuery.isEmpty {
+                            if searchModel.searchCategory == .TVshows {
+                                ForEach(tvResults) { show in
+                                    NavigationLink(destination: TVShowDetailView(showId: show.id)) {
+                                        SearchViewRow(item: show)
                                             .frame(height: 120)
-                                        }
                                     }
                                 }
-                                if searchModel.searchCategory == .Movies {
-                                    ForEach(movieResults) { movie in
-                                        NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                                            SearchViewRow(item: movie)
-                                            .frame(height: 120)
-                                        }
-                                    }
-                                }
-                                if searchModel.searchCategory == .People {
-                                    ForEach(peopleResults) { person in
-                                        NavigationLink(destination: PersonDetailsView(personId: person.id, personName: person.name!)) {
-                                            PeopleSearchRow(item: person)
-                                            .frame(height: 120)
-                                        }
-                                    }
-                                }
-                            } else {
-                                ForEach(previousSearches, id: \.self) { query in
-                                    Button(action: {self.searchModel.searchQuery = query}) {
-                                        PreviousSearchRow(query: query)
-                                    }
-                                }.padding(.top)
                             }
+                            if searchModel.searchCategory == .Movies {
+                                ForEach(movieResults) { movie in
+                                    NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                                        SearchViewRow(item: movie)
+                                            .frame(height: 120)
+                                    }
+                                }
+                            }
+                            if searchModel.searchCategory == .People {
+                                ForEach(peopleResults) { person in
+                                    NavigationLink(destination: PersonDetailsView(personId: person.id, personName: person.name!)) {
+                                        PeopleSearchRow(item: person)
+                                            .frame(height: 120)
+                                    }
+                                }
+                            }
+                        } else {
+                            ForEach(previousSearches, id: \.self) { query in
+                                Button(action: {self.searchModel.searchQuery = query}) {
+                                    PreviousSearchRow(query: query)
+                                }
+                            }.padding(.top)
                         }
                     }
-                }.padding(.vertical, 75)
-            }
-            .navigationBarTitle(Text("Search"), displayMode: .inline)
+                }
+            }.padding(.vertical, 75)
         }
+        .navigationBarTitle(Text("Search"), displayMode: .inline)
     }
 }
 

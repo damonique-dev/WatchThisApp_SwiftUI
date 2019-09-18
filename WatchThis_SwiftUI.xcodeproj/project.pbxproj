@@ -51,6 +51,8 @@
 		5485E0B42331C8D30057DC6E /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5485E0B32331C8D30057DC6E /* UserState.swift */; };
 		5485E0B62331CBB40057DC6E /* UserReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5485E0B52331CBB40057DC6E /* UserReducer.swift */; };
 		5485E0B82331CC110057DC6E /* UserActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5485E0B72331CC110057DC6E /* UserActions.swift */; };
+		5485E0BA2331DB1C0057DC6E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5485E0B92331DB1C0057DC6E /* ProfileView.swift */; };
+		5485E0BC2331E4570057DC6E /* CustomListButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5485E0BB2331E4570057DC6E /* CustomListButtonView.swift */; };
 		54AAA3E5231262810092A11E /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA3E4231262810092A11E /* GridView.swift */; };
 		54AAA3EB23133B2F0092A11E /* BlurredBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA3EA23133B2F0092A11E /* BlurredBackground.swift */; };
 		54AAA3ED23133BA50092A11E /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AAA3EC23133BA50092A11E /* Buttons.swift */; };
@@ -137,6 +139,8 @@
 		5485E0B32331C8D30057DC6E /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
 		5485E0B52331CBB40057DC6E /* UserReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserReducer.swift; sourceTree = "<group>"; };
 		5485E0B72331CC110057DC6E /* UserActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActions.swift; sourceTree = "<group>"; };
+		5485E0B92331DB1C0057DC6E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		5485E0BB2331E4570057DC6E /* CustomListButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListButtonView.swift; sourceTree = "<group>"; };
 		54AAA3E4231262810092A11E /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		54AAA3EA23133B2F0092A11E /* BlurredBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredBackground.swift; sourceTree = "<group>"; };
 		54AAA3EC23133BA50092A11E /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -400,6 +404,7 @@
 				5406F83D232F2BD400959FA9 /* WatchTrailerButton.swift */,
 				5406F83F232F2C0300959FA9 /* FavoriteButtonView.swift */,
 				5485E0AD233075B60057DC6E /* CustomListsActionSheet.swift */,
+				5485E0BB2331E4570057DC6E /* CustomListButtonView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -497,6 +502,7 @@
 				54605C1E231CD4ED0016F065 /* SearchView.swift */,
 				54AEB768232B079E0013CAFD /* MovieListView.swift */,
 				54AAA3EE23133C7D0092A11E /* TVShowListView.swift */,
+				5485E0B92331DB1C0057DC6E /* ProfileView.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -679,6 +685,7 @@
 				5406F83A232F2B3E00959FA9 /* TVSeasonsRow.swift in Sources */,
 				54F71B10232B494B001A4FE5 /* MovieDetailsView.swift in Sources */,
 				5406F83E232F2BD400959FA9 /* WatchTrailerButton.swift in Sources */,
+				5485E0BC2331E4570057DC6E /* CustomListButtonView.swift in Sources */,
 				54605C1B231C97F40016F065 /* ImageLoader.swift in Sources */,
 				54AAA42D2318C2BD0092A11E /* TraktApiHelper.swift in Sources */,
 				5485E0B62331CBB40057DC6E /* UserReducer.swift in Sources */,
@@ -688,6 +695,7 @@
 				54AAA419231799BD0092A11E /* TVShowState.swift in Sources */,
 				54197A7C22FBB061000CE4D2 /* SceneDelegate.swift in Sources */,
 				540CB411231BB2C4001C8CC4 /* Labels.swift in Sources */,
+				5485E0BA2331DB1C0057DC6E /* ProfileView.swift in Sources */,
 				5450797F232E211200BE978E /* SearchHeaderView.swift in Sources */,
 				54AEB75F2329DE010013CAFD /* MovieModels.swift in Sources */,
 				540CB40D231BB25B001C8CC4 /* SeasonCell.swift in Sources */,

@@ -61,10 +61,10 @@ struct PersonDetailsView: View {
             ActionSheet(title: actionSheet.title, message: actionSheet.message, buttons: actionSheet.buttons)
         }.alert(isPresented: $showCustomListConfirmation) {
             if customListModel.response.shouldRemove {
-                return Alert(title: Text("Successfully Removed \(personName) from \(customListModel.response.listName!)"))
+                return Alert(title: Text("Successfully Removed \"\(personName)\" from \(customListModel.response.listName!)"))
             }
             
-            return Alert(title: Text("Successfully Added \(personName) to \(customListModel.response.listName!)"))
+            return Alert(title: Text("Successfully Added \"\(personName)\" to \(customListModel.response.listName!)"))
         }
     }
 }

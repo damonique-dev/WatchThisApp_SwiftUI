@@ -17,16 +17,16 @@ struct TabbedView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            TVShowListView().tabItem{
+            NavigationView {TVShowListView()}.tabItem{
                 Image(systemName: "tv.fill").font(.system(size: 30))
             }.tag(Tab.showList)
-            MovieListView().tabItem{
+            NavigationView {MovieListView()}.tabItem{
                 Image(systemName: "film.fill").font(.system(size: 30))
             }.tag(Tab.movieList)
-            Text("My Shows").tabItem{
+            NavigationView {ProfileView()}.tabItem{
                 Image(systemName: "person.fill").font(.system(size: 30))
             }.tag(Tab.myShows)
-            SearchView().tabItem{
+            NavigationView {SearchView()}.tabItem{
                 Image(systemName: "magnifyingglass").font(.system(size: 30))
             }.tag(Tab.search)
         }

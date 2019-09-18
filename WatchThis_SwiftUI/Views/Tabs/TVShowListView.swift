@@ -33,24 +33,22 @@ struct TVShowListView: View {
     }
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
-                
-                ScrollView(.vertical) {
-                    VStack {
-                        if !favoriteShows.isEmpty {
-                            TVCategoryRow(title: "My Shows", shows: favoriteShows)
-                        }
-                        TVCategoryRow(title: "Trending Shows", shows: trendingShows)
-                        TVCategoryRow(title: "Popular Shows", shows: popularShows)
+        ZStack {
+            BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
+            
+            ScrollView(.vertical) {
+                VStack {
+                    if !favoriteShows.isEmpty {
+                        TVCategoryRow(title: "My Shows", shows: favoriteShows)
                     }
-                }.padding(.vertical, 44)
-            }
-            .navigationBarTitle(Text("Hot Shows"), displayMode: .inline)
-                .onAppear() {
-                    self.fetchShowLists()
-            }
+                    TVCategoryRow(title: "Trending Shows", shows: trendingShows)
+                    TVCategoryRow(title: "Popular Shows", shows: popularShows)
+                }
+            }.padding(.vertical, 44)
+        }
+        .navigationBarTitle(Text("Hot Shows"), displayMode: .inline)
+        .onAppear() {
+            self.fetchShowLists()
         }
     }
 }

@@ -67,10 +67,10 @@ struct TVShowDetailView: View {
             ActionSheet(title: actionSheet.title, message: actionSheet.message, buttons: actionSheet.buttons)
         }.alert(isPresented: $showCustomListConfirmation) {
             if customListModel.response.shouldRemove {
-                return Alert(title: Text("Successfully Removed \(showDetail.name) from \(customListModel.response.listName!)"))
+                return Alert(title: Text("Successfully Removed \"\(showDetail.name)\" from \(customListModel.response.listName!)"))
             }
             
-            return Alert(title: Text("Successfully Added \(showDetail.name) to \(customListModel.response.listName!)"))
+            return Alert(title: Text("Successfully Added \"\(showDetail.name)\" to \(customListModel.response.listName!)"))
         }
     }
 }

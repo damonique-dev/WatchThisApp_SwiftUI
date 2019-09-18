@@ -32,24 +32,22 @@ struct MovieListView: View {
     }
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
-                
-                ScrollView(.vertical) {
-                    VStack {
-                        if !favoriteMovies.isEmpty {
-                            MovieCategoryRow(title: "My Movies", movies: favoriteMovies)
-                        }
-                        MovieCategoryRow(title: "Top Grossing Movies", movies: boxOfficeMovies)
-                        MovieCategoryRow(title: "Trending Movies", movies: trendingMovies)
+        ZStack {
+            BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
+            
+            ScrollView(.vertical) {
+                VStack {
+                    if !favoriteMovies.isEmpty {
+                        MovieCategoryRow(title: "My Movies", movies: favoriteMovies)
                     }
-                }.padding(.vertical, 44)
-            }
-            .navigationBarTitle(Text("Movies"), displayMode: .inline)
-                .onAppear() {
-                    self.fetchMovieLists()
-            }
+                    MovieCategoryRow(title: "Top Grossing Movies", movies: boxOfficeMovies)
+                    MovieCategoryRow(title: "Trending Movies", movies: trendingMovies)
+                }
+            }.padding(.vertical, 44)
+        }
+        .navigationBarTitle(Text("Movies"), displayMode: .inline)
+        .onAppear() {
+            self.fetchMovieLists()
         }
     }
 }

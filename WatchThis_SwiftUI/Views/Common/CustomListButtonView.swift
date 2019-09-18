@@ -18,7 +18,7 @@ struct CustomListButtonView: View {
                     self.showActionSheet.toggle()
                 })
                 Spacer()
-            }.padding(.leading, UIScreen.main.bounds.width / 2 - UIScreen.main.bounds.width/6 - 80)
+            }.padding(.leading, UIScreen.main.bounds.width / 2 - UIScreen.main.bounds.width/6 - 40)
             Spacer()
         }.padding(.top, 310)
     }

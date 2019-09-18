@@ -10,7 +10,7 @@ import SwiftUI
 
 struct PersonDetailScrollView: View {
     @EnvironmentObject var store: Store<AppState>
-    @Binding var isFavorite: Bool
+    @Binding var showActionSheet: Bool
     let personDetails: PersonDetails
     
     private var tvCredits: [PersonCredit] {
@@ -42,7 +42,7 @@ struct PersonDetailScrollView: View {
                         PersonMovieCreditRow(movieCredits: movieCredits)
                     }
                 }
-                FavoriteButtonView(isFavorite: $isFavorite, addAction: PeopleActions.AddPersonToFavorites(personId: personDetails.id), removeAction: PeopleActions.RemovePersonFromFavorites(personId: personDetails.id))
+                CustomListButtonView(showActionSheet: $showActionSheet)
             }
         }.padding(8)
     }

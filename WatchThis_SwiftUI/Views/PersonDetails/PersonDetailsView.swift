@@ -42,7 +42,7 @@ struct PersonDetailsView: View {
         ZStack {
             BlurredBackground(image: nil, imagePath: personDetails.profilePath)
             VStack {
-                PersonDetailScrollView(isFavorite: $isFavorite, personDetails: personDetails)
+                PersonDetailScrollView(showActionSheet: $showActionSheet, personDetails: personDetails)
             }
         }
         .padding(.vertical, 44)

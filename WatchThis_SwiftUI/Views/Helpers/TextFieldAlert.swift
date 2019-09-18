@@ -10,7 +10,7 @@ import SwiftUI
 
 struct TextFieldAlert<Presenting>: View where Presenting: View {
     @Binding var isShowing: Bool
-    @State var text = "My Custom List"
+    @State var text = "Binge Worthy!!"
     let presenting: Presenting
     let title: Text
     let doneAction: (_ text: String) -> Void

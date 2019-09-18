@@ -11,7 +11,7 @@ import SwiftUI
 struct MovieDetailsScrollView: View {
     @EnvironmentObject var store: Store<AppState>
     
-    @Binding var isFavorite: Bool
+    @Binding var showActionSheet: Bool
     let movieDetails: MovieDetails
     
     private var cast: [Cast] {
@@ -57,7 +57,7 @@ struct MovieDetailsScrollView: View {
                         SimilarMoviesRow(similarMovies: similarMovies)
                     }
                 }
-                FavoriteButtonView(isFavorite: $isFavorite, addAction: MovieActions.AddMovieToFavorites(movieId: self.movieDetails.id), removeAction: MovieActions.RemoveMovieFromFavorites(movieId: self.movieDetails.id))
+                CustomListButtonView(showActionSheet: $showActionSheet)
                 WatchTrailerButton()
             }
         }.padding(8)

@@ -48,7 +48,7 @@ struct TVShowDetailView: View {
         ZStack {
             BlurredBackground(image: nil, imagePath: imagePath)
             VStack {
-                TVDetailScrollView(isFavorite: $isFavorite, showActionSheet: $showActionSheet, showDetail: showDetail)
+                TVDetailScrollView(showActionSheet: $showActionSheet, showDetail: showDetail)
             }
         }
         .padding(.vertical, 44)

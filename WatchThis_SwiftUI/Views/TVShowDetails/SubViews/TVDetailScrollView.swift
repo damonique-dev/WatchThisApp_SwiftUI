@@ -10,7 +10,6 @@ import SwiftUI
 
 struct TVDetailScrollView: View {
     @EnvironmentObject var store: Store<AppState>
-    @Binding var isFavorite: Bool
     @Binding var showActionSheet: Bool
     let showDetail: TVShowDetails
     
@@ -40,7 +39,6 @@ struct TVDetailScrollView: View {
                         TVSimilarShowsRow(similarShows: similarShows)
                     }
                 }
-                FavoriteButtonView(isFavorite: $isFavorite, addAction: TVShowActions.AddShowToFavorites(showId: showDetail.id), removeAction: TVShowActions.RemoveShowFromFavorites(showId: showDetail.id))
                 CustomListButtonView(showActionSheet: $showActionSheet)
                 WatchTrailerButton()
             }

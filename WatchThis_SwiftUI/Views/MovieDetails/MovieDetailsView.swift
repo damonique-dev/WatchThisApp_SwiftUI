@@ -14,6 +14,7 @@ struct MovieDetailsView: View {
     @State private var showActionSheet = false
     @State private var showCustomListConfirmation = false
     @State private var showCustomListAlert = false
+    @State private var showVideoPlayer = false
     @State private var isFavorite = false
     
     let movieId: Int
@@ -34,6 +35,10 @@ struct MovieDetailsView: View {
         isFavorite = store.state.movieState.favoriteMovies.contains(movieDetails.id)
     }
     
+    private var movieVideo: Video? {
+        return store.state.movieState.movieDetails[movieId]?.videos?.results?[0]
+    }
+    
     lazy var computedActionSheet: CustomListActionSheet = {
         let customLists = Array(store.state.userState.customLists.values)
         return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, showCustomListAlert: $showCustomListAlert, customLists: customLists, objectName: movieDetails.title, objectId: movieId, itemType: .Movie)
@@ -48,7 +53,10 @@ struct MovieDetailsView: View {
         ZStack {
             BlurredBackground(image: nil, imagePath: movieDetails.posterPath)
             VStack {
-                MovieDetailsScrollView(showActionSheet: $showActionSheet, movieDetails: movieDetails)
+                MovieDetailsScrollView(showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer, movieDetails: movieDetails)
+            }
+            if showVideoPlayer && movieVideo != nil {
+                VideoPlayerView(showPlayer: $showVideoPlayer, video: movieVideo)
             }
         }
         .padding(.vertical, 44)

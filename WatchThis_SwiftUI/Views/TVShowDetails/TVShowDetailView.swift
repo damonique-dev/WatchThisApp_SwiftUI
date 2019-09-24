@@ -16,6 +16,7 @@ struct TVShowDetailView: View {
     @State private var selectedTab = 0
     @State private var customListModel = CustomListModel()
     @State private var showCustomListConfirmation = false
+    @State private var showVideoPlayer = false
     
     let showId: Int
     
@@ -27,6 +28,10 @@ struct TVShowDetailView: View {
     }
     private var showDetail: TVShowDetails {
         return store.state.tvShowState.tvShowDetail[showId] ?? TVShowDetails(id: showId, name: "")
+    }
+    
+    private var showVideo: Video? {
+        return store.state.tvShowState.tvShowDetail[showId]?.videos?.results?[0]
     }
     
     private func fetchShowDetails() {
@@ -49,7 +54,10 @@ struct TVShowDetailView: View {
         ZStack {
             BlurredBackground(image: nil, imagePath: imagePath)
             VStack {
-                TVDetailScrollView(showActionSheet: $showActionSheet, showDetail: showDetail)
+                TVDetailScrollView(showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer, showDetail: showDetail)
+            }
+            if showVideoPlayer && showVideo != nil {
+                VideoPlayerView(showPlayer: $showVideoPlayer, video: showVideo)
             }
         }
         .padding(.vertical, 44)

@@ -12,6 +12,7 @@ struct MovieDetailsScrollView: View {
     @EnvironmentObject var store: Store<AppState>
     
     @Binding var showActionSheet: Bool
+    @Binding var showVideoPlayer: Bool
     let movieDetails: MovieDetails
     
     private var cast: [Cast] {
@@ -59,7 +60,7 @@ struct MovieDetailsScrollView: View {
                     }
                 }
                 CustomListButtonView(showActionSheet: $showActionSheet)
-                WatchTrailerButton()
+                WatchTrailerButton(action: {self.showVideoPlayer.toggle()})
             }
         }.padding(8)
     }

@@ -10,9 +10,10 @@ import SwiftUI
 
 struct WatchThisButton: View {
     var text = "Button Text"
+    let action: () -> Void
         
     var body: some View {
-        Button(action: {}) {
+        Button(action: {self.action()}) {
             Text(text)
                 .font(Font.system(.body, design: .rounded))
                 .fontWeight(.bold)
@@ -64,7 +65,7 @@ struct DetailTabButton: View {
 #if DEBUG
 struct WatchThisButton_Previews: PreviewProvider {
     static var previews: some View {
-        WatchThisButton()
+        WatchThisButton(action: {print("action")})
     }
 }
 #endif

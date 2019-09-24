@@ -11,6 +11,7 @@ import SwiftUI
 struct TVDetailScrollView: View {
     @EnvironmentObject var store: Store<AppState>
     @Binding var showActionSheet: Bool
+    @Binding var showVideoPlayer: Bool
     let showDetail: TVShowDetails
     
     private var cast: [Cast] {
@@ -40,7 +41,7 @@ struct TVDetailScrollView: View {
                     }
                 }
                 CustomListButtonView(showActionSheet: $showActionSheet)
-                WatchTrailerButton()
+                WatchTrailerButton(action: {self.showVideoPlayer.toggle()})
             }
         }.padding(8)
     }

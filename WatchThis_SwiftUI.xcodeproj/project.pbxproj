@@ -45,6 +45,7 @@
 		54605C1D231C9DDD0016F065 /* ImageLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54605C1C231C9DDD0016F065 /* ImageLoaderView.swift */; };
 		54605C1F231CD4ED0016F065 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54605C1E231CD4ED0016F065 /* SearchView.swift */; };
 		54605C21231F73C50016F065 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54605C20231F73C50016F065 /* SearchModel.swift */; };
+		5479B1D32339E9A2005DAFB6 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5479B1D22339E9A2005DAFB6 /* VideoPlayerView.swift */; };
 		547AA58B2339A06400DF4423 /* ActivitySpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547AA58A2339A06400DF4423 /* ActivitySpinner.swift */; };
 		5485E0AE233075B60057DC6E /* CustomListsActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5485E0AD233075B60057DC6E /* CustomListsActionSheet.swift */; };
 		5485E0B0233094570057DC6E /* CustomListsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5485E0AF233094570057DC6E /* CustomListsModel.swift */; };
@@ -134,6 +135,7 @@
 		54605C1C231C9DDD0016F065 /* ImageLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoaderView.swift; sourceTree = "<group>"; };
 		54605C1E231CD4ED0016F065 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		54605C20231F73C50016F065 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
+		5479B1D22339E9A2005DAFB6 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		547AA58A2339A06400DF4423 /* ActivitySpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivitySpinner.swift; sourceTree = "<group>"; };
 		5485E0AD233075B60057DC6E /* CustomListsActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListsActionSheet.swift; sourceTree = "<group>"; };
 		5485E0AF233094570057DC6E /* CustomListsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomListsModel.swift; sourceTree = "<group>"; };
@@ -408,6 +410,7 @@
 				5485E0AD233075B60057DC6E /* CustomListsActionSheet.swift */,
 				5485E0BB2331E4570057DC6E /* CustomListButtonView.swift */,
 				547AA58A2339A06400DF4423 /* ActivitySpinner.swift */,
+				5479B1D22339E9A2005DAFB6 /* VideoPlayerView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -680,6 +683,7 @@
 				54507981232E213600BE978E /* SearchBar.swift in Sources */,
 				54AAA3F1231349B20092A11E /* RoundedImageCell.swift in Sources */,
 				54AAA414231799060092A11E /* Middleware.swift in Sources */,
+				5479B1D32339E9A2005DAFB6 /* VideoPlayerView.swift in Sources */,
 				54AEB7652329FE8A0013CAFD /* MovieActions.swift in Sources */,
 				54AAA42323179CDA0092A11E /* TVShowActions.swift in Sources */,
 				54AAA4292318B8B60092A11E /* ImageService.swift in Sources */,

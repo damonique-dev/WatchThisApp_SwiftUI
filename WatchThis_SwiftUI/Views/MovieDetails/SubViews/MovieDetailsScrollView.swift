@@ -45,8 +45,8 @@ struct MovieDetailsScrollView: View {
                     Text("\(movieDetails.overview ?? "")")
                         .font(.body)
                         .foregroundColor(.white)
-                        .padding(8)
                         .fixedSize(horizontal: false, vertical: true)
+                        .padding(8)
                     VStack(alignment: .leading) {
                         DetailsLabel(title: "Release Date:", detail: movieDetails.releaseDate)
                         DetailsLabel(title: "Runtime:", detail: movieRuntime)

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct TextFieldAlert<Presenting>: View where Presenting: View {
     @Binding var isShowing: Bool
-    @State var text = "Binge Worthy!!"
+    @State var text = ""
     let presenting: Presenting
     let title: Text
     let doneAction: (_ text: String) -> Void
@@ -22,7 +22,7 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
             presenting
                 .disabled(isShowing)
             VStack {
-                title
+                title.padding(.bottom, 8)
                 TextField("Custom List Name", text: $text)
                 Divider()
                 HStack {
@@ -39,8 +39,8 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                     Spacer()
                     Button(action: {
                         withAnimation {
-                            self.doneAction(self.text)
                             self.isShowing.toggle()
+                            self.doneAction(self.text)
                         }
                     }) {
                         Text("Create")
@@ -49,7 +49,7 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                 }
             }
             .padding()
-            .frame(width: width, height: width * 8/11)
+            .frame(width: width, height: width * 5/11)
             .background(Color(.black))
             .shadow(radius: 1)
             .cornerRadius(5)

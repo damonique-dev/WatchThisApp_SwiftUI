@@ -19,14 +19,15 @@ struct RoundedImageCell: View {
             Text(title)
                 .font(Font.system(.headline, design: .rounded))
                 .fontWeight(.semibold)
-                .frame(width: height * 8/11, height: height)
                 .foregroundColor(.white)
-                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(16)
             ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: posterPath,
                                                                                      size: .original))
-                .frame(width: height * 8/11, height: height)
                 .cornerRadius(15)
         }
+        .frame(width: height * 8/11, height: height)
+        .padding(8)
     }
 }
 

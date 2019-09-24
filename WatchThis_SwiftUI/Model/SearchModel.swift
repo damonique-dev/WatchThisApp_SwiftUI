@@ -19,7 +19,6 @@ class SearchModel: ObservableObject {
     @Published var searchQuery = "" {
         willSet {
             DispatchQueue.main.async {
-                print("Search Query Changed")
                 self.didChange.send(SearchContent(searchQuery: newValue, searchCategory: self.searchCategory))
             }
         }

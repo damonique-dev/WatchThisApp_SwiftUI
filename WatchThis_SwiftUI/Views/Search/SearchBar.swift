@@ -7,10 +7,24 @@
 //
 
 import SwiftUI
+import Combine
 
 struct SearchBar: View {
     @ObservedObject var searchModel: SearchModel
     @State var isActiveBar = false
+    @Binding var isSearching: Bool
+    
+    private var searchCancellable: Cancellable? = nil
+    
+    init(searchModel: SearchModel, isSearching: Binding<Bool>) {
+        self.searchModel = searchModel
+        self._isSearching = isSearching
+        
+        self.searchCancellable = searchModel.didChange.sink(receiveValue: { value in
+            isSearching.wrappedValue = !value.searchQuery.isEmpty
+        })
+    }
+    
     var body: some View {
         HStack(alignment: VerticalAlignment.center, spacing: 0, content: {
             ZStack {

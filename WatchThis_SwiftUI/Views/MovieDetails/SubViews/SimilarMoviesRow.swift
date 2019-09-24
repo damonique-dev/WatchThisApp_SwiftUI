@@ -26,6 +26,6 @@ struct SimilarMoviesRow: View {
                     }
                 }
             }
-        }.padding(.top, 8)
+        }.padding(8)
     }
 }

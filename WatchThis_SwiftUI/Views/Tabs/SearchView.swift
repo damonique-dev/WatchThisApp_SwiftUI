@@ -18,18 +18,46 @@ struct SearchView: View {
     @EnvironmentObject var store: Store<AppState>
     @State var searchModel = SearchModel()
     @State var isActiveBar = false
+    @State var isSearching = false
     
-    private var tvResults: [TVShowDetails]  {
-        return store.state.tvShowState.tvShowSearch[searchModel.searchQuery] ?? [TVShowDetails]()
+    private var tvResults: [TVShowDetails]? {
+        return store.state.tvShowState.tvShowSearch[searchModel.searchQuery]
     }
     
-    private var movieResults: [MovieDetails]  {
-        return store.state.movieState.movieSearch[searchModel.searchQuery] ?? [MovieDetails]()
+    private var movieResults: [MovieDetails]? {
+        return store.state.movieState.movieSearch[searchModel.searchQuery]
     }
     
-    private var peopleResults: [PersonDetails]  {
-        return store.state.peopleState.peopleSearch[searchModel.searchQuery] ?? [PersonDetails]()
+    private var peopleResults: [PersonDetails]? {
+        return store.state.peopleState.peopleSearch[searchModel.searchQuery]
     }
+    
+    private var searchResultsLoaded: Bool {
+        return tvResults != nil || movieResults != nil || peopleResults != nil
+    }
+    
+    var body: some View {
+        ZStack {
+            BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
+            VStack {
+                SearchHeaderView(searchModel: searchModel, isSearching: $isSearching)
+                SearchResultsScrollView(searchModel: searchModel, tvResults: tvResults, movieResults: movieResults, peopleResults: peopleResults)
+            }.padding(.vertical, 75)
+            if isSearching && !searchResultsLoaded {
+                ActivitySpinner()
+            }
+        }
+        .navigationBarTitle(Text("Search"), displayMode: .inline)
+    }
+}
+
+struct SearchResultsScrollView: View {
+    @EnvironmentObject var store: Store<AppState>
+    @ObservedObject var searchModel: SearchModel
+    
+    let tvResults: [TVShowDetails]?
+    let movieResults: [MovieDetails]?
+    let peopleResults: [PersonDetails]?
     
     private var previousSearches: [String] {
         switch searchModel.searchCategory {
@@ -43,49 +71,75 @@ struct SearchView: View {
     }
     
     var body: some View {
-        ZStack {
-            BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
+        ScrollView(.vertical) {
             VStack {
-                SearchHeaderView(searchModel: searchModel)
-                ScrollView(.vertical) {
-                    VStack {
-                        if !searchModel.searchQuery.isEmpty {
-                            if searchModel.searchCategory == .TVshows {
-                                ForEach(tvResults) { show in
-                                    NavigationLink(destination: TVShowDetailView(showId: show.id)) {
-                                        SearchViewRow(item: show)
-                                            .frame(height: 120)
-                                    }
-                                }
-                            }
-                            if searchModel.searchCategory == .Movies {
-                                ForEach(movieResults) { movie in
-                                    NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                                        SearchViewRow(item: movie)
-                                            .frame(height: 120)
-                                    }
-                                }
-                            }
-                            if searchModel.searchCategory == .People {
-                                ForEach(peopleResults) { person in
-                                    NavigationLink(destination: PersonDetailsView(personId: person.id, personName: person.name!)) {
-                                        PeopleSearchRow(item: person)
-                                            .frame(height: 120)
-                                    }
-                                }
-                            }
-                        } else {
-                            ForEach(previousSearches, id: \.self) { query in
-                                Button(action: {self.searchModel.searchQuery = query}) {
-                                    PreviousSearchRow(query: query)
-                                }
-                            }.padding(.top)
+                if !searchModel.searchQuery.isEmpty {
+                    TVSearchResults(tvResults: tvResults, category: searchModel.searchCategory)
+                    MovieSearchResults(movieResults: movieResults, category: searchModel.searchCategory)
+                    PeopleSearchResults(peopleResults: peopleResults, category: searchModel.searchCategory)
+                } else {
+                    ForEach(previousSearches, id: \.self) { query in
+                        Button(action: {self.searchModel.searchQuery = query}) {
+                            PreviousSearchRow(query: query)
                         }
+                    }.padding(.top)
+                }
+            }
+        }
+    }
+}
+
+struct TVSearchResults: View {
+    let tvResults: [TVShowDetails]?
+    let category: SearchCategories
+    
+    var body: some View {
+        VStack {
+            if category == .TVshows && tvResults != nil {
+                ForEach(tvResults!) { show in
+                    NavigationLink(destination: TVShowDetailView(showId: show.id)) {
+                        SearchViewRow(item: show)
+                            .frame(height: 120)
                     }
                 }
-            }.padding(.vertical, 75)
+            }
         }
-        .navigationBarTitle(Text("Search"), displayMode: .inline)
+    }
+}
+
+struct MovieSearchResults: View {
+    let movieResults: [MovieDetails]?
+    let category: SearchCategories
+    
+    var body: some View {
+        VStack {
+            if category == .Movies && movieResults != nil {
+                ForEach(movieResults!) { movie in
+                    NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                        SearchViewRow(item: movie)
+                            .frame(height: 120)
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct PeopleSearchResults: View {
+    let peopleResults: [PersonDetails]?
+    let category: SearchCategories
+    
+    var body: some View {
+        VStack {
+            if category == .People && peopleResults != nil {
+                ForEach(peopleResults!) { person in
+                    NavigationLink(destination: PersonDetailsView(personId: person.id, personName: person.name!)) {
+                        PeopleSearchRow(item: person)
+                            .frame(height: 120)
+                    }
+                }
+            }
+        }
     }
 }
 

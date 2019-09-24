@@ -44,12 +44,13 @@ struct MovieDetailsScrollView: View {
                     Text("\(movieDetails.overview ?? "")")
                         .font(.body)
                         .foregroundColor(.white)
+                        .padding(8)
                         .fixedSize(horizontal: false, vertical: true)
                     VStack(alignment: .leading) {
                         DetailsLabel(title: "Release Date:", detail: movieDetails.releaseDate)
                         DetailsLabel(title: "Runtime:", detail: movieRuntime)
                         DetailsLabel(title: "Revenue:", detail: movieRevenue)
-                    }.padding(.top, 8)
+                    }.padding(8)
                     if cast.count > 0 {
                         CastRow(cast: cast)
                     }

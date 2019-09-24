@@ -31,12 +31,12 @@ struct CustomListActionSheet {
         // Add/ Remove from existing lists buttons
         for list in customLists {
             if list.items[objectId] != nil {
-                buttonList.append(ActionSheet.Button.default(Text("Remove \(objectName) from \(list.listName)"), action: {
+                buttonList.append(ActionSheet.Button.default(Text("Remove \"\(objectName)\" from \(list.listName)"), action: {
                     self.customListModel.response = CustomListContent(shouldRemove: true, listName: list.listName, listId: list.id, itemId: self.objectId, itemType: self.itemType)
                     self.showCustomListConfirmation = true
                 }))
             } else {
-                buttonList.append(ActionSheet.Button.default(Text("Add \(objectName) to \(list.listName)"), action: { self.customListModel.response = CustomListContent(shouldAdd: true, listName: list.listName, listId: list.id, itemId: self.objectId, itemType: self.itemType)
+                buttonList.append(ActionSheet.Button.default(Text("Add \"\(objectName)\" to \(list.listName)"), action: { self.customListModel.response = CustomListContent(shouldAdd: true, listName: list.listName, listId: list.id, itemId: self.objectId, itemType: self.itemType)
                     self.showCustomListConfirmation = true
                 }))
             }

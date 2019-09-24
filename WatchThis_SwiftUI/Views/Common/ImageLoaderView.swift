@@ -27,8 +27,7 @@ struct ImageLoaderView: View {
                 }
             } else {
                 RoundedRectangle(cornerRadius: 15)
-                .foregroundColor(Color.black.opacity(0))
-                .border(Color.white)
+                    .foregroundColor(Color.black.opacity(0.2))
             }
         }
     }

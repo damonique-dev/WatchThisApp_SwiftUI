@@ -96,6 +96,7 @@ enum TVShowList: String, Codable {
     case Popular
     case Trending
     case MostWatchedWeekly
+    case Anticipated
 }
 
 #if DEBUG

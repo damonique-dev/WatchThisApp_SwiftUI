@@ -22,9 +22,9 @@ class TMDBClient {
         return Singleton.sharedInstance
     }
     
-    func GET<T: Codable>(endpoint: Endpoint, params: [String: String]?, completionHandler: @escaping (Result<T, APIError>) -> Void) {
+    func GET<T: Codable>(endpoint: Endpoint, params: [String: String]?, retryCount: Int = 0, completionHandler: @escaping (Result<T, APIError>) -> Void) {
         let url = URLFromParameters(endpoint: endpoint, parameters: params as [String : AnyObject]?)
-        AF.request(url).responseJSON { response in
+        AF.request(url).validate(statusCode: 200..<300).responseJSON { response in
             switch response.result {
                 case .success(let result):
                     do {
@@ -44,6 +44,15 @@ class TMDBClient {
                     }
                     return
                 case .failure(let error):
+                    if let statusCode = response.response?.statusCode {
+                        if statusCode == 429 {
+                            let seconds = 3.0
+                            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + seconds) {
+                                let newRetryCount = retryCount + 1
+                                self.GET(endpoint: endpoint, params: params, retryCount:newRetryCount, completionHandler: completionHandler)
+                            }
+                        }
+                    }
                     #if DEBUG
                     print("Error: \(error)")
                     #endif

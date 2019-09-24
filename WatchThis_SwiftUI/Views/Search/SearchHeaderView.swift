@@ -10,10 +10,11 @@ import SwiftUI
 
 struct SearchHeaderView: View {
     @ObservedObject var searchModel: SearchModel
+    @Binding var isSearching: Bool
     
     var body: some View {
         VStack {
-            SearchBar(searchModel: searchModel)
+            SearchBar(searchModel: searchModel, isSearching: $isSearching)
                 .padding(.top, 25)
             Picker(selection: $searchModel.searchCategory, label: Text("")) {
                 Text("TV Shows").tag(SearchCategories.TVshows)

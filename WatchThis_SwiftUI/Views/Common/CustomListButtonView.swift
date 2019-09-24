@@ -32,7 +32,7 @@ struct CustomListButton: View {
             ZStack {
                 Circle().foregroundColor(.orange)
                 Image(systemName: "text.badge.plus")
-                    .imageScale(.large)
+                    .imageScale(.medium)
                     .foregroundColor(.white)
             }
         }.frame(width: 30, height: 30)

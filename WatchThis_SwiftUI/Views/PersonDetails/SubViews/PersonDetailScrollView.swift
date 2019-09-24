@@ -41,7 +41,7 @@ struct PersonDetailScrollView: View {
                     if movieCredits.count > 0 {
                         PersonMovieCreditRow(movieCredits: movieCredits)
                     }
-                }
+                }.padding(8)
                 CustomListButtonView(showActionSheet: $showActionSheet)
             }
         }.padding(8)

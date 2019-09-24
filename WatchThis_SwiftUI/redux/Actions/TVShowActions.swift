@@ -9,35 +9,21 @@
 import Foundation
 
 struct TVShowActions {
-    struct FetchTraktPopularShowList: AsyncAction {
+    struct FetchTraktShowList<T: Codable>: AsyncAction {
         let endpoint: TraktApiClient.Endpoint
         let showList: TVShowList
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             TraktApiClient.sharedInstance().GetList(endpoint: endpoint, params: [:])
             {
-                (result: Result<[TraktList], APIError>) in
+                (result: Result<T, APIError>) in
                 switch result {
                 case let .success(response):
-                    dispatch(FetchTMDBShowsFromTrakt(list: response, showList: self.showList))
-                case let .failure(error):
-                    print(error)
-                    break
-                }
-            }
-        }
-    }
-    
-    struct FetchTraktTrendingShowList: AsyncAction {
-        let endpoint: TraktApiClient.Endpoint
-        let showList: TVShowList
-        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TraktApiClient.sharedInstance().GetList(endpoint: endpoint, params: [:])
-            {
-                (result: Result<[TraktShowListResults], APIError>) in
-                switch result {
-                case let .success(response):
-                    let list = response.compactMap {$0.show}
-                    dispatch(FetchTMDBShowsFromTrakt(list: list, showList: self.showList))
+                    if T.self == [TraktList].self {
+                        dispatch(FetchTMDBShowsFromTrakt(list: response as! [TraktList], showList: self.showList))
+                    } else if T.self == [TraktShowListResults].self {
+                        let list = (response as! [TraktShowListResults]).compactMap {$0.show}
+                        dispatch(FetchTMDBShowsFromTrakt(list: list, showList: self.showList))
+                    }
                 case let .failure(error):
                     print(error)
                     break

@@ -13,6 +13,7 @@ struct PersonDetailsView: View {
     @State private var customListModel = CustomListModel()
     @State private var showActionSheet = false
     @State private var showCustomListConfirmation = false
+    @State private var showCustomListAlert = false
     @State private var isFavorite = false
     
     let personId: Int
@@ -30,7 +31,7 @@ struct PersonDetailsView: View {
     
     lazy var computedActionSheet: CustomListActionSheet = {
         let customLists = Array(store.state.userState.customLists.values)
-        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, customLists: customLists, objectName: personName, objectId: personId, itemType: .Person)
+        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, showCustomListAlert: $showCustomListAlert, customLists: customLists, objectName: personName, objectId: personId, itemType: .Person)
     }()
     
     private var actionSheet: CustomListActionSheet {
@@ -50,7 +51,7 @@ struct PersonDetailsView: View {
         .onAppear() {
             self.fetchPersonDetails()
         }
-        .textFieldAlert(isShowing: $customListModel.response.shouldCreateNewList, title: Text("Create Custom List"), doneAction: { (newListName) in
+        .textFieldAlert(isShowing: $showCustomListAlert, title: Text("Create Custom List"), doneAction: { (newListName) in
             let newListUUID = UUID()
             self.customListModel.response.listName = newListName
             self.store.dispatch(action: UserActions.CreateNewCustomList(listName: newListName, uuid: newListUUID))

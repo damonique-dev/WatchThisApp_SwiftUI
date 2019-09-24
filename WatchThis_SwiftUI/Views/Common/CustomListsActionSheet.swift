@@ -11,6 +11,7 @@ import SwiftUI
 struct CustomListActionSheet {
     @ObservedObject var customListModel: CustomListModel
     @Binding var showCustomListConfirmation: Bool
+    @Binding var showCustomListAlert: Bool
     private let customLists: [CustomList]
     private let objectName: String
     private let objectId: Int
@@ -26,7 +27,10 @@ struct CustomListActionSheet {
         var buttonList = [ActionSheet.Button]()
         
         // Create list button
-        buttonList.append(ActionSheet.Button.default(Text("Create a new list"), action: { self.customListModel.response = CustomListContent(shouldCreateNewList: true, listId: UUID(), itemId: self.objectId, itemType: .TVShow) }))
+        buttonList.append(ActionSheet.Button.default(Text("Create a new list"), action: {
+            self.customListModel.response = CustomListContent(shouldCreateNewList: true, listId: UUID(), itemId: self.objectId, itemType: .TVShow)
+            self.showCustomListAlert = true
+        }))
         
         // Add/ Remove from existing lists buttons
         for list in customLists {
@@ -48,9 +52,10 @@ struct CustomListActionSheet {
         return buttonList
     }
     
-    init(customListModel: CustomListModel, showCustomListConfirmation: Binding<Bool>, customLists: [CustomList], objectName: String, objectId: Int, itemType: ItemType) {
+    init(customListModel: CustomListModel, showCustomListConfirmation: Binding<Bool>, showCustomListAlert: Binding<Bool>, customLists: [CustomList], objectName: String, objectId: Int, itemType: ItemType) {
         self.customListModel = customListModel
         self._showCustomListConfirmation = showCustomListConfirmation
+        self._showCustomListAlert = showCustomListAlert
         self.customLists = customLists
         self.objectName = objectName
         self.objectId = objectId

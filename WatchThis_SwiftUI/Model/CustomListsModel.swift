@@ -27,7 +27,6 @@ class CustomListModel: ObservableObject {
     @Published var response = CustomListContent(listId: UUID(), itemId: -1, itemType: .Movie) {
         willSet {
             DispatchQueue.main.async {
-                print(newValue)
                 self.didChange.send(newValue)
             }
         }

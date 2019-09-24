@@ -11,6 +11,7 @@ import SwiftUI
 struct TVShowDetailView: View {
     @EnvironmentObject var store: Store<AppState>
     @State private var isFavorite = false
+    @State private var showCustomListAlert = false
     @State private var showActionSheet = false
     @State private var selectedTab = 0
     @State private var customListModel = CustomListModel()
@@ -36,7 +37,7 @@ struct TVShowDetailView: View {
     
     lazy var computedActionSheet: CustomListActionSheet = {
         let customLists = Array(store.state.userState.customLists.values)
-        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, customLists: customLists, objectName: showDetail.name, objectId: showId, itemType: .TVShow)
+        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, showCustomListAlert: $showCustomListAlert, customLists: customLists, objectName: showDetail.name, objectId: showId, itemType: .TVShow)
     }()
     
     private var actionSheet: CustomListActionSheet {
@@ -56,7 +57,7 @@ struct TVShowDetailView: View {
         .onAppear() {
             self.fetchShowDetails()
         }
-        .textFieldAlert(isShowing: $customListModel.response.shouldCreateNewList, title: Text("Create Custom List"), doneAction: { (newListName) in
+        .textFieldAlert(isShowing: $showCustomListAlert, title: Text("Create Custom List"), doneAction: { (newListName) in
             let newListUUID = UUID()
             self.customListModel.response.listName = newListName
             self.store.dispatch(action: UserActions.CreateNewCustomList(listName: newListName, uuid: newListUUID))

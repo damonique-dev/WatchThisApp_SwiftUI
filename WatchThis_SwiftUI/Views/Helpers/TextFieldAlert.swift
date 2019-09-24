@@ -51,6 +51,7 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
             .padding()
             .frame(width: width, height: width * 5/11)
             .background(Color(.black))
+            .compositingGroup()
             .shadow(radius: 1)
             .cornerRadius(5)
             .opacity(isShowing ? 1 : 0)

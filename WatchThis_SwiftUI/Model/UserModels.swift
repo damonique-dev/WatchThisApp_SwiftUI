@@ -8,20 +8,19 @@
 
 import Foundation
 
-class User: NSObject {
-    var email: String?
-    var id: String?
-    var name: String?
-    var profileImagePath: String?
-    
-    init(dictionary: [String: AnyObject]) {
-        super.init()
-        id = dictionary["id"] as? String
-        name = dictionary["name"] as? String
-        email = dictionary["email"] as? String
-        if let idString = id {
-            profileImagePath = "https://graph.facebook.com/\(idString)/picture?type=large" as String
-        }
-    }
+struct CustomList: Codable, Identifiable {
+    var id: UUID
+    var listName: String
+    var items: [Int: ListItem] = [:]
 }
 
+struct ListItem: Codable, Identifiable {
+    let id: Int
+    let itemType: ItemType
+}
+
+enum ItemType: String, Codable {
+    case TVShow
+    case Movie
+    case Person
+}

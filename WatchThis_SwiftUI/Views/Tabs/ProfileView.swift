@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @EnvironmentObject var store: Store<AppState>
+    @State var showSettings = false
     
     private var customLists: [CustomList] {
         return Array(store.state.userState.customLists.values)
@@ -39,6 +40,9 @@ struct ProfileView: View {
             }
         }
         .navigationBarTitle(Text("Your Lists"), displayMode: .inline)
+        .navigationBarItems(trailing: NavigationLink(destination: SettingsView()) {
+            Image(systemName: "gear").font(Font.system(size: 25, weight: .regular))
+        })
     }
 }
 

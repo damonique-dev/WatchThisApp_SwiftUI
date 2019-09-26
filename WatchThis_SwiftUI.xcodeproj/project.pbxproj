@@ -90,6 +90,8 @@
 		54AEB769232B079E0013CAFD /* MovieListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AEB768232B079E0013CAFD /* MovieListView.swift */; };
 		54AEB76B232B082C0013CAFD /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AEB76A232B082C0013CAFD /* TMDBModels.swift */; };
 		54E03290232B5EBF00D5E244 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E0328F232B5EBF00D5E244 /* Helpers.swift */; };
+		54F6688E233C6CA500736BC3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F6688D233C6CA500736BC3 /* SettingsView.swift */; };
+		54F66890233C783800736BC3 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F6688F233C783800736BC3 /* WebView.swift */; };
 		54F71B10232B494B001A4FE5 /* MovieDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F71B0F232B494B001A4FE5 /* MovieDetailsView.swift */; };
 		F348B248C59CACA818C34A44 /* Pods_WatchThis_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7174350BA5E629424B8CBA26 /* Pods_WatchThis_SwiftUI.framework */; };
 /* End PBXBuildFile section */
@@ -104,7 +106,7 @@
 		540CB40C231BB25B001C8CC4 /* SeasonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonCell.swift; sourceTree = "<group>"; };
 		540CB40E231BB29C001C8CC4 /* CastCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastCellView.swift; sourceTree = "<group>"; };
 		540CB410231BB2C4001C8CC4 /* Labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Labels.swift; sourceTree = "<group>"; };
-		54197A7622FBB061000CE4D2 /* WatchThis_SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchThis_SwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		54197A7622FBB061000CE4D2 /* UpNext!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UpNext!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		54197A7922FBB061000CE4D2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54197A7B22FBB061000CE4D2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		54197A7D22FBB061000CE4D2 /* TVShowDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDetailView.swift; sourceTree = "<group>"; };
@@ -180,6 +182,8 @@
 		54AEB768232B079E0013CAFD /* MovieListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListView.swift; sourceTree = "<group>"; };
 		54AEB76A232B082C0013CAFD /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
 		54E0328F232B5EBF00D5E244 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		54F6688D233C6CA500736BC3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		54F6688F233C783800736BC3 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		54F71B0F232B494B001A4FE5 /* MovieDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsView.swift; sourceTree = "<group>"; };
 		6060183C0BFCC0CF7C33F67E /* Pods-WatchThis_SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchThis_SwiftUI.release.xcconfig"; path = "Target Support Files/Pods-WatchThis_SwiftUI/Pods-WatchThis_SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		6C3ECBBA47DEA4F9076B7FD6 /* Pods-WatchThis_SwiftUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchThis_SwiftUITests.debug.xcconfig"; path = "Target Support Files/Pods-WatchThis_SwiftUITests/Pods-WatchThis_SwiftUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -245,7 +249,7 @@
 		54197A7722FBB061000CE4D2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				54197A7622FBB061000CE4D2 /* WatchThis_SwiftUI.app */,
+				54197A7622FBB061000CE4D2 /* UpNext!.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -411,6 +415,8 @@
 				5485E0BB2331E4570057DC6E /* CustomListButtonView.swift */,
 				547AA58A2339A06400DF4423 /* ActivitySpinner.swift */,
 				5479B1D22339E9A2005DAFB6 /* VideoPlayerView.swift */,
+				54F6688D233C6CA500736BC3 /* SettingsView.swift */,
+				54F6688F233C783800736BC3 /* WebView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -564,7 +570,7 @@
 			);
 			name = WatchThis_SwiftUI;
 			productName = WatchThis_SwiftUI;
-			productReference = 54197A7622FBB061000CE4D2 /* WatchThis_SwiftUI.app */;
+			productReference = 54197A7622FBB061000CE4D2 /* UpNext!.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -665,6 +671,7 @@
 				54507986232F2A1300BE978E /* CastRow.swift in Sources */,
 				54AAA40D231799060092A11E /* StoreProvider.swift in Sources */,
 				5446B94C22FD11E00001C6DF /* TMDBClient.swift in Sources */,
+				54F6688E233C6CA500736BC3 /* SettingsView.swift in Sources */,
 				5450797C232E0C6A00BE978E /* PersonDetailScrollView.swift in Sources */,
 				54AAA3ED23133BA50092A11E /* Buttons.swift in Sources */,
 				54AAA40C231799060092A11E /* AsyncActionsMiddleware.swift in Sources */,
@@ -693,6 +700,7 @@
 				5406F83A232F2B3E00959FA9 /* TVSeasonsRow.swift in Sources */,
 				54F71B10232B494B001A4FE5 /* MovieDetailsView.swift in Sources */,
 				5406F83E232F2BD400959FA9 /* WatchTrailerButton.swift in Sources */,
+				54F66890233C783800736BC3 /* WebView.swift in Sources */,
 				5485E0BC2331E4570057DC6E /* CustomListButtonView.swift in Sources */,
 				54605C1B231C97F40016F065 /* ImageLoader.swift in Sources */,
 				54AAA42D2318C2BD0092A11E /* TraktApiHelper.swift in Sources */,
@@ -887,10 +895,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.damonique.WatchThis;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.damonique.UpNext;
+				PRODUCT_NAME = "UpNext!";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -909,10 +917,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.damonique.WatchThis;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.damonique.UpNext;
+				PRODUCT_NAME = "UpNext!";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         //TODO: Move that to SwiftUI once implemented
-        UINavigationBar.appearance().barTintColor = .black
+        UINavigationBar.appearance().barTintColor = UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1)
         
         UINavigationBar.appearance().titleTextAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor(named: "Orange")!,
@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             
-            let controller = UIHostingController(rootView:
+            let controller = DarkHostingController(rootView:
                 StoreProvider(store: store) {
                     TabbedView()
             })
@@ -44,6 +44,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func sceneDidEnterBackground(_ scene: UIScene) {
         store.state.archiveState()
+    }
+}
+
+class DarkHostingController<Content> : UIHostingController<Content> where Content : View {
+    @objc override dynamic open var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
     }
 }
 

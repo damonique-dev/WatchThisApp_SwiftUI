@@ -87,7 +87,15 @@ struct TVShowDetailView: View {
 #if DEBUG
 struct TVShowDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        TVShowDetailView(showId: testTVShowDetail.id).environmentObject(sampleStore)
+        Group {
+           TVShowDetailView(showId: testTVShowDetail.id).environmentObject(sampleStore)
+              .previewDevice(PreviewDevice(rawValue: "iPhone SE"))
+              .previewDisplayName("iPhone SE")
+
+          TVShowDetailView(showId: testTVShowDetail.id).environmentObject(sampleStore)
+              .previewDevice(PreviewDevice(rawValue: "iPhone XS Max"))
+              .previewDisplayName("iPhone XS Max")
+        }
     }
 }
 #endif

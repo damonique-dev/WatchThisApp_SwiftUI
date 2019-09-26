@@ -17,8 +17,8 @@ struct WatchThisButton: View {
             Text(text)
                 .font(Font.system(.body, design: .rounded))
                 .fontWeight(.bold)
-                .frame(height:30)
-                .padding(.horizontal, 4)
+                .frame(minHeight:30)
+                .padding(.horizontal, 8)
                 .foregroundColor(Color.white)
         }
         .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.orange))

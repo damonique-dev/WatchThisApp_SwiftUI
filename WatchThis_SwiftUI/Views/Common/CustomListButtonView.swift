@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CustomListButtonView: View {
     @Binding var showActionSheet: Bool
-    
+        
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -20,7 +20,7 @@ struct CustomListButtonView: View {
                 Spacer()
             }.padding(.leading, UIScreen.main.bounds.width / 2 - UIScreen.main.bounds.width/6 - 40)
             Spacer()
-        }.padding(.top, 310)
+        }.padding(.top, UIScreen.main.bounds.height/3 + 8)
     }
 }
 

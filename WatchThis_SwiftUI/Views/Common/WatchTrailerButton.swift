@@ -10,7 +10,7 @@ import SwiftUI
 
 struct WatchTrailerButton: View {
     let action: () -> Void
-    
+        
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -18,6 +18,6 @@ struct WatchTrailerButton: View {
                 Spacer()
             }.padding(.leading, UIScreen.main.bounds.width / 2 + UIScreen.main.bounds.width/6 + 10)
             Spacer()
-        }.padding(.top, 310)
+        }.padding(.top, UIScreen.main.bounds.height/3 + 8)
     }
 }

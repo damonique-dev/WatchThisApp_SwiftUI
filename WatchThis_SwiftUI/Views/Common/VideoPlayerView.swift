@@ -47,10 +47,11 @@ struct VideoPlayerRepresentable: UIViewRepresentable {
 
     func updateUIView(_ view: YTPlayerView, context: Context) {
         if let key = video?.key {
-            print("Video: \(key)")
             view.load(withVideoId: key)
         }
-        print("showPlayer: \(showPlayer)")
+        if !showPlayer {
+            view.stopVideo()
+        }
     }
     
     class Coordinator: NSObject, YTPlayerViewDelegate {

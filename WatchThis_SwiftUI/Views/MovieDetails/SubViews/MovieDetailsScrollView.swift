@@ -36,27 +36,37 @@ struct MovieDetailsScrollView: View {
         }
         return nil
     }
+    private var details: [OverviewDetail] {
+        return [
+            .init(title: "Release Date:", detail: movieDetails.releaseDate),
+            .init(title: "Runtime:", detail: movieRuntime),
+            .init(title: "Revenue:", detail: movieRevenue),
+        ]
+    }
     
     var body: some View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
-                    MovieDetailHeader(movieDetail: movieDetails)
-                    Text("\(movieDetails.overview ?? "")")
-                        .font(.body)
-                        .foregroundColor(.white)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(8)
-                    VStack(alignment: .leading) {
-                        DetailsLabel(title: "Release Date:", detail: movieDetails.releaseDate)
-                        DetailsLabel(title: "Runtime:", detail: movieRuntime)
-                        DetailsLabel(title: "Revenue:", detail: movieRevenue)
-                    }.padding(8)
+                    DetailHeaderView(title: movieDetails.title, posterPath: movieDetails.posterPath, backdropPath: movieDetails.backdropPath)
+                    DetailOverviewView(overview: movieDetails.overview, details: details)
                     if cast.count > 0 {
-                        CastRow(cast: cast)
+                        DetailCategoryRow(categoryTitle: "Cast") {
+                            ForEach(self.cast) { cast in
+                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+                                    CastCellView(person: cast)
+                                }
+                            }
+                        }
                     }
                     if similarMovies.count > 0 {
-                        SimilarMoviesRow(similarMovies: similarMovies)
+                        DetailCategoryRow(categoryTitle: "Similar Movies") {
+                            ForEach(self.similarMovies) { movie in
+                                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                                    RoundedImageCell(title: movie.title, posterPath: movie.posterPath, height: CGFloat(125))
+                                }
+                            }
+                        }
                     }
                 }
                 CustomListButtonView(showActionSheet: $showActionSheet)

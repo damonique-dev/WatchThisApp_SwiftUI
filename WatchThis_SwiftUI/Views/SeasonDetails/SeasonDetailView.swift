@@ -95,7 +95,13 @@ struct SeasonDetailsHeader: View {
                 .foregroundColor(.white)
                 .fixedSize(horizontal: false, vertical: true)
             if cast.count > 0 {
-                CastRow(cast: cast)
+                DetailCategoryRow(categoryTitle: "Cast") {
+                    ForEach(self.cast) { cast in
+                        NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+                            CastCellView(person: cast)
+                        }
+                    }
+                }
             }
         }.padding(.horizontal, 8)
     }
@@ -141,7 +147,13 @@ struct EpisodeRow: View {
                 .foregroundColor(.white)
                 .fixedSize(horizontal: false, vertical: true)
             if guestStars.count > 0 {
-                CastRow(cast: guestStars, rowHeader: "Guest Stars")
+                DetailCategoryRow(categoryTitle: "Guest Stars") {
+                    ForEach(self.guestStars) { cast in
+                        NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+                            CastCellView(person: cast)
+                        }
+                    }
+                }
             }
         }.padding(.bottom, 8)
     }

@@ -50,58 +50,26 @@ struct PersonDetailScrollView: View {
                     DetailHeaderView(title: personDetails.name ?? "", posterPath: personDetails.profilePath, backdropPath: firstCreditBackdrop)
                     DetailOverviewView(overview: personDetails.biography, details: details)
                     if tvCredits.count > 0 {
-                        PersonTVCreditRow(tvCredits: tvCredits)
+                        DetailCategoryRow(categoryTitle: "TV Credits") {
+                            ForEach(self.tvCredits) { show in
+                                NavigationLink(destination: TVShowDetailView(showId: show.id)) {
+                                    RoundedImageCell(title: show.name ?? "", posterPath: show.posterPath, height: CGFloat(125))
+                                }
+                            }
+                        }
                     }
                     if movieCredits.count > 0 {
-                        PersonMovieCreditRow(movieCredits: movieCredits)
+                        DetailCategoryRow(categoryTitle: "Movie Credits") {
+                            ForEach(self.movieCredits) { movie in
+                                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                                    RoundedImageCell(title: movie.title ?? "", posterPath: movie.posterPath, height: CGFloat(125))
+                                }
+                            }
+                        }
                     }
                 }.padding(8)
                 CustomListButtonView(showActionSheet: $showActionSheet)
             }
         }.padding(8)
-    }
-}
-
-struct PersonTVCreditRow: View {
-    let tvCredits: [PersonCredit]
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("TV Credits")
-                .font(.headline)
-                .foregroundColor(.white)
-                .multilineTextAlignment(.leading)
-            ScrollView(.horizontal) {
-                HStack(spacing: 16.0) {
-                    ForEach(tvCredits) { show in
-                        NavigationLink(destination: TVShowDetailView(showId: show.id)) {
-                            RoundedImageCell(title: show.name ?? "", posterPath: show.posterPath, height: CGFloat(125))
-                        }
-                    }
-                }
-            }
-        }.padding(.top, 8)
-    }
-}
-
-struct PersonMovieCreditRow: View {
-    let movieCredits: [PersonCredit]
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("Movie Credits")
-                .font(.headline)
-                .foregroundColor(.white)
-                .multilineTextAlignment(.leading)
-            ScrollView(.horizontal) {
-                HStack(spacing: 16.0) {
-                    ForEach(movieCredits) { movie in
-                        NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                            RoundedImageCell(title: movie.title ?? "", posterPath: movie.posterPath, height: CGFloat(125))
-                        }
-                    }
-                }
-            }
-        }.padding(.top, 8)
     }
 }

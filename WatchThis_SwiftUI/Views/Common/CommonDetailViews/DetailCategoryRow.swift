@@ -1,30 +1,31 @@
 //
-//  TVSeasonsRow.swift
+//  DetailCategoryRow.swift
 //  WatchThis_SwiftUI
 //
-//  Created by Damonique Thomas on 9/15/19.
+//  Created by Damonique Blake on 10/3/19.
 //  Copyright © 2019 Damonique Thomas. All rights reserved.
 //
 
 import SwiftUI
 
-struct TVSeasonsRow: View {
-    let seasons: [Season]
-    let showId: Int
+struct DetailCategoryRow<Content: View>: View {
+    let categoryTitle: String
+    let viewBuilder: () -> Content
+    
+    init(categoryTitle: String, @ViewBuilder builder: @escaping () -> Content) {
+        self.categoryTitle = categoryTitle
+        self.viewBuilder = builder
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Seasons")
+            Text(categoryTitle)
                 .font(.headline)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.leading)
             ScrollView(.horizontal) {
                 HStack {
-                    ForEach(seasons) { season in
-                        NavigationLink(destination: SeasonDetailView(showId: self.showId, seasonId: season.id)) {
-                            SeasonCell(season: season)
-                        }
-                    }
+                    viewBuilder()
                 }
             }.padding(8)
         }.padding(8)

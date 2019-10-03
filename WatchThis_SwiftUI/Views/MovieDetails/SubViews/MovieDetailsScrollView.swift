@@ -51,10 +51,22 @@ struct MovieDetailsScrollView: View {
                     DetailHeaderView(title: movieDetails.title, posterPath: movieDetails.posterPath, backdropPath: movieDetails.backdropPath)
                     DetailOverviewView(overview: movieDetails.overview, details: details)
                     if cast.count > 0 {
-                        CastRow(cast: cast)
+                        DetailCategoryRow(categoryTitle: "Cast") {
+                            ForEach(self.cast) { cast in
+                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+                                    CastCellView(person: cast)
+                                }
+                            }
+                        }
                     }
                     if similarMovies.count > 0 {
-                        SimilarMoviesRow(similarMovies: similarMovies)
+                        DetailCategoryRow(categoryTitle: "Similar Movies") {
+                            ForEach(self.similarMovies) { movie in
+                                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                                    RoundedImageCell(title: movie.title, posterPath: movie.posterPath, height: CGFloat(125))
+                                }
+                            }
+                        }
                     }
                 }
                 CustomListButtonView(showActionSheet: $showActionSheet)

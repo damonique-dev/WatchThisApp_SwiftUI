@@ -7,11 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5406F83A232F2B3E00959FA9 /* TVSeasonsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5406F839232F2B3E00959FA9 /* TVSeasonsRow.swift */; };
-		5406F83C232F2B7900959FA9 /* TVSimilarShowsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5406F83B232F2B7900959FA9 /* TVSimilarShowsRow.swift */; };
 		5406F83E232F2BD400959FA9 /* WatchTrailerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5406F83D232F2BD400959FA9 /* WatchTrailerButton.swift */; };
 		5406F840232F2C0300959FA9 /* FavoriteButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5406F83F232F2C0300959FA9 /* FavoriteButtonView.swift */; };
-		5406F842232F2F8100959FA9 /* SimilarMoviesRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5406F841232F2F8100959FA9 /* SimilarMoviesRow.swift */; };
 		5406F845232F32EB00959FA9 /* SeasonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5406F844232F32EB00959FA9 /* SeasonDetailView.swift */; };
 		540CB40D231BB25B001C8CC4 /* SeasonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540CB40C231BB25B001C8CC4 /* SeasonCell.swift */; };
 		540CB40F231BB29C001C8CC4 /* CastCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540CB40E231BB29C001C8CC4 /* CastCellView.swift */; };
@@ -91,15 +88,13 @@
 		54F71B10232B494B001A4FE5 /* MovieDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F71B0F232B494B001A4FE5 /* MovieDetailsView.swift */; };
 		F08AC3CC2345BFCB00E5D78C /* DetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08AC3CB2345BFCB00E5D78C /* DetailHeaderView.swift */; };
 		F08AC3CE2345C19E00E5D78C /* DetailOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08AC3CD2345C19E00E5D78C /* DetailOverviewView.swift */; };
+		F08AC3D12345E33900E5D78C /* DetailCategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08AC3D02345E33900E5D78C /* DetailCategoryRow.swift */; };
 		F348B248C59CACA818C34A44 /* Pods_WatchThis_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7174350BA5E629424B8CBA26 /* Pods_WatchThis_SwiftUI.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5406F839232F2B3E00959FA9 /* TVSeasonsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVSeasonsRow.swift; sourceTree = "<group>"; };
-		5406F83B232F2B7900959FA9 /* TVSimilarShowsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVSimilarShowsRow.swift; sourceTree = "<group>"; };
 		5406F83D232F2BD400959FA9 /* WatchTrailerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTrailerButton.swift; sourceTree = "<group>"; };
 		5406F83F232F2C0300959FA9 /* FavoriteButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButtonView.swift; sourceTree = "<group>"; };
-		5406F841232F2F8100959FA9 /* SimilarMoviesRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarMoviesRow.swift; sourceTree = "<group>"; };
 		5406F844232F32EB00959FA9 /* SeasonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonDetailView.swift; sourceTree = "<group>"; };
 		540CB40C231BB25B001C8CC4 /* SeasonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonCell.swift; sourceTree = "<group>"; };
 		540CB40E231BB29C001C8CC4 /* CastCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastCellView.swift; sourceTree = "<group>"; };
@@ -190,6 +185,7 @@
 		ECD18160120B9ECC28A74751 /* Pods-WatchThis_SwiftUIUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchThis_SwiftUIUITests.release.xcconfig"; path = "Target Support Files/Pods-WatchThis_SwiftUIUITests/Pods-WatchThis_SwiftUIUITests.release.xcconfig"; sourceTree = "<group>"; };
 		F08AC3CB2345BFCB00E5D78C /* DetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHeaderView.swift; sourceTree = "<group>"; };
 		F08AC3CD2345C19E00E5D78C /* DetailOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailOverviewView.swift; sourceTree = "<group>"; };
+		F08AC3D02345E33900E5D78C /* DetailCategoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCategoryRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,7 +211,6 @@
 		540CB40A231BB1E0001C8CC4 /* TVShowDetails */ = {
 			isa = PBXGroup;
 			children = (
-				54507984232F29ED00BE978E /* Rows */,
 				54507969232E060200BE978E /* SubViews */,
 				540CB40B231BB234001C8CC4 /* Cells */,
 				54197A7D22FBB061000CE4D2 /* TVShowDetailView.swift */,
@@ -342,7 +337,6 @@
 			isa = PBXGroup;
 			children = (
 				54507971232E076E00BE978E /* MovieDetailsScrollView.swift */,
-				5406F841232F2F8100959FA9 /* SimilarMoviesRow.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -374,15 +368,6 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
-		54507984232F29ED00BE978E /* Rows */ = {
-			isa = PBXGroup;
-			children = (
-				5406F839232F2B3E00959FA9 /* TVSeasonsRow.swift */,
-				5406F83B232F2B7900959FA9 /* TVSimilarShowsRow.swift */,
-			);
-			path = Rows;
-			sourceTree = "<group>";
-		};
 		54AAA3E823133AEC0092A11E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -395,6 +380,7 @@
 		54AAA3E923133B190092A11E /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				F08AC3CF2345E31400E5D78C /* CommonDetailViews */,
 				54507985232F2A1300BE978E /* CastRow.swift */,
 				54AAA3EA23133B2F0092A11E /* BlurredBackground.swift */,
 				54AAA3EC23133BA50092A11E /* Buttons.swift */,
@@ -409,8 +395,6 @@
 				5479B1D22339E9A2005DAFB6 /* VideoPlayerView.swift */,
 				54F6688D233C6CA500736BC3 /* SettingsView.swift */,
 				54F6688F233C783800736BC3 /* WebView.swift */,
-				F08AC3CB2345BFCB00E5D78C /* DetailHeaderView.swift */,
-				F08AC3CD2345C19E00E5D78C /* DetailOverviewView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -543,6 +527,16 @@
 				E82368593181E32A6FB47190 /* Pods_WatchThis_SwiftUIUITests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F08AC3CF2345E31400E5D78C /* CommonDetailViews */ = {
+			isa = PBXGroup;
+			children = (
+				F08AC3CD2345C19E00E5D78C /* DetailOverviewView.swift */,
+				F08AC3CB2345BFCB00E5D78C /* DetailHeaderView.swift */,
+				F08AC3D02345E33900E5D78C /* DetailCategoryRow.swift */,
+			);
+			path = CommonDetailViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -691,7 +685,6 @@
 				54605C1F231CD4ED0016F065 /* SearchView.swift in Sources */,
 				5406F840232F2C0300959FA9 /* FavoriteButtonView.swift in Sources */,
 				F08AC3CE2345C19E00E5D78C /* DetailOverviewView.swift in Sources */,
-				5406F83A232F2B3E00959FA9 /* TVSeasonsRow.swift in Sources */,
 				54F71B10232B494B001A4FE5 /* MovieDetailsView.swift in Sources */,
 				5406F83E232F2BD400959FA9 /* WatchTrailerButton.swift in Sources */,
 				54F66890233C783800736BC3 /* WebView.swift in Sources */,
@@ -701,17 +694,16 @@
 				5485E0B62331CBB40057DC6E /* UserReducer.swift in Sources */,
 				54AAA42B2318C27A0092A11E /* TraktApiClient.swift in Sources */,
 				54AAA40E231799060092A11E /* StoreConnector.swift in Sources */,
-				5406F842232F2F8100959FA9 /* SimilarMoviesRow.swift in Sources */,
 				54AAA419231799BD0092A11E /* TVShowState.swift in Sources */,
 				54197A7C22FBB061000CE4D2 /* SceneDelegate.swift in Sources */,
 				540CB411231BB2C4001C8CC4 /* Labels.swift in Sources */,
+				F08AC3D12345E33900E5D78C /* DetailCategoryRow.swift in Sources */,
 				5485E0BA2331DB1C0057DC6E /* ProfileView.swift in Sources */,
 				5450797F232E211200BE978E /* SearchHeaderView.swift in Sources */,
 				54AEB75F2329DE010013CAFD /* MovieModels.swift in Sources */,
 				540CB40D231BB25B001C8CC4 /* SeasonCell.swift in Sources */,
 				54507972232E076E00BE978E /* MovieDetailsScrollView.swift in Sources */,
 				54AAA411231799060092A11E /* Reducer.swift in Sources */,
-				5406F83C232F2B7900959FA9 /* TVSimilarShowsRow.swift in Sources */,
 				54AAA4312318D6D30092A11E /* TabbedView.swift in Sources */,
 				54AAA41B231799FF0092A11E /* PeopleState.swift in Sources */,
 				54507983232E216200BE978E /* SearchResultsRows.swift in Sources */,

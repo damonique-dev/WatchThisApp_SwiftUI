@@ -64,13 +64,31 @@ struct TVDetailScrollView: View {
                     DetailHeaderView(title: showDetail.name, posterPath: showDetail.posterPath, backdropPath: showDetail.backdropPath)
                     DetailOverviewView(overview: showDetail.overview, details: details)
                     if cast.count > 0 {
-                        CastRow(cast: cast)
+                        DetailCategoryRow(categoryTitle: "Cast") {
+                            ForEach(self.cast) { cast in
+                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+                                    CastCellView(person: cast)
+                                }
+                            }
+                        }
                     }
                     if seasons.count > 0 {
-                        TVSeasonsRow(seasons: seasons, showId: showDetail.id)
+                        DetailCategoryRow(categoryTitle: "Seasons") {
+                            ForEach(self.seasons) { season in
+                                NavigationLink(destination: SeasonDetailView(showId: self.showDetail.id, seasonId: season.id)) {
+                                    SeasonCell(season: season)
+                                }
+                            }
+                        }
                     }
                     if similarShows.count > 0 {
-                        TVSimilarShowsRow(similarShows: similarShows)
+                        DetailCategoryRow(categoryTitle: "Similar Shows") {
+                            ForEach(self.similarShows) { show in
+                                NavigationLink(destination: TVShowDetailView(showId: show.id)) {
+                                    RoundedImageCell(title: show.name, posterPath: show.posterPath, height: CGFloat(125))
+                                }
+                            }
+                        }
                     }
                 }
                 CustomListButtonView(showActionSheet: $showActionSheet)

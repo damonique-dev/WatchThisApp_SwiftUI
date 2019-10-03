@@ -10,28 +10,12 @@ import SwiftUI
 
 struct TVShowDetailView: View {
     @EnvironmentObject var store: Store<AppState>
-    @State private var isFavorite = false
-    @State private var showCustomListAlert = false
     @State private var showActionSheet = false
-    @State private var selectedTab = 0
-    @State private var customListModel = CustomListModel()
-    @State private var showCustomListConfirmation = false
     @State private var showVideoPlayer = false
     
     let showId: Int
-    
-    private var imagePath: String {
-        return store.state.tvShowState.tvShowDetail[showId]?.posterPath ?? ""
-    }
-    private var backgroundImagePath: String {
-        return store.state.tvShowState.tvShowDetail[showId]?.backdropPath ?? ""
-    }
     private var showDetail: TVShowDetails {
         return store.state.tvShowState.tvShowDetail[showId] ?? TVShowDetails(id: showId, name: "")
-    }
-    
-    private var showVideo: Video? {
-        return store.state.tvShowState.tvShowDetail[showId]?.videos?.results?[0]
     }
     
     private func fetchShowDetails() {
@@ -39,47 +23,12 @@ struct TVShowDetailView: View {
             store.dispatch(action: TVShowActions.FetchTVShowDetails(id: showId))
         }
     }
-    
-    lazy var computedActionSheet: CustomListActionSheet = {
-        let customLists = Array(store.state.userState.customLists.values)
-        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, showCustomListAlert: $showCustomListAlert, customLists: customLists, objectName: showDetail.name, objectId: showId, itemType: .TVShow)
-    }()
-    
-    private var actionSheet: CustomListActionSheet {
-        var mutatableSelf = self
-        return mutatableSelf.computedActionSheet
-    }
         
     var body: some View {
-        ZStack {
-            BlurredBackground(image: nil, imagePath: imagePath)
-            VStack {
-                TVDetailScrollView(showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer, showDetail: showDetail)
-            }
-            if showVideoPlayer && showVideo != nil {
-                VideoPlayerView(showPlayer: $showVideoPlayer, video: showVideo)
-            }
-        }
-        .padding(.vertical, 44)
-        .navigationBarTitle(Text("\(showDetail.name)"))
-        .onAppear() {
+        DetailView(id: showId, title: showDetail.name, itemType: .TVShow, video: showDetail.videos?.results?[0], imagePath: showDetail.posterPath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
+            TVDetailScrollView(showActionSheet: self.$showActionSheet, showVideoPlayer: self.$showVideoPlayer, showDetail: self.showDetail)
+        }.onAppear() {
             self.fetchShowDetails()
-        }
-        .textFieldAlert(isShowing: $showCustomListAlert, title: Text("Create Custom List"), doneAction: { (newListName) in
-            let newListUUID = UUID()
-            self.customListModel.response.listName = newListName
-            self.store.dispatch(action: UserActions.CreateNewCustomList(listName: newListName, uuid: newListUUID))
-            self.store.dispatch(action: UserActions.AddToCustomList(customListUUID: newListUUID, itemType: .TVShow, itemId: self.showId))
-            self.showCustomListConfirmation = true
-        })
-        .actionSheet(isPresented: $showActionSheet) {
-            ActionSheet(title: actionSheet.title, message: actionSheet.message, buttons: actionSheet.buttons)
-        }.alert(isPresented: $showCustomListConfirmation) {
-            if customListModel.response.shouldRemove {
-                return Alert(title: Text("Successfully Removed \"\(showDetail.name)\" from \(customListModel.response.listName!)"))
-            }
-            
-            return Alert(title: Text("Successfully Added \"\(showDetail.name)\" to \(customListModel.response.listName!)"))
         }
     }
 }

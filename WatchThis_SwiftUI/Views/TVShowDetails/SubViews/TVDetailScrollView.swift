@@ -28,7 +28,7 @@ struct TVDetailScrollView: View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
-                    TVDetailHeader(showDetail: showDetail)
+                    DetailHeaderView(title: showDetail.name, posterPath: showDetail.posterPath, backdropPath: showDetail.backdropPath)
                     ShowOverviewDetailView(showDetail: showDetail)
                     if cast.count > 0 {
                         CastRow(cast: cast)

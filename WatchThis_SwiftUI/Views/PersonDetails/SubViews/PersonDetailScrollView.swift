@@ -21,11 +21,25 @@ struct PersonDetailScrollView: View {
         return personDetails.movieCredits?.cast ?? []
     }
     
+    private var firstCreditBackdrop: String? {
+        if !(personDetails.movieCredits?.cast?.isEmpty ?? false) {
+            let firstCredit = personDetails.movieCredits?.cast![0]
+            return firstCredit?.backdropPath
+        }
+        if !(personDetails.tvCredits?.cast?.isEmpty ?? false) {
+            let firstCredit = personDetails.tvCredits?.cast![0]
+            return firstCredit?.backdropPath
+        }
+        
+        // TODO: Add placeholder if person has no tv or movie credits
+        return nil
+    }
+    
     var body: some View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
-                    PersonDetailsHeaderView(personDetails: personDetails)
+                    DetailHeaderView(title: personDetails.name ?? "", posterPath: personDetails.profilePath, backdropPath: firstCreditBackdrop)
                     Text("\(personDetails.biography ?? "")")
                         .font(.body)
                         .foregroundColor(.white)

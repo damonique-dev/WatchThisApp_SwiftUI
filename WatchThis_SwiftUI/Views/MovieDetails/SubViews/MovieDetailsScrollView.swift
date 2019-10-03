@@ -41,6 +41,7 @@ struct MovieDetailsScrollView: View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
+                    DetailHeaderView(title: movieDetails.title, posterPath: movieDetails.posterPath, backdropPath: movieDetails.backdropPath)
                     MovieDetailHeader(movieDetail: movieDetails)
                     Text("\(movieDetails.overview ?? "")")
                         .font(.body)

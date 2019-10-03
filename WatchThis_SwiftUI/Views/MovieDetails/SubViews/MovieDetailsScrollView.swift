@@ -36,23 +36,20 @@ struct MovieDetailsScrollView: View {
         }
         return nil
     }
+    private var details: [OverviewDetail] {
+        return [
+            .init(title: "Release Date:", detail: movieDetails.releaseDate),
+            .init(title: "Runtime:", detail: movieRuntime),
+            .init(title: "Revenue:", detail: movieRevenue),
+        ]
+    }
     
     var body: some View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
                     DetailHeaderView(title: movieDetails.title, posterPath: movieDetails.posterPath, backdropPath: movieDetails.backdropPath)
-                    MovieDetailHeader(movieDetail: movieDetails)
-                    Text("\(movieDetails.overview ?? "")")
-                        .font(.body)
-                        .foregroundColor(.white)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(8)
-                    VStack(alignment: .leading) {
-                        DetailsLabel(title: "Release Date:", detail: movieDetails.releaseDate)
-                        DetailsLabel(title: "Runtime:", detail: movieRuntime)
-                        DetailsLabel(title: "Revenue:", detail: movieRevenue)
-                    }.padding(8)
+                    DetailOverviewView(overview: movieDetails.overview, details: details)
                     if cast.count > 0 {
                         CastRow(cast: cast)
                     }

@@ -24,12 +24,45 @@ struct TVDetailScrollView: View {
         return store.state.tvShowState.tvShowDetail[showDetail.id]?.seasons ?? []
     }
     
+    func getRuntime() -> String {
+        if let runtime = showDetail.episodeRunTime?.first {
+            return "\(runtime) minutes"
+        }
+        return ""
+    }
+    
+    func getGenreList() -> String {
+        if let genres = showDetail.genres {
+            return genres.map({$0.name!}).joined(separator: ", ")
+        }
+        return ""
+    }
+    
+    func getNumberStringOf(_ number: Int?) -> String? {
+        if let number  = number {
+            return "\(number)"
+        }
+        
+        return nil
+    }
+    
+    private var details: [OverviewDetail] {
+        return [
+            .init(title: "Airs:", detail: showDetail.lastAirDate),
+            .init(title: "First Air Date:", detail: showDetail.firstAirDate),
+            .init(title: "Number of Seasons:", detail: getNumberStringOf(showDetail.numberOfSeasons)),
+            .init(title: "Number of Episodes:", detail: getNumberStringOf(showDetail.numberOfEpisodes)),
+            .init(title: "Runtime:", detail: getRuntime()),
+            .init(title: "Genres:", detail: getGenreList()),
+        ]
+    }
+    
     var body: some View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
                     DetailHeaderView(title: showDetail.name, posterPath: showDetail.posterPath, backdropPath: showDetail.backdropPath)
-                    ShowOverviewDetailView(showDetail: showDetail)
+                    DetailOverviewView(overview: showDetail.overview, details: details)
                     if cast.count > 0 {
                         CastRow(cast: cast)
                     }

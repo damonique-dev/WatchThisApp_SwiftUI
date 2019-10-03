@@ -35,20 +35,20 @@ struct PersonDetailScrollView: View {
         return nil
     }
     
+    private var details: [OverviewDetail] {
+        return [
+            .init(title: "Birthday:", detail: personDetails.birthday),
+            .init(title: "Deathday:", detail: personDetails.deathday),
+            .init(title: "Place of Birth:", detail: personDetails.placeOfBirth)
+        ]
+    }
+    
     var body: some View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
                     DetailHeaderView(title: personDetails.name ?? "", posterPath: personDetails.profilePath, backdropPath: firstCreditBackdrop)
-                    Text("\(personDetails.biography ?? "")")
-                        .font(.body)
-                        .foregroundColor(.white)
-                        .fixedSize(horizontal: false, vertical: true)
-                    VStack(alignment: .leading) {
-                        DetailsLabel(title: "Birthday:", detail: personDetails.birthday)
-                        DetailsLabel(title: "Deathday:", detail: personDetails.deathday)
-                        DetailsLabel(title: "Place of Birth:", detail: personDetails.placeOfBirth)
-                    }.padding(.top, 8)
+                    DetailOverviewView(overview: personDetails.biography, details: details)
                     if tvCredits.count > 0 {
                         PersonTVCreditRow(tvCredits: tvCredits)
                     }

@@ -40,6 +40,9 @@ struct MovieActions {
             for trakt in list {
                 if let tmdbId = trakt.ids?.tmdb {
                     ids.append(tmdbId)
+                    if let slug = trakt.ids?.slug {
+                        dispatch(SetMovieSlug(movieId: tmdbId, slug: slug))
+                    }
                     if let appState = state as? AppState {
                         if appState.movieState.movieDetails[tmdbId] == nil {
                             dispatch(FetchMovieDetails(id: tmdbId))
@@ -107,6 +110,26 @@ struct MovieActions {
         }
     }
     
+    struct FetchTraktIds: AsyncAction {
+        let movieId: Int
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            TraktApiClient.sharedInstance().GetList(endpoint: .TraktIds(id: movieId), params: ["type":"movie"])
+            {
+                (result: Result<[IdSearchResult], APIError>) in
+                switch result {
+                case let .success(response):
+                    let showIds = response.first { $0.movie != nil }
+                    if let slug = showIds?.movie?.ids?.slug {
+                        dispatch(SetMovieSlug(movieId: self.movieId, slug: slug))
+                    }
+                case let .failure(error):
+                    print(error)
+                    break
+                }
+            }
+        }
+    }
+    
     struct SetMovieList: Action {
         let list: MovieList
         let ids: [Int]
@@ -133,5 +156,10 @@ struct MovieActions {
     struct SetMovieSearch: Action {
         let query: String
         let movies: [MovieDetails]
+    }
+    
+    struct SetMovieSlug: Action {
+        let movieId: Int
+        let slug: String
     }
 }

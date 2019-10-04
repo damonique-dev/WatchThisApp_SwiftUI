@@ -19,4 +19,6 @@ struct MovieState: FluxState, Codable {
     
     var favoriteMovies: Set<Int> = Set()
     var movieSearchQueries: [String] = []
+    // [TMDBId: Slug]
+    var movieSlugId: [Int: String] = [:]
 }

@@ -9,6 +9,8 @@
 import Foundation
 
 extension TraktApiClient {
+    static let whereToWatchUrl = ""
+    
     struct Constants {
         static let ApiScheme = "https"
         static let ApiHost = "api.trakt.tv"
@@ -52,6 +54,8 @@ extension TraktApiClient {
         case Movie_Anticipated
         case Movie_MostWatchedWeekly
         
+         case TraktIds(id: Int)
+        
         func path() -> String {
             switch self {
                 case .TV_Popular:
@@ -72,6 +76,8 @@ extension TraktApiClient {
                     return "/movies/anticipated"
                 case .Movie_MostWatchedWeekly:
                     return "/movies/watched/weekly"
+                case let .TraktIds(id):
+                    return "/search/tmdb/\(id)"
             }
         }
     }

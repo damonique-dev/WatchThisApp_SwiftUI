@@ -49,7 +49,7 @@ struct RatingView: View {
         return .gray
     }
     
-    private let size: CGFloat = 65
+    private let size: CGFloat = 50
     
     private func animate() {
         if let rating = rating {

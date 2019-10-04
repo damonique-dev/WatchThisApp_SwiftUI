@@ -20,7 +20,7 @@ struct CustomListButtonView: View {
                 Spacer()
             }
             Spacer()
-        }.padding(.top, 18)
+        }.padding(.top, 12)
     }
 }
 

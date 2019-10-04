@@ -13,12 +13,15 @@ struct CastCellView: View {
     
     let person: Cast
     
+    private let width = UIScreen.main.bounds.width/3
+    private let imageWidth = UIScreen.main.bounds.width/3 - 30
+    
     var body: some View {
         ZStack {
             VStack(alignment: .center) {
                 ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: person.profilePath,
                                                                                          size: .original), contentMode: .fill)
-                .frame(width: 90, height: 90, alignment: .center)
+                .frame(width: imageWidth, height: imageWidth, alignment: .center)
                 .clipShape(Circle())
                 Spacer()
                 Text(person.name)
@@ -33,7 +36,7 @@ struct CastCellView: View {
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
             }
-        }.frame(width: UIScreen.main.bounds.width/2.5 - 20, height: UIScreen.main.bounds.width/2.5 - 5)
+        }.frame(width: width, height: width * 11/8)
             .cornerRadius(10)
     }
 }

@@ -40,7 +40,11 @@ struct TVShowActions {
             for trakt in list {
                 if let tmdbId = trakt.ids?.tmdb {
                     ids.append(tmdbId)
-                    dispatch(FetchTVShowDetails(id: tmdbId))
+                    if let appState = state as? AppState {
+                        if appState.tvShowState.tvShowDetail[tmdbId] == nil {
+                            dispatch(FetchTVShowDetails(id: tmdbId))
+                        }
+                    }
                 }
             }
             dispatch(SetTVShowList(list: self.showList, ids: ids))

@@ -40,7 +40,12 @@ struct MovieActions {
             for trakt in list {
                 if let tmdbId = trakt.ids?.tmdb {
                     ids.append(tmdbId)
-                    dispatch(FetchMovieDetails(id: tmdbId))
+                    if let appState = state as? AppState {
+                        if appState.movieState.movieDetails[tmdbId] == nil {
+                            dispatch(FetchMovieDetails(id: tmdbId))
+                        }
+                    }
+                    
                 }
             }
             dispatch(SetMovieList(list: self.movieList, ids: ids))

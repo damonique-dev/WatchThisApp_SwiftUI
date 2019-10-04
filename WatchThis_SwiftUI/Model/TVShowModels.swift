@@ -28,7 +28,7 @@ struct TVShowDetails: Details, Identifiable {
     var popularity: Float?
     var firstAirDate: String?
     var backdropPath: String?
-    var voteAverage: Float?
+    var voteAverage: Double?
     var overview: String?
     var posterPath: String?
     var createdBy: [Person]?
@@ -106,6 +106,7 @@ let testTVShowDetail = TVShowDetails(
     popularity: 124.38,
     firstAirDate: "2005-03-27",
     backdropPath: "/y6JABtgWMVYPx84Rvy7tROU5aNH.jpg",
+    voteAverage: 6.4,
     overview: "Follows the personal and professional lives of a group of doctors at Seattle’s Grey Sloan Memorial Hospital.",
     posterPath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg",
     numberOfEpisodes: 341,

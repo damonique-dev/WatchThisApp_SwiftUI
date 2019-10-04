@@ -46,6 +46,14 @@ struct TVDetailScrollView: View {
         return nil
     }
     
+    private var hasVideo: Bool {
+        if let videos = showDetail.videos?.results, !videos.isEmpty {
+            return true
+        }
+        
+        return false
+    }
+    
     private var details: [OverviewDetail] {
         return [
             .init(title: "Airs:", detail: showDetail.lastAirDate),
@@ -61,7 +69,7 @@ struct TVDetailScrollView: View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
-                    DetailHeaderView(title: showDetail.name, posterPath: showDetail.posterPath, backdropPath: showDetail.backdropPath)
+                    DetailHeaderView(showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer, title: showDetail.name, posterPath: showDetail.posterPath, backdropPath: showDetail.backdropPath, itemType: .TVShow, rating: showDetail.voteAverage, hasVideo: hasVideo)
                     DetailOverviewView(overview: showDetail.overview, details: details)
                     if cast.count > 0 {
                         DetailCategoryRow(categoryTitle: "Cast") {
@@ -91,8 +99,6 @@ struct TVDetailScrollView: View {
                         }
                     }
                 }
-                CustomListButtonView(showActionSheet: $showActionSheet)
-                WatchTrailerButton(action: {self.showVideoPlayer.toggle()})
             }
         }.padding(8)
     }

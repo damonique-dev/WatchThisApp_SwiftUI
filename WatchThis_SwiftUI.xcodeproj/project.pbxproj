@@ -90,6 +90,7 @@
 		F08AC3D12345E33900E5D78C /* DetailCategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08AC3D02345E33900E5D78C /* DetailCategoryRow.swift */; };
 		F08AC3D52345E5D900E5D78C /* VideoPlayerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08AC3D42345E5D900E5D78C /* VideoPlayerRepresentable.swift */; };
 		F08AC3D72345E66200E5D78C /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08AC3D62345E66200E5D78C /* DetailView.swift */; };
+		F08AC3D92346D5C200E5D78C /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08AC3D82346D5C200E5D78C /* RatingView.swift */; };
 		F348B248C59CACA818C34A44 /* Pods_WatchThis_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7174350BA5E629424B8CBA26 /* Pods_WatchThis_SwiftUI.framework */; };
 /* End PBXBuildFile section */
 
@@ -188,6 +189,7 @@
 		F08AC3D02345E33900E5D78C /* DetailCategoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCategoryRow.swift; sourceTree = "<group>"; };
 		F08AC3D42345E5D900E5D78C /* VideoPlayerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerRepresentable.swift; sourceTree = "<group>"; };
 		F08AC3D62345E66200E5D78C /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		F08AC3D82346D5C200E5D78C /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -393,6 +395,7 @@
 				547AA58A2339A06400DF4423 /* ActivitySpinner.swift */,
 				5479B1D22339E9A2005DAFB6 /* VideoPlayerView.swift */,
 				54F6688D233C6CA500736BC3 /* SettingsView.swift */,
+				F08AC3D82346D5C200E5D78C /* RatingView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -730,6 +733,7 @@
 				54AAA41D23179B6C0092A11E /* AppReducer.swift in Sources */,
 				5485E0B42331C8D30057DC6E /* UserState.swift in Sources */,
 				5446B95922FD15C90001C6DF /* GlobalHelper.swift in Sources */,
+				F08AC3D92346D5C200E5D78C /* RatingView.swift in Sources */,
 				54AAA3EF23133C7D0092A11E /* TVShowListView.swift in Sources */,
 				54AAA42123179B830092A11E /* PeopleReducer.swift in Sources */,
 				540CB40F231BB29C001C8CC4 /* CastCellView.swift in Sources */,

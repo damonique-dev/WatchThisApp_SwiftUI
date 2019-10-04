@@ -26,6 +26,21 @@ struct WatchThisButton: View {
     }
 }
 
+struct PlayTrailerButton: View {
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: { self.action() } ) {
+            ZStack {
+                Circle().foregroundColor(.orange)
+                Image(systemName: "play.fill")
+                    .imageScale(.medium)
+                    .foregroundColor(.white)
+            }
+        }.frame(width: 30, height: 30)
+    }
+}
+
 struct FavoriteButton: View {
     @Binding var isFavorite: Bool
     let action: () -> Void

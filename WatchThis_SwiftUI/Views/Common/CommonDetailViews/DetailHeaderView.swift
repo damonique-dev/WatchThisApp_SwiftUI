@@ -9,39 +9,75 @@
 import SwiftUI
 
 struct DetailHeaderView: View {
+    @Binding var showActionSheet: Bool
+    @Binding var showVideoPlayer: Bool
     let title: String
     let posterPath: String?
     let backdropPath: String?
+    let itemType: ItemType
+    let rating: Double?
+    let hasVideo: Bool
+    
+    init(showActionSheet: Binding<Bool>, showVideoPlayer: Binding<Bool>, title: String, posterPath: String?, backdropPath: String?, itemType: ItemType, rating: Double?, hasVideo: Bool) {
+        self._showActionSheet = showActionSheet
+        self._showVideoPlayer = showVideoPlayer
+        self.title = title
+        self.posterPath = posterPath
+        self.backdropPath = backdropPath
+        self.itemType = itemType
+        self.rating = rating
+        self.hasVideo = hasVideo
+    }
     
     private let screenWidth = UIScreen.main.bounds.width
     private let screenHeight = UIScreen.main.bounds.height
-    private let backgroundImageHeight = UIScreen.main.bounds.height/3
-    private let showImageWidth = UIScreen.main.bounds.width/3
-    private let showImageHeight = (UIScreen.main.bounds.width/3) * 11/8
-    private let showImageTop = (UIScreen.main.bounds.height/3) - (((UIScreen.main.bounds.width/3) * 11/8)/2)
+    private let backgroundImageHeight = UIScreen.main.bounds.height/5
+    private let showImageWidth = UIScreen.main.bounds.width/4
+    private let showImageHeight = (UIScreen.main.bounds.width/4) * 11/8
+    private let showImageTop = (UIScreen.main.bounds.height/5) - (((UIScreen.main.bounds.width/4) * 11/8)/2)
+    
+    private let gradient = Gradient(colors: [Color(.black).opacity(0), Color(.black).opacity(0.95)])
     
     var body: some View {
         ZStack {
             VStack {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: backdropPath,
-                                                                                         size: .original), contentMode: .fill)
-                .frame(width: screenWidth, height: backgroundImageHeight, alignment: .center)
+                ZStack {
+                    ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: backdropPath,
+                                                                                             size: .original), contentMode: .fill)
+                    Rectangle()
+                        .fill(LinearGradient(gradient: gradient, startPoint: .top, endPoint: .bottom))
+                       
+                }.frame(width: screenWidth, height: backgroundImageHeight, alignment: .center)
                 Spacer()
             }
-            VStack {
-                HStack {
-                    ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: posterPath,
-                                                                                             size: .original), contentMode: .fill)
+            HStack {
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: posterPath,
+                                                                                         size: .original), contentMode: .fill)
                     .frame(width: showImageWidth, height: showImageHeight, alignment: .center)
-                }
-                    
-                HStack {
-                    Text("\(title)")
+                    .padding(.leading, 16)
+                    .cornerRadius(5)
+                    .shadow(radius: 5)
+                VStack(alignment: .leading) {
+                    Text(title)
                         .font(Font.system(.title, design: .rounded))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                }
+                        .padding(8)
+                        .fixedSize(horizontal: false, vertical: true)
+                    HStack {
+                        if itemType != .Person {
+                            RatingView(rating: rating)
+                            if hasVideo {
+                                WatchTrailerButton(action: {self.showVideoPlayer.toggle()})
+                            }
+                        }
+                        CustomListButtonView(showActionSheet: $showActionSheet)
+                        Spacer()
+                    }
+                    Spacer()
+                }.frame(maxHeight: 100)
+                Spacer()
             }.padding(.top, showImageTop)
-        }
+        }.padding(.bottom, 16)
     }
 }

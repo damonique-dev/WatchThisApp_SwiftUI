@@ -23,9 +23,17 @@ struct MovieDetailsView: View {
             store.dispatch(action: MovieActions.FetchMovieDetails(id: movieDetails.id))
         }
     }
+    
+    private var video: Video? {
+        if let videos = movieDetails.videos?.results, !videos.isEmpty {
+            return videos[0]
+        }
+        
+        return nil
+    }
         
     var body: some View {
-        DetailView(id: movieId, title: movieDetails.title, itemType: .Movie, video: movieDetails.videos?.results?[0], imagePath: movieDetails.posterPath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
+        DetailView(id: movieId, title: movieDetails.title, itemType: .Movie, video: video, imagePath: movieDetails.posterPath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
             MovieDetailsScrollView(showActionSheet: self.$showActionSheet, showVideoPlayer: self.$showVideoPlayer, movieDetails: self.movieDetails)
         }.onAppear() {
             self.fetchMovieDetails()

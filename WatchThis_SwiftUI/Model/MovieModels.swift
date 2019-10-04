@@ -22,6 +22,7 @@ struct MovieDetails: Details {
     var videos: VideoResults?
     var credits: Credits?
     var similar: MovieResults?
+    var voteAverage: Double?
 //    var status: MovieStatus?
 }
 

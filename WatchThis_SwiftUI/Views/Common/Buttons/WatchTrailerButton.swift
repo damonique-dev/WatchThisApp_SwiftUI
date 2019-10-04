@@ -12,12 +12,24 @@ struct WatchTrailerButton: View {
     let action: () -> Void
         
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                WatchThisButton(text: "Watch Trailer", action: action)
-                Spacer()
-            }.padding(.leading, UIScreen.main.bounds.width / 2 + UIScreen.main.bounds.width/6 + 10)
-            Spacer()
-        }.padding(.top, UIScreen.main.bounds.height/3 + 8)
+        HStack {
+            Button(action: {self.action()}) {
+                GeometryReader { geo in
+                    HStack {
+                        Image(systemName: "play.fill")
+                            .imageScale(.medium)
+                            .foregroundColor(.white)
+                        if geo.size.width > 60 {
+                            Text("Trailer")
+                                .font(Font.system(.body, design: .rounded))
+                                .fontWeight(.bold)
+                                
+                                .foregroundColor(Color.white)
+                        }
+                    }
+                }.frame(maxHeight:30)
+            }
+            .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.orange))
+        }
     }
 }

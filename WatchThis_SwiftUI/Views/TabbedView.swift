@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIFlux
 
 struct TabbedView: View {
     @State var selectedTab = Tab.showList

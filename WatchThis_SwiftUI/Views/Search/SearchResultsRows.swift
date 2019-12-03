@@ -13,7 +13,7 @@ struct SearchViewRow<T:Details>: View {
     let rectangleWidth = UIScreen.main.bounds.width - (100 * 8/11) - 50
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
+            HStack(alignment: .top) {
                 ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: item.posterPath,
                                                                                          size: .original), contentMode: .fill)
                     .frame(width: 100 * 8/11, height: 100)
@@ -37,7 +37,7 @@ struct SearchViewRow<T:Details>: View {
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0)
                 .padding(.leading, 4)
             }
-            Divider().background(Color.white)
+            Divider().background(Color.white).padding(.vertical, 8)
         }.padding()
     }
 }

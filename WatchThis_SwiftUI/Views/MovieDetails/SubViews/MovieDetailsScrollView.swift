@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIFlux
 
 struct MovieDetailsScrollView: View {
     @EnvironmentObject var store: Store<AppState>
@@ -44,11 +45,19 @@ struct MovieDetailsScrollView: View {
         ]
     }
     
+    private var hasVideo: Bool {
+        if let videos = movieDetails.videos?.results, !videos.isEmpty {
+            return true
+        }
+        
+        return false
+    }
+    
     var body: some View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
-                    DetailHeaderView(title: movieDetails.title, posterPath: movieDetails.posterPath, backdropPath: movieDetails.backdropPath)
+                    DetailHeaderView(showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer, title: movieDetails.title, posterPath: movieDetails.posterPath, backdropPath: movieDetails.backdropPath, itemType: .Movie, rating: movieDetails.voteAverage, hasVideo: hasVideo)
                     DetailOverviewView(overview: movieDetails.overview, details: details)
                     if cast.count > 0 {
                         DetailCategoryRow(categoryTitle: "Cast") {
@@ -69,8 +78,6 @@ struct MovieDetailsScrollView: View {
                         }
                     }
                 }
-                CustomListButtonView(showActionSheet: $showActionSheet)
-                WatchTrailerButton(action: {self.showVideoPlayer.toggle()})
             }
         }.padding(8)
     }

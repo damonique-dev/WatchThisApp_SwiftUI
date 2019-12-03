@@ -27,4 +27,11 @@ struct Ids: Codable {
     var trakt: Int?
     var tmdb: Int?
     var imdb: String?
+    var slug: String?
+}
+
+struct IdSearchResult: Codable {
+    var type: String?
+    var show: TraktList?
+    var movie: TraktList?
 }

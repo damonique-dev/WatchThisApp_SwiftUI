@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIFlux
 
 struct PersonDetailScrollView: View {
     @EnvironmentObject var store: Store<AppState>
@@ -47,7 +48,7 @@ struct PersonDetailScrollView: View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
-                    DetailHeaderView(title: personDetails.name ?? "", posterPath: personDetails.profilePath, backdropPath: firstCreditBackdrop)
+                    DetailHeaderView(showActionSheet: $showActionSheet, showVideoPlayer: .constant(false), title: personDetails.name ?? "", posterPath: personDetails.profilePath, backdropPath: firstCreditBackdrop, itemType: .Person, rating: nil, hasVideo: false)
                     DetailOverviewView(overview: personDetails.biography, details: details)
                     if tvCredits.count > 0 {
                         DetailCategoryRow(categoryTitle: "TV Credits") {
@@ -68,7 +69,6 @@ struct PersonDetailScrollView: View {
                         }
                     }
                 }.padding(8)
-                CustomListButtonView(showActionSheet: $showActionSheet)
             }
         }.padding(8)
     }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUIFlux
 
 struct TVShowActions {
     struct FetchTraktShowList<T: Codable>: AsyncAction {
@@ -40,7 +41,14 @@ struct TVShowActions {
             for trakt in list {
                 if let tmdbId = trakt.ids?.tmdb {
                     ids.append(tmdbId)
-                    dispatch(FetchTVShowDetails(id: tmdbId))
+                    if let slug = trakt.ids?.slug {
+                        dispatch(SetShowSlug(showId: tmdbId, slug: slug))
+                    }
+                    if let appState = state as? AppState {
+                        if appState.tvShowState.tvShowDetail[tmdbId] == nil {
+                            dispatch(FetchTVShowDetails(id: tmdbId))
+                        }
+                    }
                 }
             }
             dispatch(SetTVShowList(list: self.showList, ids: ids))
@@ -145,6 +153,26 @@ struct TVShowActions {
         }
     }
     
+    struct FetchTraktIds: AsyncAction {
+        let showId: Int
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            TraktApiClient.sharedInstance().GetList(endpoint: .TraktIds(id: showId), params: ["type":"show"])
+            {
+                (result: Result<[IdSearchResult], APIError>) in
+                switch result {
+                case let .success(response):
+                    let showIds = response.first { $0.show != nil }
+                    if let slug = showIds?.show?.ids?.slug {
+                        dispatch(SetShowSlug(showId: self.showId, slug: slug))
+                    }
+                case let .failure(error):
+                    print(error)
+                    break
+                }
+            }
+        }
+    }
+    
     struct AddShowToFavorites: Action {
         let showId: Int
     }
@@ -183,5 +211,10 @@ struct TVShowActions {
         let id: Int
         let cast: [Cast]
         let crew: [Crew]
+    }
+    
+    struct SetShowSlug: Action {
+        let showId: Int
+        let slug: String
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUIFlux
 
 struct UserState: FluxState, Codable {
     var customLists: [UUID: CustomList] = [:]

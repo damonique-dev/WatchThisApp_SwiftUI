@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUIFlux
 
 struct MovieState: FluxState, Codable {
     var movieDetails: [Int: MovieDetails] = [:]
@@ -19,4 +20,6 @@ struct MovieState: FluxState, Codable {
     
     var favoriteMovies: Set<Int> = Set()
     var movieSearchQueries: [String] = []
+    // [TMDBId: Slug]
+    var movieSlugId: [Int: String] = [:]
 }

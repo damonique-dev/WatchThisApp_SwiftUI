@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUIFlux
 
 func peopleReducer(state: PeopleState, action: Action) -> PeopleState {
     var state = state

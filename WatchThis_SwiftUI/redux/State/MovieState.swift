@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUIFlux
 
 struct MovieState: FluxState, Codable {
     var movieDetails: [Int: MovieDetails] = [:]

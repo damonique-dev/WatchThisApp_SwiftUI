@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIFlux
 
 struct MovieListView: View {
      @EnvironmentObject var store: Store<AppState>

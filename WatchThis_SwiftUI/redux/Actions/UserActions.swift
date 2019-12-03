@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUIFlux
 
 struct UserActions {
     struct CreateNewCustomList: Action {

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIFlux
 
 struct DetailView<Content: View>: View {
     @EnvironmentObject var store: Store<AppState>

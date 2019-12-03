@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUIFlux
 
 struct MovieActions {
     struct FetchTraktMovieList<T: Codable>: AsyncAction {

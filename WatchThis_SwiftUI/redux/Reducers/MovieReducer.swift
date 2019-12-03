@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUIFlux
 
 func movieReducer(state: MovieState, action: Action) -> MovieState {
     var state = state

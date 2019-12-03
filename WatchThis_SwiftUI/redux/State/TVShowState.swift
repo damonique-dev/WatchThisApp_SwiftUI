@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUIFlux
 
 struct TVShowState: FluxState, Codable {
     var tvShow: [Int: TVShow] = [:]

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIFlux
 
 struct SeasonDetailView: View {
     @EnvironmentObject var store: Store<AppState>

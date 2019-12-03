@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUIFlux
 
 func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
     var state = state

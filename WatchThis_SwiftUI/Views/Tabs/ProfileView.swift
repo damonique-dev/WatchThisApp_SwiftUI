@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIFlux
 
 struct ProfileView: View {
     @EnvironmentObject var store: Store<AppState>

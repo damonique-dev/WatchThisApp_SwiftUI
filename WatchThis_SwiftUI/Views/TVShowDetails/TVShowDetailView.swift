@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIFlux
 
 struct TVShowDetailView: View {
     @EnvironmentObject var store: Store<AppState>

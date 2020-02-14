@@ -20,7 +20,7 @@ struct CastCellView: View {
     var body: some View {
         ZStack {
             VStack(alignment: .center) {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: person.profilePath,
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: person.profilePath,
                                                                                          size: .original), contentMode: .fill)
                 .frame(width: imageWidth, height: imageWidth, alignment: .center)
                 .clipShape(Circle())

@@ -12,15 +12,14 @@ import Alamofire
 var TMDB_Parameters = [TMDBClient.ParameterKeys.APIKey : TMDBClient.ParameterValues.APIKey]
 
 class TMDBClient {
-    var parameters = [ParameterKeys.APIKey : ParameterValues.APIKey]
-    let decoder = JSONDecoder()
+    private var parameters = [ParameterKeys.APIKey : ParameterValues.APIKey]
+    private let decoder = JSONDecoder()
     
-    class func sharedInstance() -> TMDBClient {
-        struct Singleton {
-            static var sharedInstance = TMDBClient()
-        }
-        return Singleton.sharedInstance
+    private init() {
+        self.decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
+    
+    static let sharedInstance = TMDBClient()
     
     func GET<T: Codable>(endpoint: Endpoint, params: [String: String]?, retryCount: Int = 0, completionHandler: @escaping (Result<T, APIError>) -> Void) {
         let url = URLFromParameters(endpoint: endpoint, parameters: params as [String : AnyObject]?)
@@ -29,7 +28,6 @@ class TMDBClient {
                 case .success(let result):
                     do {
                         let data = try JSONSerialization.data(withJSONObject: result as? [String: AnyObject] ?? [:])
-                        self.decoder.keyDecodingStrategy = .convertFromSnakeCase
                         let object = try self.decoder.decode(T.self, from: data)
                         DispatchQueue.main.async {
                             completionHandler(.success(object))
@@ -44,15 +42,6 @@ class TMDBClient {
                     }
                     return
                 case .failure(let error):
-                    if let statusCode = response.response?.statusCode {
-                        if statusCode == 429 {
-                            let seconds = 3.0
-                            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + seconds) {
-                                let newRetryCount = retryCount + 1
-                                self.GET(endpoint: endpoint, params: params, retryCount:newRetryCount, completionHandler: completionHandler)
-                            }
-                        }
-                    }
                     #if DEBUG
                     print("Error: \(error)")
                     #endif

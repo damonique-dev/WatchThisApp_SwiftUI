@@ -88,7 +88,7 @@ struct SeasonDetailsHeader: View {
     
     var body: some View {
         VStack {
-            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: seasonDetails.posterPath,
+            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: seasonDetails.posterPath,
                                                                                  size: .original))
             .frame(width: imageWidth, height: imageHeight)
             Text("\(seasonDetails.overview ?? "")")
@@ -140,7 +140,7 @@ struct EpisodeRow: View {
 
     var body: some View {
         VStack {
-            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: episode.stillPath,
+            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: episode.stillPath,
                                                                                      size: .original))
                 .frame(width: imageWidth, height: imageWidth * 8/11)
             Text("\(episode.overview ?? "")")

@@ -46,17 +46,17 @@ struct MovieListView: View {
     var body: some View {
         ZStack {
             BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
-            
-            ScrollView(.vertical) {
-                VStack {
-                    MovieCategoryRow(title: "Top Grossing Movies", movies: boxOfficeMovies)
-                    MovieCategoryRow(title: "Trending Movies", movies: trendingMovies)
-                    MovieCategoryRow(title: "Most Watched (Weekly)", movies: mostWatchedWeekly)
-                    MovieCategoryRow(title: "Anticipated", movies: anticipatedMovies)
-                }
-            }.padding(.vertical, 44)
             if noListsLoaded {
                 ActivitySpinner()
+            } else {
+                ScrollView(.vertical) {
+                    VStack {
+                        MovieCategoryRow(title: "Top Grossing Movies", movies: boxOfficeMovies)
+                        MovieCategoryRow(title: "Trending Movies", movies: trendingMovies)
+                        MovieCategoryRow(title: "Most Watched (Weekly)", movies: mostWatchedWeekly)
+                        MovieCategoryRow(title: "Anticipated", movies: anticipatedMovies)
+                    }
+                }.padding(.vertical, 44)
             }
         }
         .navigationBarTitle(Text("Movies"), displayMode: .inline)

@@ -60,7 +60,7 @@ struct MovieActions {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             TMDB_Parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.AppendVideoCreditsSimilar
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Movie_NowPlaying, params: TMDB_Parameters)
+            TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Movie_NowPlaying, params: TMDB_Parameters)
             {
                 (result: Result<[MovieDetails], APIError>) in
                 switch result {
@@ -78,7 +78,7 @@ struct MovieActions {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             TMDB_Parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.AppendVideoCreditsSimilar
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Movie_Details(id: id), params: TMDB_Parameters)
+            TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Movie_Details(id: id), params: TMDB_Parameters)
             {
                 (result: Result<MovieDetails, APIError>) in
                 switch result {
@@ -97,7 +97,7 @@ struct MovieActions {
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             TMDB_Parameters[TMDBClient.ParameterKeys.SearchQuery] = query
             TMDB_Parameters["include_adult"] = "false"
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Search_Movies, params: TMDB_Parameters)
+            TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Search_Movies, params: TMDB_Parameters)
             {
                 (result: Result<MovieResults, APIError>) in
                 switch result {

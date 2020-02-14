@@ -11,12 +11,13 @@ import SwiftUI
 struct ImageLoaderView: View {
     @ObservedObject var imageLoader: ImageLoader
     @State var isImageLoaded = false
+    @State var image: UIImage = UIImage()
     var contentMode = ContentMode.fit
     
     var body: some View {
         ZStack {
-            if self.imageLoader.image != nil {
-                Image(uiImage: self.imageLoader.image!)
+            if isImageLoaded {
+                Image(uiImage: image)
                     .resizable()
                     .renderingMode(.original)
                     .aspectRatio(contentMode: contentMode)
@@ -28,6 +29,11 @@ struct ImageLoaderView: View {
             } else {
                 RoundedRectangle(cornerRadius: 15)
                     .foregroundColor(Color.black.opacity(0.2))
+            }
+        }.onReceive(imageLoader.didChange) { data in
+            if let image = UIImage(data: data) {
+                self.image = image
+                self.isImageLoaded = true
             }
         }
     }

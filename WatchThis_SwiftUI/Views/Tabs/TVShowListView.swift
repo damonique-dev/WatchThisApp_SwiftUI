@@ -46,17 +46,17 @@ struct TVShowListView: View {
     var body: some View {
         ZStack {
             BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
-            
-            ScrollView(.vertical) {
-                VStack {
-                    TVCategoryRow(title: "Trending Shows", shows: trendingShows)
-                    TVCategoryRow(title: "Popular Shows", shows: popularShows)
-                    TVCategoryRow(title: "Most Watched (weekly)", shows: mostWatched)
-                    TVCategoryRow(title: "Anticipated Shows", shows: anticipatedShows)
-                }
-            }.padding(.vertical, 44)
             if noListsLoaded {
                 ActivitySpinner()
+            } else {
+                ScrollView(.vertical) {
+                    VStack {
+                        TVCategoryRow(title: "Trending Shows", shows: trendingShows)
+                        TVCategoryRow(title: "Popular Shows", shows: popularShows)
+                        TVCategoryRow(title: "Most Watched (weekly)", shows: mostWatched)
+                        TVCategoryRow(title: "Anticipated Shows", shows: anticipatedShows)
+                    }
+                }.padding(.vertical, 44)
             }
         }
         .navigationBarTitle(Text("Hot Shows"), displayMode: .inline)

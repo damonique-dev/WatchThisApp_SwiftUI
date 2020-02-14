@@ -42,7 +42,7 @@ struct DetailHeaderView: View {
         ZStack {
             VStack {
                 ZStack {
-                    ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: backdropPath,
+                    ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: backdropPath,
                                                                                              size: .original), contentMode: .fill)
                     Rectangle()
                         .fill(LinearGradient(gradient: gradient, startPoint: .top, endPoint: .bottom))
@@ -50,34 +50,42 @@ struct DetailHeaderView: View {
                 }.frame(width: screenWidth, height: backgroundImageHeight, alignment: .center)
                 Spacer()
             }
-            HStack {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: posterPath,
-                                                                                         size: .original), contentMode: .fill)
-                    .frame(width: showImageWidth, height: showImageHeight, alignment: .center)
-                    .padding(.leading, 16)
-                    .cornerRadius(5)
-                    .shadow(radius: 5)
-                VStack(alignment: .leading) {
-                    Text(title)
-                        .font(Font.system(.title, design: .rounded))
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(8)
-                        .fixedSize(horizontal: false, vertical: true)
-                    HStack {
-                        if itemType != .Person {
-                            RatingView(rating: rating)
-                            if hasVideo {
-                                WatchTrailerButton(action: {self.showVideoPlayer.toggle()})
-                            }
-                        }
-                        CustomListButtonView(showActionSheet: $showActionSheet)
+            VStack {
+                HStack {
+                    ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: posterPath,
+                                                                                             size: .original), contentMode: .fill)
+                        .frame(width: showImageWidth, height: showImageHeight, alignment: .center)
+                        .padding(.leading, 16)
+                        .cornerRadius(5)
+                        .shadow(radius: 5)
+                    VStack(alignment: .leading) {
                         Spacer()
-                    }
+                        Text(title)
+                            .font(Font.system(.title, design: .rounded))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(8)
+                            .fixedSize(horizontal: false, vertical: true)
+                        HStack(alignment: .center) {
+                            if itemType != .Person {
+                                RatingView(rating: rating)
+                                if hasVideo {
+                                    WatchTrailerButton(action: {self.showVideoPlayer.toggle()})
+                                }
+                            }
+                            CustomListButtonView(showActionSheet: $showActionSheet)
+                        }.frame(height: 50)
+                    }.frame(maxHeight: showImageHeight)
                     Spacer()
-                }.frame(maxHeight: 100)
-                Spacer()
-            }.padding(.top, showImageTop)
+                }.padding(.top, showImageTop + 16)
+                
+            }
         }.padding(.bottom, 16)
+    }
+}
+
+struct DetailHeaderView_Previews: PreviewProvider {
+    static var previews: some View {
+        DetailHeaderView(showActionSheet: .constant(false), showVideoPlayer: .constant(false), title: "Movie Title", posterPath: "/y6JABtgWMVYPx84Rvy7tROU5aNH.jpg", backdropPath: "/y6JABtgWMVYPx84Rvy7tROU5aNH.jpg", itemType: .Movie, rating: 7.0, hasVideo: true)
     }
 }

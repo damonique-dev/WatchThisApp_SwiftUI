@@ -20,7 +20,7 @@ struct SeasonCell: View {
                 .foregroundColor(.white)
                 .lineLimit(nil)
             VStack {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: season.posterPath,
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: season.posterPath,
                                                                                          size: .original))
                     .frame(width: 125 * 8/11, height: 125)
                     .cornerRadius(15)

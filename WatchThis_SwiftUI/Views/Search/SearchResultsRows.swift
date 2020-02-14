@@ -14,7 +14,7 @@ struct SearchViewRow<T:Details>: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: item.posterPath,
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: item.posterPath,
                                                                                          size: .original), contentMode: .fill)
                     .frame(width: 100 * 8/11, height: 100)
                 VStack(alignment: .leading) {
@@ -48,7 +48,7 @@ struct PeopleSearchRow: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: item.profilePath,
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: item.profilePath,
                                                                                          size: .original), contentMode: .fill)
                     .frame(width: 100 * 8/11, height: 100)
                 Text(item.name!)

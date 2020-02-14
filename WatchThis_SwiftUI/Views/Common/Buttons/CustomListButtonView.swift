@@ -13,6 +13,7 @@ struct CustomListButtonView: View {
         
     var body: some View {
         VStack(alignment: .leading) {
+            Spacer()
             HStack {
                 CustomListButton(action: {
                     self.showActionSheet.toggle()
@@ -20,7 +21,7 @@ struct CustomListButtonView: View {
                 Spacer()
             }
             Spacer()
-        }.padding(.top, 12)
+        }
     }
 }
 

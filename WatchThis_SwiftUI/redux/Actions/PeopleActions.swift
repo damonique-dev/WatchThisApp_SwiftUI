@@ -15,7 +15,7 @@ struct PeopleActions {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             TMDB_Parameters[TMDBClient.ParameterKeys.Append_Resource] = TMDBClient.ParameterValues.AppendAllCredits
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Person_Details(id: id), params: TMDB_Parameters)
+            TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Person_Details(id: id), params: TMDB_Parameters)
             {
                 (result: Result<PersonDetails, APIError>) in
                 switch result {
@@ -33,7 +33,7 @@ struct PeopleActions {
     struct FetchPersonCombinedCredit: AsyncAction {
         let id: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Person_Combined_Credits(id: id), params: TMDB_Parameters)
+            TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Person_Combined_Credits(id: id), params: TMDB_Parameters)
             {
                 (result: Result<[TVShow], APIError>) in
                 switch result {
@@ -51,7 +51,7 @@ struct PeopleActions {
         let query: String
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             TMDB_Parameters[TMDBClient.ParameterKeys.SearchQuery] = query
-            TMDBClient.sharedInstance().GET(endpoint: TMDBClient.Endpoint.Search_People, params: TMDB_Parameters)
+            TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Search_People, params: TMDB_Parameters)
             {
                 (result: Result<PeopleResults, APIError>) in
                 switch result {

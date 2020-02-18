@@ -35,14 +35,10 @@ struct VideoPlayerRepresentable: UIViewRepresentable {
     
     class Coordinator: NSObject, YTPlayerViewDelegate {
         @Binding var showPlayer: Bool
+        @State private var isInitialLoad = true
         
         init(showPlayer: Binding<Bool>) {
             _showPlayer = showPlayer
-        }
-        
-        func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
-            // call play video when the player is finished loading.
-            playerView.playVideo()
         }
         
         func playerView(_ playerView: YTPlayerView, didChangeTo state: YTPlayerState) {

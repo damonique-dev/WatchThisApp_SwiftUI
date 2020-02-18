@@ -12,6 +12,7 @@ struct ExpandableTextView: View {
     @State private var isExpanded = false
     @State private var truncated: Bool = false
     
+    let title: String
     let text: String
     var imagePath: String?
     var font: Font = .headline
@@ -67,13 +68,19 @@ struct ExpandableTextView: View {
                 BlurredBackground(image: nil, imagePath: self.imagePath)
                 VStack {
                     HStack {
+                        Text(self.title)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.orange)
+                            .lineLimit(1)
                         Spacer()
                         Button(action: {self.isExpanded.toggle()}) {
                             Image(systemName: "xmark")
                                 .font(.title)
                                 .foregroundColor(self.color)
                         }
-                    }.padding()
+                    }.padding(.horizontal)
+                        .padding(.top)
                     ScrollView(.vertical) {
                         Text(self.text)
                             .font(self.font)
@@ -81,7 +88,7 @@ struct ExpandableTextView: View {
                             .multilineTextAlignment(.leading)
                             .padding()
                     }
-                }.padding(.top, 44)
+                }.padding(.vertical, 44)
             }.background(Color.black)
             .edgesIgnoringSafeArea(.all)
         }
@@ -93,6 +100,6 @@ struct ExpandableTextView_Previews: PreviewProvider {
     static let shortText = "The first season of the American television medical drama Grey's Anatomy, began airing in the United States on the American Broadcasting Company on March 27, 2005 and concluded on May 22, 2005."
     
     static var previews: some View {
-        ExpandableTextView(text: longText, color: .white).foregroundColor(.black)
+        ExpandableTextView(title: "Grey's Anatomy", text: longText, color: .white).background(Color.black)
     }
 }

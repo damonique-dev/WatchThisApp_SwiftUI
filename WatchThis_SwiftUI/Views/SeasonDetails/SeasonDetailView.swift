@@ -94,7 +94,7 @@ struct SeasonDetailsHeader: View {
                 ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: seasonDetails.posterPath,
                                                                                      size: .original))
                 .frame(width: imageWidth, height: imageHeight)
-                ExpandableTextView(text: "\(seasonDetails.overview ?? "")", imagePath: seasonDetails.posterPath, font: .headline, color: .white)
+                ExpandableTextView(title: seasonDetails.name ?? "", text: "\(seasonDetails.overview ?? "")", imagePath: seasonDetails.posterPath, font: .headline, color: .white)
                 if cast.count > 0 {
                     DetailCategoryRow(categoryTitle: "Cast") {
                         ForEach(self.cast) { cast in
@@ -145,7 +145,7 @@ struct EpisodeRow: View {
             ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: episode.stillPath,
                                                                                      size: .original))
                 .frame(width: imageWidth, height: imageWidth * 8/11)
-            ExpandableTextView(text: "\(episode.overview ?? "")", imagePath: episode.stillPath, font: .body, color: .white)
+            ExpandableTextView(title: episode.name ?? "", text: "\(episode.overview ?? "")", imagePath: episode.stillPath, font: .body, color: .white)
             if guestStars.count > 0 {
                 DetailCategoryRow(categoryTitle: "Guest Stars") {
                     ForEach(self.guestStars) { cast in

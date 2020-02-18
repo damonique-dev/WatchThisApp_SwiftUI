@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct DetailOverviewView: View {
+    let title: String?
     let overview: String?
     let details: [OverviewDetail]
     let posterPath: String?
@@ -16,7 +17,7 @@ struct DetailOverviewView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             if overview != nil {
-                ExpandableTextView(text: overview!, imagePath: posterPath, font: .body, color: .white)
+                ExpandableTextView(title: title ?? "", text: overview!, imagePath: posterPath, font: .body, color: .white)
             }
             ForEach(details, id: \.self) { detail in
                 DetailsLabel(title: detail.title, detail: detail.detail)

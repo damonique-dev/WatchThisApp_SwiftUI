@@ -49,7 +49,7 @@ struct PersonDetailScrollView: View {
             ZStack {
                 VStack {
                     DetailHeaderView(showActionSheet: $showActionSheet, showVideoPlayer: .constant(false), title: personDetails.name ?? "", posterPath: personDetails.profilePath, backdropPath: firstCreditBackdrop, itemType: .Person, rating: nil, hasVideo: false)
-                    DetailOverviewView(overview: personDetails.biography, details: details, posterPath: personDetails.profilePath)
+                    DetailOverviewView(title: personDetails.name, overview: personDetails.biography, details: details, posterPath: personDetails.profilePath)
                     if tvCredits.count > 0 {
                         DetailCategoryRow(categoryTitle: "TV Credits") {
                             ForEach(self.tvCredits) { show in

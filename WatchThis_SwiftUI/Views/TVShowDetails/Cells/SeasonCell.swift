@@ -21,7 +21,7 @@ struct SeasonCell: View {
                 .lineLimit(nil)
             VStack {
                 ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: season.posterPath,
-                                                                                         size: .original))
+                                                                                       size: .original), placeholder: .poster)
                     .frame(width: 125 * 8/11, height: 125)
                     .cornerRadius(15)
                 Text("\(season.name ?? "")")

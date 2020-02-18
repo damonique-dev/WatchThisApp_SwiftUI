@@ -21,7 +21,7 @@ struct CastCellView: View {
         ZStack {
             VStack(alignment: .center) {
                 ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: person.profilePath,
-                                                                                         size: .original), contentMode: .fill)
+                                                                                       size: .original), contentMode: .fill, placeholder: .person)
                 .frame(width: imageWidth, height: imageWidth, alignment: .center)
                 .clipShape(Circle())
                 Spacer()
@@ -45,7 +45,7 @@ struct CastCellView: View {
 #if DEBUG
 struct CastCellView_Previews: PreviewProvider {
     static var previews: some View {
-        CastCellView(person: Cast(id: 1, name: "Samuel L. Jackson", character: "Samuel L. Jackson Jackson", profilePath: nil)).environmentObject(sampleStore)
+        CastCellView(person: Cast(id: 1, name: "Samuel L. Jackson", character: "Samuel L. Jackson Jackson", profilePath: nil)).environmentObject(sampleStore).background(Color.black)
     }
 }
 #endif

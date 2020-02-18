@@ -38,12 +38,21 @@ struct DetailHeaderView: View {
     
     private let gradient = Gradient(colors: [Color(.black).opacity(0), Color(.black).opacity(0.95)])
     
+    private var placeholder: PlaceholderImage {
+        switch itemType {
+        case .Movie, .TVShow:
+            return .poster
+        case .Person:
+            return .person
+        }
+    }
+    
     var body: some View {
         ZStack {
             VStack {
                 ZStack {
                     ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: backdropPath,
-                                                                                             size: .original), contentMode: .fill)
+                                                                                           size: .original), contentMode: .fill, placeholder: .header)
                     Rectangle()
                         .fill(LinearGradient(gradient: gradient, startPoint: .top, endPoint: .bottom))
                        
@@ -53,7 +62,7 @@ struct DetailHeaderView: View {
             VStack {
                 HStack {
                     ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: posterPath,
-                                                                                             size: .original), contentMode: .fill)
+                                                                                             size: .original), contentMode: .fill, placeholder: placeholder)
                         .frame(width: showImageWidth, height: showImageHeight, alignment: .center)
                         .padding(.leading, 16)
                         .cornerRadius(5)

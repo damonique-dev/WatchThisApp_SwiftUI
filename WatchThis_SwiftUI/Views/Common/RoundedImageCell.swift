@@ -24,7 +24,7 @@ struct RoundedImageCell: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(16)
             ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: posterPath,
-                                                                                     size: .original))
+                                                                                   size: .original), placeholder: .poster)
                 .cornerRadius(15)
         }
         .frame(width: height * 8/11, height: height)

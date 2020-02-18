@@ -49,7 +49,7 @@ struct SeasonDetailView: View {
                 VStack(alignment: .leading) {
                     SeasonDetailsHeader(seasonDetails: seasonDetails)
                     Text("Episodes:")
-                        .font(.headline)
+                        .font(.title)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.leading)
                         .padding(.leading, 8)
@@ -65,8 +65,9 @@ struct SeasonDetailView: View {
                             }
                         }.padding(.top, -6)
                     }
-                }
-            }.padding(.bottom, 16)
+                }.frame(width: UIScreen.main.bounds.width - 16)
+                .padding(.vertical, 16)
+            }
         }
         .padding(.vertical, 44)
         .navigationBarTitle(Text("\(seasonDetails.name ?? "")"))
@@ -87,24 +88,25 @@ struct SeasonDetailsHeader: View {
     }
     
     var body: some View {
-        VStack {
-            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: seasonDetails.posterPath,
-                                                                                 size: .original))
-            .frame(width: imageWidth, height: imageHeight)
-            Text("\(seasonDetails.overview ?? "")")
-                .font(.body)
-                .foregroundColor(.white)
-                .fixedSize(horizontal: false, vertical: true)
-            if cast.count > 0 {
-                DetailCategoryRow(categoryTitle: "Cast") {
-                    ForEach(self.cast) { cast in
-                        NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
-                            CastCellView(person: cast)
+        HStack {
+            Spacer()
+            VStack {
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: seasonDetails.posterPath,
+                                                                                     size: .original))
+                .frame(width: imageWidth, height: imageHeight)
+                ExpandableTextView(text: "\(seasonDetails.overview ?? "")", imagePath: seasonDetails.posterPath, font: .headline, color: .white)
+                if cast.count > 0 {
+                    DetailCategoryRow(categoryTitle: "Cast") {
+                        ForEach(self.cast) { cast in
+                            NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+                                CastCellView(person: cast)
+                            }
                         }
                     }
                 }
-            }
-        }.padding(.horizontal, 8)
+            }.padding(.horizontal, 8)
+            Spacer()
+        }
     }
 }
 
@@ -143,10 +145,7 @@ struct EpisodeRow: View {
             ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: episode.stillPath,
                                                                                      size: .original))
                 .frame(width: imageWidth, height: imageWidth * 8/11)
-            Text("\(episode.overview ?? "")")
-                .font(.body)
-                .foregroundColor(.white)
-                .fixedSize(horizontal: false, vertical: true)
+            ExpandableTextView(text: "\(episode.overview ?? "")", imagePath: episode.stillPath, font: .body, color: .white)
             if guestStars.count > 0 {
                 DetailCategoryRow(categoryTitle: "Guest Stars") {
                     ForEach(self.guestStars) { cast in
@@ -159,3 +158,11 @@ struct EpisodeRow: View {
         }.padding(.bottom, 8)
     }
 }
+
+#if DEBUG
+struct SeasonDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        SeasonDetailView(showId: 1416, seasonId: 1).environmentObject(sampleStore)
+    }
+}
+#endif

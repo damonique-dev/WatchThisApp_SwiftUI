@@ -21,7 +21,7 @@ struct BlurredBackground: View {
                     .blur(radius: 15)
             } else {
             ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: imagePath,
-                                                                                         size: .original))
+                                                                                   size: .original), contentMode: .fill)
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                     .blur(radius: 15)
             }

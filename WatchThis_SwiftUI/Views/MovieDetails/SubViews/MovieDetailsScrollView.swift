@@ -58,7 +58,7 @@ struct MovieDetailsScrollView: View {
             ZStack {
                 VStack {
                     DetailHeaderView(showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer, title: movieDetails.title, posterPath: movieDetails.posterPath, backdropPath: movieDetails.backdropPath, itemType: .Movie, rating: movieDetails.voteAverage, hasVideo: hasVideo)
-                    DetailOverviewView(overview: movieDetails.overview, details: details)
+                    DetailOverviewView(overview: movieDetails.overview, details: details, posterPath: movieDetails.posterPath)
                     if cast.count > 0 {
                         DetailCategoryRow(categoryTitle: "Cast") {
                             ForEach(self.cast) { cast in

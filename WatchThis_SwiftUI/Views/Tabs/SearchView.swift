@@ -34,7 +34,7 @@ struct SearchView: View {
     }
     
     private var searchResultsLoaded: Bool {
-        return tvResults != nil || movieResults != nil || peopleResults != nil
+        return tvResults != nil && movieResults != nil && peopleResults != nil
     }
     
     var body: some View {
@@ -42,11 +42,12 @@ struct SearchView: View {
             BlurredBackground(image: UIImage(named: "appBackground"), imagePath: nil)
             VStack {
                 SearchHeaderView(searchModel: searchModel, isSearching: $isSearching)
-                SearchResultsScrollView(searchModel: searchModel, tvResults: tvResults, movieResults: movieResults, peopleResults: peopleResults)
+                if isSearching && !searchResultsLoaded {
+                    ActivitySpinner()
+                } else {
+                    SearchResultsScrollView(searchModel: searchModel, tvResults: tvResults, movieResults: movieResults, peopleResults: peopleResults)
+                }
             }.padding(.vertical, 75)
-            if isSearching && !searchResultsLoaded {
-                ActivitySpinner()
-            }
         }
         .navigationBarTitle(Text("Search"), displayMode: .inline)
     }
@@ -55,7 +56,6 @@ struct SearchView: View {
 struct SearchResultsScrollView: View {
     @EnvironmentObject var store: Store<AppState>
     @ObservedObject var searchModel: SearchModel
-    
     let tvResults: [TVShowDetails]?
     let movieResults: [MovieDetails]?
     let peopleResults: [PersonDetails]?
@@ -67,7 +67,7 @@ struct SearchResultsScrollView: View {
         case .Movies:
             return store.state.movieState.movieSearchQueries
         case .People:
-           return store.state.peopleState.peopleSearchQueries
+            return store.state.peopleState.peopleSearchQueries
         }
     }
     
@@ -75,9 +75,15 @@ struct SearchResultsScrollView: View {
         ScrollView(.vertical) {
             VStack {
                 if !searchModel.searchQuery.isEmpty {
-                    TVSearchResults(tvResults: tvResults, category: searchModel.searchCategory)
-                    MovieSearchResults(movieResults: movieResults, category: searchModel.searchCategory)
-                    PeopleSearchResults(peopleResults: peopleResults, category: searchModel.searchCategory)
+                    if searchModel.searchCategory == .TVshows {
+                        TVSearchResults(tvResults: tvResults ?? [])
+                    }
+                    if searchModel.searchCategory == .Movies {
+                        MovieSearchResults(movieResults: movieResults ?? [])
+                    }
+                    if searchModel.searchCategory == .People {
+                        PeopleSearchResults(peopleResults: peopleResults ?? [])
+                    }
                 } else {
                     ForEach(previousSearches, id: \.self) { query in
                         Button(action: {self.searchModel.searchQuery = query}) {
@@ -91,17 +97,14 @@ struct SearchResultsScrollView: View {
 }
 
 struct TVSearchResults: View {
-    let tvResults: [TVShowDetails]?
-    let category: SearchCategories
+    let tvResults: [TVShowDetails]
     
     var body: some View {
         VStack {
-            if category == .TVshows && tvResults != nil {
-                ForEach(tvResults!) { show in
-                    NavigationLink(destination: TVShowDetailView(showId: show.id)) {
-                        SearchViewRow(item: show)
-                            .frame(height: 120)
-                    }
+            ForEach(tvResults) { show in
+                NavigationLink(destination: TVShowDetailView(showId: show.id)) {
+                    SearchViewRow(item: show)
+                        .frame(height: 120)
                 }
             }
         }
@@ -109,17 +112,14 @@ struct TVSearchResults: View {
 }
 
 struct MovieSearchResults: View {
-    let movieResults: [MovieDetails]?
-    let category: SearchCategories
+    let movieResults: [MovieDetails]
     
     var body: some View {
         VStack {
-            if category == .Movies && movieResults != nil {
-                ForEach(movieResults!) { movie in
-                    NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                        SearchViewRow(item: movie)
-                            .frame(height: 120)
-                    }
+            ForEach(movieResults) { movie in
+                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                    SearchViewRow(item: movie)
+                        .frame(height: 120)
                 }
             }
         }
@@ -127,17 +127,14 @@ struct MovieSearchResults: View {
 }
 
 struct PeopleSearchResults: View {
-    let peopleResults: [PersonDetails]?
-    let category: SearchCategories
+    let peopleResults: [PersonDetails]
     
     var body: some View {
         VStack {
-            if category == .People && peopleResults != nil {
-                ForEach(peopleResults!) { person in
-                    NavigationLink(destination: PersonDetailsView(personId: person.id, personName: person.name!)) {
-                        PeopleSearchRow(item: person)
-                            .frame(height: 120)
-                    }
+            ForEach(peopleResults) { person in
+                NavigationLink(destination: PersonDetailsView(personId: person.id, personName: person.name!)) {
+                    PeopleSearchRow(item: person)
+                        .frame(height: 120)
                 }
             }
         }

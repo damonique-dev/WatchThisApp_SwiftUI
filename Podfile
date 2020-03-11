@@ -7,6 +7,7 @@ target 'WatchThis_SwiftUI' do
 
   # Pods for WatchThis_SwiftUI
   pod 'Alamofire', '~> 5.0.0-rc.2'
+  pod 'Firebase/Analytics'
   pod 'youtube-ios-player-helper'
 
 end

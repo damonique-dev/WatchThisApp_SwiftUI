@@ -14,6 +14,9 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
     switch(action) {
         case let action as TVShowActions.SetTVShowList:
             state.tvLists[action.list] = action.shows
+            for show in action.shows {
+                state.traktShows[show.slug] = show
+            }
         case let action as TVShowActions.SetTVShowDetail:
             state.tvShowDetail[action.id] = action.tvShowDetail
         case let action as TVShowActions.SetTVShowSeason:

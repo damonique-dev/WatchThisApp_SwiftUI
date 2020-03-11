@@ -102,10 +102,10 @@ struct TVSearchResults: View {
     var body: some View {
         VStack {
             ForEach(tvResults) { show in
-                NavigationLink(destination: TVShowDetailView(showId: show.id)) {
+//                NavigationLink(destination: TVShowDetailView(showId: show.id)) {
                     SearchViewRow(item: show)
                         .frame(height: 120)
-                }
+//                }
             }
         }
     }

@@ -104,9 +104,9 @@ struct CustomListRowCell: View {
     var body: some View {
         VStack {
             if item.itemType == ItemType.TVShow {
-                NavigationLink(destination: TVShowDetailView(showId: item.itemId)) {
+//                NavigationLink(destination: TVShowDetailView(showId: item.itemId)) {
                     RoundedImageCell(title: item.itemName ?? "", posterPath: item.imagePath, height: CGFloat(200))
-                }
+//                }
             }
             if item.itemType == ItemType.Movie {
                 NavigationLink(destination: MovieDetailsView(movieId: item.itemId)) {

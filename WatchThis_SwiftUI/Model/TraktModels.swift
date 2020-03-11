@@ -37,16 +37,20 @@ struct TraktShow: Codable, Identifiable {
     var trailer: String?
     var homepage: String?
     var status: String? // TODO: Change to enum and use icons
-    var rating: Float?
+    var rating: Double?
     var airedEpisodes: Int?
     var genres: [String]?
+    
+    var slug: String {
+        return ids!.slug
+    }
 }
 
 struct Ids: Codable {
     var trakt: Int?
     var tmdb: Int?
     var imdb: String?
-    var slug: String?
+    var slug: String
 }
 
 struct IdSearchResult: Codable {

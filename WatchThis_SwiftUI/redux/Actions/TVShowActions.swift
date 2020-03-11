@@ -34,6 +34,22 @@ struct TVShowActions {
         }
     }
     
+    struct FetchTraktShow: AsyncAction {
+        let slug: String
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+//            TraktApiClient.sharedInstance().GetList(endpoint: endpoint, params: Trakt_Parameters) { (result: Result<TraktShow, APIError>) in
+//                switch result {
+//                case let .success(response):
+//                   print(response)
+//
+//                case let .failure(error):
+//                    print(error)
+//                    break
+//                }
+//            }
+        }
+    }
+    
     struct FetchImagesFromTMDB: AsyncAction {
         let shows: [TraktShow]
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {

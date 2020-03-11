@@ -53,9 +53,9 @@ struct PersonDetailScrollView: View {
                     if tvCredits.count > 0 {
                         DetailCategoryRow(categoryTitle: "TV Credits") {
                             ForEach(self.tvCredits) { show in
-                                NavigationLink(destination: TVShowDetailView(showId: show.id)) {
+//                                NavigationLink(destination: TVShowDetailView(showId: show.id)) {
                                     RoundedImageCell(title: show.name ?? "", posterPath: show.posterPath, height: CGFloat(125))
-                                }
+//                                }
                             }
                         }
                     }

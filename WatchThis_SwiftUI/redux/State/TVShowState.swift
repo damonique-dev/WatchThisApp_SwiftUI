@@ -10,7 +10,6 @@ import Foundation
 import SwiftUIFlux
 
 struct TVShowState: FluxState, Codable {
-    var tvShow: [Int: TVShow] = [:]
     var tvShowDetail: [Int: TVShowDetails] = [:]
     var tvShowCast: [Int: [Cast]] = [:]
     var tvShowCrew: [Int: [Crew]] = [:]
@@ -19,11 +18,15 @@ struct TVShowState: FluxState, Codable {
     
     // [TVShowId: [SeasonId: Season]]
     var tvShowSeasons: [Int: [Int: Season]] = [:]
-        
-    var tvLists: [TVShowList : [Int]] = [:]
     
     var favoriteShows: Set<Int> = Set()
     var tvSearchQueries: [String] = []
     // [TMDBId: Slug]
     var tvShowSlugId: [Int: String] = [:]
+    
+    // Keys are SlugIds from Trakt.
+    var images: [String: SlugImages] = [:]
+    var traktShows: [String: TraktShow] = [:]
+    var tvLists: [TVShowList : [TraktShow]] = [:]
+    var tvShow: [Int: TVShow] = [:]
 }

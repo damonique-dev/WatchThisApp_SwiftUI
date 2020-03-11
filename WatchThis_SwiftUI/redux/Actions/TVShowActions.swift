@@ -14,18 +14,49 @@ struct TVShowActions {
         let endpoint: TraktApiClient.Endpoint
         let showList: TVShowList
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TraktApiClient.sharedInstance().GetList(endpoint: endpoint, params: [:]) { (result: Result<T, APIError>) in
+            TraktApiClient.sharedInstance().GetList(endpoint: endpoint, params: Trakt_Parameters) { (result: Result<T, APIError>) in
                 switch result {
                 case let .success(response):
-                    if T.self == [TraktList].self {
-                        dispatch(FetchTMDBShowsFromTrakt(list: response as! [TraktList], showList: self.showList))
+                    if T.self == [TraktShow].self {
+                        dispatch(SetTVShowList(list: self.showList, shows: response as! [TraktShow]))
+                        dispatch(FetchImagesFromTMDB(shows: response as! [TraktShow]))
                     } else if T.self == [TraktShowListResults].self {
                         let list = (response as! [TraktShowListResults]).compactMap {$0.show}
-                        dispatch(FetchTMDBShowsFromTrakt(list: list, showList: self.showList))
+                        dispatch(SetTVShowList(list: self.showList, shows: list))
+                        dispatch(FetchImagesFromTMDB(shows: list))
                     }
+                    
                 case let .failure(error):
                     print(error)
                     break
+                }
+            }
+        }
+    }
+    
+    struct FetchImagesFromTMDB: AsyncAction {
+        let shows: [TraktShow]
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            for show in shows {
+                if let appState = state as? AppState, let tmdbId = show.ids?.tmdb, let slug = show.ids?.slug {
+                    if let detail = appState.tvShowState.tvShowDetail[tmdbId] {
+                        dispatch(SetSlugImage(slugImage: .init(slug: slug, backgroundPath: detail.backdropPath, posterPath: detail.posterPath)))
+                    }
+                    else {
+                        TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.TV_ShowDetails(id: tmdbId), params: TMDB_Parameters)
+                        {
+                            (result: Result<TVShowDetails, APIError>) in
+                            switch result {
+                            case let .success(response):
+                                dispatch(SetTVShowDetail(id: tmdbId, tvShowDetail: response))
+                                dispatch(SetSlugImage(slugImage: .init(slug: slug, backgroundPath: response.backdropPath, posterPath: response.posterPath)))
+                            case let .failure(error):
+                                print(error)
+                                break
+                            }
+                        }
+                    }
+                    dispatch(SetTraktShow(slug: slug, traktShow: show))
                 }
             }
         }
@@ -49,7 +80,7 @@ struct TVShowActions {
                     }
                 }
             }
-            dispatch(SetTVShowList(list: self.showList, ids: ids))
+//            dispatch(SetTVShowList(list: self.showList, ids: ids))
         }
     }
     
@@ -181,7 +212,7 @@ struct TVShowActions {
     
     struct SetTVShowList: Action {
         let list: TVShowList
-        let ids: [Int]
+        let shows: [TraktShow]
     }
     
     struct SetTVShowDetail: Action {
@@ -214,5 +245,14 @@ struct TVShowActions {
     struct SetShowSlug: Action {
         let showId: Int
         let slug: String
+    }
+    
+    struct SetSlugImage: Action {
+        let slugImage: SlugImages
+    }
+    
+    struct SetTraktShow: Action {
+        let slug: String
+        let traktShow: TraktShow
     }
 }

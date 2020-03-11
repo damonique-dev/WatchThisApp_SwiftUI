@@ -13,7 +13,7 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
     var state = state
     switch(action) {
         case let action as TVShowActions.SetTVShowList:
-            state.tvLists[action.list] = action.ids
+            state.tvLists[action.list] = action.shows
         case let action as TVShowActions.SetTVShowDetail:
             state.tvShowDetail[action.id] = action.tvShowDetail
         case let action as TVShowActions.SetTVShowSeason:
@@ -33,6 +33,8 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
             state.favoriteShows.insert(action.showId)
         case let action as TVShowActions.RemoveShowFromFavorites:
             state.favoriteShows.remove(action.showId)
+        case let action as TVShowActions.SetSlugImage:
+            state.images[action.slugImage.slug] = action.slugImage
         default:
             break
     }

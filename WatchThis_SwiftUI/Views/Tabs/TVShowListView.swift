@@ -12,28 +12,24 @@ import SwiftUIFlux
 struct TVShowListView: View {
     @EnvironmentObject var store: Store<AppState>
     
-    private var popularShows: [TVShowDetails] {
-        let showState = store.state.tvShowState
-        return showState.tvLists[.Popular]?.compactMap {showState.tvShowDetail[$0]} ?? [TVShowDetails]()
+    private var popularShows: [TraktShow] {
+        return store.state.tvShowState.tvLists[.Popular] ?? [TraktShow]()
     }
     
-    private var trendingShows: [TVShowDetails] {
-        let showState = store.state.tvShowState
-        return showState.tvLists[.Trending]?.compactMap {showState.tvShowDetail[$0]} ?? [TVShowDetails]()
+    private var trendingShows: [TraktShow] {
+        return store.state.tvShowState.tvLists[.Trending] ?? [TraktShow]()
     }
     
-    private var mostWatched: [TVShowDetails] {
-        let showState = store.state.tvShowState
-        return showState.tvLists[.MostWatchedWeekly]?.compactMap {showState.tvShowDetail[$0]} ?? [TVShowDetails]()
+    private var mostWatched: [TraktShow] {
+        return store.state.tvShowState.tvLists[.MostWatchedWeekly] ?? [TraktShow]()
     }
     
-    private var anticipatedShows: [TVShowDetails] {
-        let showState = store.state.tvShowState
-        return showState.tvLists[.Anticipated]?.compactMap {showState.tvShowDetail[$0]} ?? [TVShowDetails]()
+    private var anticipatedShows: [TraktShow] {
+        return store.state.tvShowState.tvLists[.Anticipated] ?? [TraktShow]()
     }
             
     func fetchShowLists() {
-        store.dispatch(action: TVShowActions.FetchTraktShowList<[TraktList]>(endpoint: .TV_Popular, showList: .Popular))
+        store.dispatch(action: TVShowActions.FetchTraktShowList<[TraktShow]>(endpoint: .TV_Popular, showList: .Popular))
         store.dispatch(action: TVShowActions.FetchTraktShowList<[TraktShowListResults]>(endpoint: .TV_Trending, showList: .Trending))
         store.dispatch(action: TVShowActions.FetchTraktShowList<[TraktShowListResults]>(endpoint: .TV_MostWatchedWeekly, showList: .MostWatchedWeekly))
         store.dispatch(action: TVShowActions.FetchTraktShowList<[TraktShowListResults]>(endpoint: .TV_Anticipated, showList: .Anticipated))
@@ -67,8 +63,18 @@ struct TVShowListView: View {
 }
 
 struct TVCategoryRow: View {
+    @EnvironmentObject var store: Store<AppState>
     let title: String
-    let shows: [TVShowDetails]
+    let shows: [TraktShow]
+    
+    private func getPosterPath(for show: TraktShow) -> String? {
+        if let slug = show.ids?.slug {
+            return store.state.tvShowState.images[slug]?.posterPath
+        }
+        
+        return nil
+    }
+    
     var body: some View {
         VStack(alignment: HorizontalAlignment.leading) {
             if !shows.isEmpty {
@@ -80,13 +86,14 @@ struct TVCategoryRow: View {
                 }
                 ScrollView(.horizontal) {
                     HStack {
-                        ForEach(shows, id: \.id) { show in
-                            NavigationLink(destination: TVShowDetailView(showId: show.id)) {
-                                RoundedImageCell(title: show.name, posterPath: show.posterPath, height: CGFloat(200))
-                            }
+                        ForEach(shows) { show in
+//                            NavigationLink(destination: TVShowDetailView(showId: show.id)) {
+                            RoundedImageCell(title: show.title!, posterPath: self.getPosterPath(for: show), height: CGFloat(200))
+//                            }
                         }
                     }
-                }.frame(height: 200)
+                }
+//                .frame(height: 200)
                 Spacer()
             }
         }.padding(.top, 8)

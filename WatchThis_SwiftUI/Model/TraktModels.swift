@@ -9,7 +9,7 @@
 import Foundation
 
 struct TraktShowListResults: Codable {
-    var show: TraktList?
+    var show: TraktShow?
 }
 
 struct TraktMovieListResults: Codable {
@@ -23,6 +23,25 @@ struct TraktList: Codable {
     var ids: Ids?
 }
 
+struct TraktShow: Codable, Identifiable {
+    let id = UUID()
+    var title: String?
+    var year: Int?
+    var ids: Ids?
+    var overview: String?
+    var firstAired: String?
+    var airs: AirDate?
+    var runtime: Int?
+    var certification: String?
+    var network: String?
+    var trailer: String?
+    var homepage: String?
+    var status: String? // TODO: Change to enum and use icons
+    var rating: Float?
+    var airedEpisodes: Int?
+    var genres: [String]?
+}
+
 struct Ids: Codable {
     var trakt: Int?
     var tmdb: Int?
@@ -34,4 +53,16 @@ struct IdSearchResult: Codable {
     var type: String?
     var show: TraktList?
     var movie: TraktList?
+}
+
+struct AirDate: Codable {
+    var day: String?
+    var time: String?
+    var timezone: String?
+}
+
+struct SlugImages: Codable {
+    var slug: String
+    var backgroundPath: String?
+    var posterPath: String?
 }

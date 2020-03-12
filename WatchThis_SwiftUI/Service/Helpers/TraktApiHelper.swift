@@ -46,6 +46,7 @@ extension TraktApiClient {
         case TV_Trending
         case TV_MostWatchedWeekly
         case TV_Anticipated
+        case TV_Seasons(slug: String)
         
         // Movie Endpoints
         case Movie_Trending
@@ -54,7 +55,7 @@ extension TraktApiClient {
         case Movie_Anticipated
         case Movie_MostWatchedWeekly
         
-         case TraktIds(id: Int)
+        case TraktIds(id: Int)
         
         func path() -> String {
             switch self {
@@ -66,6 +67,9 @@ extension TraktApiClient {
                     return "/shows/watched/weekly"
                 case .TV_Anticipated:
                     return "/shows/anticipated"
+                case let .TV_Seasons(slug):
+                    return "/shows/\(slug)/seasons"
+                
                 case .Movie_Trending:
                         return "/movies/trending"
                 case .Movie_Popular:
@@ -76,9 +80,14 @@ extension TraktApiClient {
                     return "/movies/anticipated"
                 case .Movie_MostWatchedWeekly:
                     return "/movies/watched/weekly"
+                
                 case let .TraktIds(id):
                     return "/search/tmdb/\(id)"
             }
+        }
+        
+        static func ==(lhs: Endpoint, rhs: Endpoint) -> Bool {
+            return lhs.path() == rhs.path()
         }
     }
     
@@ -94,7 +103,7 @@ extension TraktApiClient {
             let queryItem = URLQueryItem(name: key, value: "\(value)")
             components.queryItems!.append(queryItem)
         }
-        
+                
         return components.url!.absoluteString
     }
 }

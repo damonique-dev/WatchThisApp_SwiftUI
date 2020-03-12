@@ -14,7 +14,7 @@ struct MovieActions {
         let endpoint: TraktApiClient.Endpoint
         let movieList: MovieList
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TraktApiClient.sharedInstance().GetList(endpoint: endpoint, params: [:])
+            TraktApiClient.sharedInstance().GET(endpoint: endpoint, params: [:])
             {
                 (result: Result<T, APIError>) in
                 switch result {
@@ -114,7 +114,7 @@ struct MovieActions {
     struct FetchTraktIds: AsyncAction {
         let movieId: Int
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TraktApiClient.sharedInstance().GetList(endpoint: .TraktIds(id: movieId), params: ["type":"movie"])
+            TraktApiClient.sharedInstance().GET(endpoint: .TraktIds(id: movieId), params: ["type":"movie"])
             {
                 (result: Result<[IdSearchResult], APIError>) in
                 switch result {

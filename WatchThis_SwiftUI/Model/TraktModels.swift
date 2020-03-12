@@ -41,16 +41,27 @@ struct TraktShow: Codable, Identifiable {
     var airedEpisodes: Int?
     var genres: [String]?
     
-    var slug: String {
+    var slug: String? {
         return ids!.slug
     }
+}
+
+struct TraktSeason: Codable, Identifiable {
+    let id = UUID()
+    let number: Int
+    let ids: Ids
+    var rating: Double?
+    var episodeCount: Int?
+    var title: String?
+    var overview: String?
+    var firstAired: String?
 }
 
 struct Ids: Codable {
     var trakt: Int?
     var tmdb: Int?
     var imdb: String?
-    var slug: String
+    var slug: String?
 }
 
 struct IdSearchResult: Codable {
@@ -65,8 +76,7 @@ struct AirDate: Codable {
     var timezone: String?
 }
 
-struct SlugImages: Codable {
-    var slug: String
+struct TraktImages: Codable {
     var backgroundPath: String?
     var posterPath: String?
 }

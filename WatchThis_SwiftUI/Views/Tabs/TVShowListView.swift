@@ -69,7 +69,7 @@ struct TVCategoryRow: View {
     
     private func getPosterPath(for show: TraktShow) -> String? {
         if let slug = show.ids?.slug {
-            return store.state.tvShowState.images[slug]?.posterPath
+            return store.state.tvShowState.slugImages[slug]?.posterPath
         }
         
         return nil
@@ -87,7 +87,7 @@ struct TVCategoryRow: View {
                 ScrollView(.horizontal) {
                     HStack {
                         ForEach(shows) { show in
-                            NavigationLink(destination: TVShowDetailView(slug: show.slug)) {
+                            NavigationLink(destination: TVShowDetailView(slug: show.slug!)) {
                                 RoundedImageCell(title: show.title!, posterPath: self.getPosterPath(for: show), height: CGFloat(200))
                             }
                         }

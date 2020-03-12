@@ -15,7 +15,7 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
         case let action as TVShowActions.SetTVShowList:
             state.tvLists[action.list] = action.shows
             for show in action.shows {
-                state.traktShows[show.slug] = show
+                state.traktShows[show.slug!] = show
             }
         case let action as TVShowActions.SetTVShowDetail:
             state.tvShowDetail[action.id] = action.tvShowDetail
@@ -37,7 +37,15 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
         case let action as TVShowActions.RemoveShowFromFavorites:
             state.favoriteShows.remove(action.showId)
         case let action as TVShowActions.SetSlugImage:
-            state.images[action.slugImage.slug] = action.slugImage
+            state.slugImages[action.slug] = action.slugImage
+        case let action as TVShowActions.SetTraktSeasons:
+            state.traktSeasons[action.showSlug] = action.seasons
+        case let action as TVShowActions.SetEntityImages:
+            if state.traktImages[action.entity] == nil {
+                state.traktImages[action.entity] = [:]
+            }
+            print("Reducer: \(action.entity) \(action.tmdbId) \(action.slugImage.posterPath)")
+            state.traktImages[action.entity]![action.tmdbId] = action.slugImage
         default:
             break
     }

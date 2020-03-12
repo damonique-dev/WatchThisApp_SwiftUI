@@ -20,13 +20,17 @@ struct TVShowDetailView: View {
     }
     
     private func fetchShowDetails() {
-        if store.state.tvShowState.traktShows[slug] == nil {
-            store.dispatch(action: TVShowActions.FetchTraktShow(slug: slug))
+        let showState = store.state.tvShowState
+//        if store.state.tvShowState.traktShows[slug] == nil {
+//            store.dispatch(action: TVShowActions.FetchTraktShow(slug: slug))
+//        }
+        if showState.traktSeasons[slug] == nil {
+            store.dispatch(action: TVShowActions.FetchFromTraktApi<[TraktSeason]>(ids: showDetail.ids!, endpoint: .TV_Seasons(slug: slug), extendedInfo: true))
         }
     }
     
     private var posterPath: String? {
-        return store.state.tvShowState.images[slug]?.posterPath
+        return store.state.tvShowState.slugImages[slug]?.posterPath
     }
     
     private var video: Video? {

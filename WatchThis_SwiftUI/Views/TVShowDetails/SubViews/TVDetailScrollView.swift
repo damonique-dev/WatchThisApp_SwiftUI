@@ -22,8 +22,8 @@ struct TVDetailScrollView: View {
     private var similarShows: [TVShowDetails] {
         return []
     }
-    private var seasons: [Season] {
-        return []
+    private var seasons: [TraktSeason] {
+        return store.state.tvShowState.traktSeasons[slug] ?? []
     }
     
     private func getRuntime() -> String {
@@ -53,11 +53,11 @@ struct TVDetailScrollView: View {
     }
     
     private var posterPath: String? {
-        return store.state.tvShowState.images[slug]?.posterPath
+        return store.state.tvShowState.slugImages[slug]?.posterPath
     }
     
     private var backgroundPath: String? {
-        return store.state.tvShowState.images[slug]?.backgroundPath
+        return store.state.tvShowState.slugImages[slug]?.backgroundPath
     }
     
     private var details: [OverviewDetail] {

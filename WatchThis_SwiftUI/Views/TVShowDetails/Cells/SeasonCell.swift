@@ -7,24 +7,33 @@
 //
 
 import SwiftUI
+import SwiftUIFlux
 
 struct SeasonCell: View {
-    let season: Season
+    @EnvironmentObject var store: Store<AppState>
+    let season: TraktSeason
+    
+    private var posterPath: String? {
+        if let tmdbId = season.ids.tmdb {
+            return store.state.tvShowState.traktImages[.Season]?[tmdbId]?.posterPath
+        }
+        return nil
+    }
     
     var body: some View {
         ZStack {
-            Text("\(season.name ?? "")")
+            Text("\(season.title ?? "")")
                 .font(Font.system(.headline, design: .rounded))
                 .fontWeight(.semibold)
                 .frame(width: 125 * 8/11, height: 125)
                 .foregroundColor(.white)
                 .lineLimit(nil)
             VStack {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: season.posterPath,
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: posterPath,
                                                                                        size: .original), placeholder: .poster)
                     .frame(width: 125 * 8/11, height: 125)
                     .cornerRadius(15)
-                Text("\(season.name ?? "")")
+                Text("\(season.title ?? "")")
                     .font(Font.system(.callout, design: .rounded))
                     .fontWeight(.bold)
                     .foregroundColor(.orange)

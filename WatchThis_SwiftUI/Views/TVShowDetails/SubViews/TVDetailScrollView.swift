@@ -64,7 +64,7 @@ struct TVDetailScrollView: View {
         return [
             .init(title: "Rating:", detail: showDetail.certification),
 //            .init(title: "Next Air Date:", detail: showDetail.nextEpisodeToAir?.airDate),
-//            .init(title: "First Air Date:", detail: showDetail.firstAired),
+            .init(title: "First Air Date:", detail: showDetail.firstAired?.fromISOtoDateString(format: "EEEE, MMMM d yyyy")),
 //            .init(title: "Number of Seasons:", detail: getNumberStringOf(showDetail.numberOfSeasons)),
             .init(title: "Number of Episodes:", detail: getNumberStringOf(showDetail.airedEpisodes)),
             .init(title: "Runtime:", detail: getRuntime()),

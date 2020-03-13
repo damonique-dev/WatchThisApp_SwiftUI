@@ -10,7 +10,7 @@ import Foundation
 import SwiftUIFlux
 
 enum TraktEntity: String, Codable {
-    case Season
+    case Season, Person
 }
 
 struct TVShowState: FluxState, Codable {
@@ -34,6 +34,7 @@ struct TVShowState: FluxState, Codable {
     var traktImages: [TraktEntity : [Int: TraktImages]] = [:]
     
     var traktShows: [String: TraktShow] = [:]
+    var traktShowCast: [String: [TraktCast]] = [:]
     var traktSeasons: [String: [TraktSeason]] = [:]
     var tvLists: [TVShowList : [TraktShow]] = [:]
     var tvShow: [Int: TVShow] = [:]

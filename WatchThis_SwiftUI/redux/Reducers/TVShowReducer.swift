@@ -44,8 +44,9 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
             if state.traktImages[action.entity] == nil {
                 state.traktImages[action.entity] = [:]
             }
-            print("Reducer: \(action.entity) \(action.tmdbId) \(action.slugImage.posterPath)")
             state.traktImages[action.entity]![action.tmdbId] = action.slugImage
+        case let action as TVShowActions.SetTraktCast:
+            state.traktShowCast[action.showSlug] = action.cast
         default:
             break
     }

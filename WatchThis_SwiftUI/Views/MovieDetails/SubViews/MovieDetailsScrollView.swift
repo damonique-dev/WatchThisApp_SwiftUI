@@ -59,24 +59,24 @@ struct MovieDetailsScrollView: View {
                 VStack {
                     DetailHeaderView(showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer, title: movieDetails.title, posterPath: movieDetails.posterPath, backdropPath: movieDetails.backdropPath, itemType: .Movie, rating: movieDetails.voteAverage, hasVideo: hasVideo)
                     DetailOverviewView(title: movieDetails.title, overview: movieDetails.overview, details: details, posterPath: movieDetails.posterPath)
-                    if cast.count > 0 {
-                        DetailCategoryRow(categoryTitle: "Cast") {
-                            ForEach(self.cast) { cast in
-                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
-                                    CastCellView(person: cast)
-                                }
-                            }
-                        }
-                    }
-                    if similarMovies.count > 0 {
-                        DetailCategoryRow(categoryTitle: "Similar Movies") {
-                            ForEach(self.similarMovies) { movie in
-                                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                                    RoundedImageCell(title: movie.title, posterPath: movie.posterPath, height: CGFloat(125))
-                                }
-                            }
-                        }
-                    }
+//                    if cast.count > 0 {
+//                        DetailCategoryRow(categoryTitle: "Cast") {
+//                            ForEach(self.cast) { cast in
+//                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+//                                    CastCellView(person: cast)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    if similarMovies.count > 0 {
+//                        DetailCategoryRow(categoryTitle: "Similar Movies") {
+//                            ForEach(self.similarMovies) { movie in
+//                                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+//                                    RoundedImageCell(title: movie.title, posterPath: movie.posterPath, height: CGFloat(125))
+//                                }
+//                            }
+//                        }
+//                    }
                 }
             }
         }.padding(8)

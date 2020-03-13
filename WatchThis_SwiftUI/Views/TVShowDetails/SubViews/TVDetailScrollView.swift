@@ -16,8 +16,8 @@ struct TVDetailScrollView: View {
     let showDetail: TraktShow
     let slug: String
     
-    private var cast: [Cast] {
-        return []
+    private var cast: [TraktCast] {
+        return store.state.tvShowState.traktShowCast[slug] ?? []
     }
     private var similarShows: [TVShowDetails] {
         return []
@@ -81,9 +81,9 @@ struct TVDetailScrollView: View {
                     if cast.count > 0 {
                         DetailCategoryRow(categoryTitle: "Cast") {
                             ForEach(self.cast) { cast in
-                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+//                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
                                     CastCellView(person: cast)
-                                }
+//                                }
                             }
                         }
                     }

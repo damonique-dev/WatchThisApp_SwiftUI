@@ -95,15 +95,15 @@ struct SeasonDetailsHeader: View {
                                                                                      size: .original))
                 .frame(width: imageWidth, height: imageHeight)
                 ExpandableTextView(title: seasonDetails.name ?? "", text: "\(seasonDetails.overview ?? "")", imagePath: seasonDetails.posterPath, font: .headline, color: .white)
-                if cast.count > 0 {
-                    DetailCategoryRow(categoryTitle: "Cast") {
-                        ForEach(self.cast) { cast in
-                            NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
-                                CastCellView(person: cast)
-                            }
-                        }
-                    }
-                }
+//                if cast.count > 0 {
+//                    DetailCategoryRow(categoryTitle: "Cast") {
+//                        ForEach(self.cast) { cast in
+//                            NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+//                                CastCellView(person: cast)
+//                            }
+//                        }
+//                    }
+//                }
             }.padding(.horizontal, 8)
             Spacer()
         }
@@ -146,15 +146,15 @@ struct EpisodeRow: View {
                                                                                      size: .original))
                 .frame(width: imageWidth, height: imageWidth * 8/11)
             ExpandableTextView(title: episode.name ?? "", text: "\(episode.overview ?? "")", imagePath: episode.stillPath, font: .body, color: .white)
-            if guestStars.count > 0 {
-                DetailCategoryRow(categoryTitle: "Guest Stars") {
-                    ForEach(self.guestStars) { cast in
-                        NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
-                            CastCellView(person: cast)
-                        }
-                    }
-                }
-            }
+//            if guestStars.count > 0 {
+//                DetailCategoryRow(categoryTitle: "Guest Stars") {
+//                    ForEach(self.guestStars) { cast in
+//                        NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+//                            CastCellView(person: cast)
+//                        }
+//                    }
+//                }
+//            }
         }.padding(.bottom, 8)
     }
 }

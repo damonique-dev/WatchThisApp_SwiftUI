@@ -50,11 +50,28 @@ struct TraktSeason: Codable, Identifiable {
     let id = UUID()
     let number: Int
     let ids: Ids
-    var rating: Double?
-    var episodeCount: Int?
-    var title: String?
-    var overview: String?
-    var firstAired: String?
+    let rating: Double?
+    let episodeCount: Int?
+    let title: String?
+    let overview: String?
+    let firstAired: String?
+}
+
+struct TraktPeopleResults: Codable {
+    let cast: [TraktCast]
+}
+
+struct TraktCast: Codable, Identifiable {
+    let id = UUID()
+    let character: String?
+    let person: TraktPerson
+    let episodeCount: Int?
+}
+
+struct TraktPerson: Codable, Identifiable {
+    let id = UUID()
+    let name: String?
+    let ids: Ids
 }
 
 struct Ids: Codable {

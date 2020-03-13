@@ -87,7 +87,7 @@ struct TraktShowCredits: Codable, Identifiable {
     let character: String?
     let show: TraktShow
     let episodeCount: Int?
-    let series_regular: Bool
+    let seriesRegular: Bool
 }
 
 struct Ids: Codable {

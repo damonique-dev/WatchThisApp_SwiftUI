@@ -33,6 +33,8 @@ func traktReducer(state: TraktState, action: Action) -> TraktState {
             state.traktRelatedShows[action.showSlug] = action.shows
         case let action as TraktActions.SetShow:
             state.traktShows[action.slug] = action.show
+        case let action as TraktActions.SetPersonShowCredits:
+            state.personShowCredits[action.slug] = action.credit
         default:
             break
     }

@@ -61,6 +61,11 @@ struct TraktActions {
                     } else if self.endpoint == TraktApiClient.Endpoint.TV_Details(slug: slug) {
                         let show = response as! TraktShow
                         dispatch(FetchImagesFromTMDB(shows: [show]))
+                    } else if self.endpoint == TraktApiClient.Endpoint.Person_TVCredits(slug: slug) {
+                        let castlist = (response as! TraktShowCreditsResults).cast
+                        dispatch(SetPersonShowCredits(slug: slug, credit: castlist))
+                        let shows = castlist.map({$0.show})
+                        dispatch(FetchImagesFromTMDB(shows: shows))
                     } else {
                         print("Endpoint \"\(self.endpoint.path())\" action not defined.")
                     }
@@ -186,5 +191,10 @@ struct TraktActions {
         let entity: TraktEntity
         let tmdbId: Int
         let slugImage: TraktImages
+    }
+    
+    struct SetPersonShowCredits: Action {
+        let slug: String
+        let credit: [TraktShowCredits]
     }
 }

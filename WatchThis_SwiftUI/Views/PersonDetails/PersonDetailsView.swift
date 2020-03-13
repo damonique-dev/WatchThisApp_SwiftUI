@@ -24,9 +24,13 @@ struct PersonDetailsView: View {
     }
     
     private func fetchPersonDetails() {
-//        if store.state.peopleState.people[personId] == nil {
-//            store.dispatch(action: PeopleActions.FetchPersonDetails(id: personId))
-//        }
+        guard let slug = personDetails.ids.slug else {
+            return
+        }
+        
+        if store.state.traktState.personShowCredits[slug] == nil {
+            store.dispatch(action: TraktActions.FetchFromTraktApi<TraktShowCreditsResults>(ids: personDetails.ids, endpoint: .Person_TVCredits(slug: slug)))
+        }
     }
         
     var body: some View {

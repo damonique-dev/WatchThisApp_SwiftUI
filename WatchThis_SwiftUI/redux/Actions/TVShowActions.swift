@@ -37,7 +37,7 @@ struct TVShowActions {
     struct FetchFromTraktApi<U: Codable>: AsyncAction {
         let ids: Ids
         let endpoint: TraktApiClient.Endpoint
-        var extendedInfo = false
+        var extendedInfo = true
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             guard let slug = ids.slug else {
                 return

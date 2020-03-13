@@ -132,10 +132,10 @@ struct PeopleSearchResults: View {
     var body: some View {
         VStack {
             ForEach(peopleResults) { person in
-                NavigationLink(destination: PersonDetailsView(personId: person.id, personName: person.name!)) {
+//                NavigationLink(destination: PersonDetailsView(personId: person.id, personName: person.name!)) {
                     PeopleSearchRow(item: person)
                         .frame(height: 120)
-                }
+//                }
             }
         }
     }

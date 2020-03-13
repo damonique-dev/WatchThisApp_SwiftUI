@@ -114,9 +114,9 @@ struct CustomListRowCell: View {
                 }
             }
             if item.itemType == ItemType.Person {
-                NavigationLink(destination: PersonDetailsView(personId: item.itemId, personName: item.itemName ?? "")) {
+//                NavigationLink(destination: PersonDetailsView(personId: item.itemId, personName: item.itemName ?? "")) {
                     RoundedImageCell(title: item.itemName ?? "", posterPath: item.imagePath, height: CGFloat(200))
-                }
+//                }
             }
         }
     }

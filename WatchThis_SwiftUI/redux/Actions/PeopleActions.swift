@@ -65,6 +65,73 @@ struct PeopleActions {
         }
     }
     
+    struct FetchFromTraktApi<U: Codable>: AsyncAction {
+        let ids: Ids
+        let endpoint: TraktApiClient.Endpoint
+        var extendedInfo = true
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            guard let slug = ids.slug else {
+                return
+            }
+            let params = extendedInfo ? Trakt_Parameters : [:]
+            TraktApiClient.sharedInstance().GET(endpoint: endpoint, params: params) { (result: Result<U, APIError>) in
+                switch result {
+                case let .success(response):
+                    if self.endpoint == TraktApiClient.Endpoint.Person_TVCredits(slug: slug) {
+                        let castlist = (response as! TraktShowCreditsResults).cast
+                        dispatch(SetPersonShowCredits(slug: slug, credit: castlist))
+                        dispatch(FetchImagesFromTMDB(credits: castlist))
+                    } else {
+                        print("Endpoint \"\(self.endpoint.path())\" action not defined.")
+                    }
+                case let .failure(error):
+                    print(error)
+                    break
+                }
+            }
+        }
+    }
+    
+    struct FetchImagesFromTMDB: AsyncAction {
+        let credits: [TraktShowCredits]
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            for credit in credits {
+                if let appState = state as? AppState, let tmdbId = credit.show.ids?.tmdb, let slug = credit.show.ids?.slug {
+                    // Only fetch images if not already in state.
+                    if appState.tvShowState.slugImages[slug] == nil {
+                        TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.TV_ShowDetails(id: tmdbId), params: TMDB_Parameters)
+                        {
+                            (result: Result<TVShowDetails, APIError>) in
+                            switch result {
+                            case let .success(response):
+                                dispatch(SetSlugImage(slug: slug, slugImage: .init(backgroundPath: response.backdropPath, posterPath: response.posterPath)))
+                            case let .failure(error):
+                                print(error)
+                                break
+                            }
+                        }
+                    }
+                    dispatch(SetTraktShow(slug: slug, traktShow: credit.show))
+                }
+            }
+        }
+    }
+    
+    struct SetPersonShowCredits: Action {
+        let slug: String
+        let credit: [TraktShowCredits]
+    }
+    
+    struct SetSlugImage: Action {
+        let slug: String
+        let slugImage: TraktImages
+    }
+    
+    struct SetTraktShow: Action {
+        let slug: String
+        let traktShow: TraktShow
+    }
+    
     struct SetPersonDetail: Action {
         let id: Int
         let personDetail: PersonDetails

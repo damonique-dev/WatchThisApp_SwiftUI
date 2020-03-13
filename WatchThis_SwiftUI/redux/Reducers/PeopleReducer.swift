@@ -22,6 +22,12 @@ func peopleReducer(state: PeopleState, action: Action) -> PeopleState {
         case let action as PeopleActions.SetPersonSearch:
             state = addToSearchList(state: state, query: action.query)
             state.peopleSearch[action.query] = action.people
+        case let action as PeopleActions.SetPersonShowCredits:
+            state.personShowCredits[action.slug] = action.credit
+//        case let action as PeopleActions.SetSlugImage:
+//            state.tvShowState.slugImages[action.slug] = action.slugImage
+//        case let action as PeopleActions.SetTraktShow:
+//            state.tvShowState.traktShows[action.slug] = action.traktShow
         default:
             break
     }

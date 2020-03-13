@@ -29,10 +29,10 @@ struct TVShowDetailView: View {
             store.dispatch(action: TVShowActions.FetchFromTraktApi<TraktPeopleResults>(ids: showIds, endpoint: .TV_Cast(slug: slug)))
         }
         if showState.traktSeasons[slug] == nil {
-            store.dispatch(action: TVShowActions.FetchFromTraktApi<[TraktSeason]>(ids: showIds, endpoint: .TV_Seasons(slug: slug), extendedInfo: true))
+            store.dispatch(action: TVShowActions.FetchFromTraktApi<[TraktSeason]>(ids: showIds, endpoint: .TV_Seasons(slug: slug)))
         }
         if showState.traktRelatedShows[slug] == nil {
-            store.dispatch(action: TVShowActions.FetchFromTraktApi<[TraktShow]>(ids: showIds, endpoint: .TV_Related(slug: slug), extendedInfo: true))
+            store.dispatch(action: TVShowActions.FetchFromTraktApi<[TraktShow]>(ids: showIds, endpoint: .TV_Related(slug: slug)))
         }
     }
     

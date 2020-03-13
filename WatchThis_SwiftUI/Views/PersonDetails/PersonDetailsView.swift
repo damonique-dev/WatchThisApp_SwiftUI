@@ -14,31 +14,27 @@ struct PersonDetailsView: View {
     @State private var showActionSheet = false
     @State private var showVideoPlayer = false
     
-    let personId: Int
-    let personName: String
+    let personDetails: TraktPerson
     
-    private var personDetails: PersonDetails {
-        return store.state.peopleState.people[personId] ?? PersonDetails(id: personId)
-    }
-    private func fetchPersonDetails() {
-        if store.state.peopleState.people[personId] == nil {
-            store.dispatch(action: PeopleActions.FetchPersonDetails(id: personId))
+    private var profilePath: String? {
+        if let tmdbId = personDetails.ids.tmdb {
+            return store.state.tvShowState.traktImages[.Person]?[tmdbId]?.posterPath
         }
+        return nil
+    }
+    
+    private func fetchPersonDetails() {
+//        if store.state.peopleState.people[personId] == nil {
+//            store.dispatch(action: PeopleActions.FetchPersonDetails(id: personId))
+//        }
     }
         
     var body: some View {
-        DetailView(id: personId, title: personName, itemType: .Person, video: nil, imagePath: personDetails.profilePath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
+        DetailView(id: personDetails.ids.tmdb ?? 0, title: personDetails.name ?? "", itemType: .Person, video: nil, imagePath: profilePath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
             PersonDetailScrollView(showActionSheet: self.$showActionSheet, personDetails: self.personDetails)
-        }.onAppear() {
+        }
+        .onAppear() {
             self.fetchPersonDetails()
         }
     }
 }
-
-#if DEBUG
-struct PersonDetailsView_Previews: PreviewProvider {
-    static var previews: some View {
-        PersonDetailsView(personId: 123, personName: "Name").environmentObject(sampleStore)
-    }
-}
-#endif

@@ -87,9 +87,9 @@ struct TVDetailScrollView: View {
                     if cast.count > 0 {
                         DetailCategoryRow(categoryTitle: "Cast") {
                             ForEach(self.cast) { cast in
-//                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+                                NavigationLink(destination: PersonDetailsView(personDetails: cast.person)) {
                                     CastCellView(person: cast)
-//                                }
+                                }
                             }
                         }
                     }

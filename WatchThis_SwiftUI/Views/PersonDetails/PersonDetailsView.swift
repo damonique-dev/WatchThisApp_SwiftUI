@@ -18,7 +18,7 @@ struct PersonDetailsView: View {
     
     private var profilePath: String? {
         if let tmdbId = personDetails.ids.tmdb {
-            return store.state.tvShowState.traktImages[.Person]?[tmdbId]?.posterPath
+            return store.state.traktState.traktImages[.Person]?[tmdbId]?.posterPath
         }
         return nil
     }

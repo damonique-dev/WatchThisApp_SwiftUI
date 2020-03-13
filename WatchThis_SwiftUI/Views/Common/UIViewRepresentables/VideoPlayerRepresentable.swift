@@ -42,7 +42,6 @@ struct VideoPlayerRepresentable: UIViewRepresentable {
         }
         
         func playerView(_ playerView: YTPlayerView, didChangeTo state: YTPlayerState) {
-            print("YTPlayerState: \(state.rawValue)")
             switch state {
             case .ended:
                 showPlayer = false

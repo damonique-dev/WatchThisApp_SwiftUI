@@ -15,5 +15,6 @@ func appStateReducer(state: AppState, action: Action) -> AppState {
     state.peopleState = peopleReducer(state: state.peopleState, action: action)
     state.movieState = movieReducer(state: state.movieState, action: action)
     state.userState = userReducer(state: state.userState, action: action)
+    state.traktState = traktReducer(state: state.traktState, action: action)
     return state
 }

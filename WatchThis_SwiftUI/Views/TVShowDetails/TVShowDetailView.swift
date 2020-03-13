@@ -17,27 +17,27 @@ struct TVShowDetailView: View {
     let slug: String
     let showIds: Ids
     private var showDetail: TraktShow {
-        return store.state.tvShowState.traktShows[slug] ?? TraktShow()
+        return store.state.traktState.traktShows[slug] ?? TraktShow()
     }
     
     private func fetchShowDetails() {
-        let showState = store.state.tvShowState
-        if store.state.tvShowState.traktShows[slug] == nil {
-            store.dispatch(action: TVShowActions.FetchFromTraktApi<TraktShow>(ids: showIds, endpoint: .TV_Details(slug: slug)))
+        let state = store.state.traktState
+        if state.traktShows[slug] == nil {
+            store.dispatch(action: TraktActions.FetchFromTraktApi<TraktShow>(ids: showIds, endpoint: .TV_Details(slug: slug)))
         }
-        if showState.traktShowCast[slug] == nil {
-            store.dispatch(action: TVShowActions.FetchFromTraktApi<TraktPeopleResults>(ids: showIds, endpoint: .TV_Cast(slug: slug)))
+        if state.traktShowCast[slug] == nil {
+            store.dispatch(action: TraktActions.FetchFromTraktApi<TraktPeopleResults>(ids: showIds, endpoint: .TV_Cast(slug: slug)))
         }
-        if showState.traktSeasons[slug] == nil {
-            store.dispatch(action: TVShowActions.FetchFromTraktApi<[TraktSeason]>(ids: showIds, endpoint: .TV_Seasons(slug: slug)))
+        if state.traktSeasons[slug] == nil {
+            store.dispatch(action: TraktActions.FetchFromTraktApi<[TraktSeason]>(ids: showIds, endpoint: .TV_Seasons(slug: slug)))
         }
-        if showState.traktRelatedShows[slug] == nil {
-            store.dispatch(action: TVShowActions.FetchFromTraktApi<[TraktShow]>(ids: showIds, endpoint: .TV_Related(slug: slug)))
+        if state.traktRelatedShows[slug] == nil {
+            store.dispatch(action: TraktActions.FetchFromTraktApi<[TraktShow]>(ids: showIds, endpoint: .TV_Related(slug: slug)))
         }
     }
     
     private var posterPath: String? {
-        return store.state.tvShowState.slugImages[slug]?.posterPath
+        return store.state.traktState.slugImages[slug]?.posterPath
     }
     
     private var video: Video? {

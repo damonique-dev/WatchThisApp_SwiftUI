@@ -16,16 +16,16 @@ struct TVDetailScrollView: View {
     let slug: String
     
     private var showDetail: TraktShow {
-        return store.state.tvShowState.traktShows[slug] ?? TraktShow()
+        return store.state.traktState.traktShows[slug] ?? TraktShow()
     }
     private var cast: [TraktCast] {
-        return store.state.tvShowState.traktShowCast[slug] ?? []
+        return store.state.traktState.traktShowCast[slug] ?? []
     }
     private var similarShows: [TraktShow] {
-        return store.state.tvShowState.traktRelatedShows[slug] ?? []
+        return store.state.traktState.traktRelatedShows[slug] ?? []
     }
     private var seasons: [TraktSeason] {
-        return store.state.tvShowState.traktSeasons[slug] ?? []
+        return store.state.traktState.traktSeasons[slug] ?? []
     }
     
     private func getRuntime() -> String {
@@ -51,7 +51,7 @@ struct TVDetailScrollView: View {
     }
     
     private func getPosterPath(for show: TraktShow) -> String? {
-        return store.state.tvShowState.slugImages[show.slug!]?.posterPath
+        return store.state.traktState.slugImages[show.slug!]?.posterPath
     }
     
     private var hasVideo: Bool {
@@ -59,11 +59,11 @@ struct TVDetailScrollView: View {
     }
     
     private var posterPath: String? {
-        return store.state.tvShowState.slugImages[slug]?.posterPath
+        return store.state.traktState.slugImages[slug]?.posterPath
     }
     
     private var backgroundPath: String? {
-        return store.state.tvShowState.slugImages[slug]?.backgroundPath
+        return store.state.traktState.slugImages[slug]?.backgroundPath
     }
     
     private var details: [OverviewDetail] {

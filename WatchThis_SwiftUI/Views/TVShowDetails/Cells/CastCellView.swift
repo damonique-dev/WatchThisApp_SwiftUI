@@ -18,7 +18,7 @@ struct CastCellView: View {
     private let imageWidth = UIScreen.main.bounds.width/3 - 30
     private var posterPath: String? {
         if let tmdbId = person.person.ids.tmdb{
-            return store.state.tvShowState.traktImages[.Person]?[tmdbId]?.posterPath
+            return store.state.traktState.traktImages[.Person]?[tmdbId]?.posterPath
         }
         return nil
     }

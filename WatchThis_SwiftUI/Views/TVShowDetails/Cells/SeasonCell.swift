@@ -15,7 +15,7 @@ struct SeasonCell: View {
     
     private var posterPath: String? {
         if let tmdbId = season.ids.tmdb {
-            return store.state.tvShowState.traktImages[.Season]?[tmdbId]?.posterPath
+            return store.state.traktState.traktImages[.Season]?[tmdbId]?.posterPath
         }
         return nil
     }

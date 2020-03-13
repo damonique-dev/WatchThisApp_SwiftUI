@@ -13,26 +13,26 @@ struct TVShowListView: View {
     @EnvironmentObject var store: Store<AppState>
     
     private var popularShows: [TraktShow] {
-        return store.state.tvShowState.tvLists[.Popular] ?? [TraktShow]()
+        return store.state.traktState.tvLists[.Popular] ?? [TraktShow]()
     }
     
     private var trendingShows: [TraktShow] {
-        return store.state.tvShowState.tvLists[.Trending] ?? [TraktShow]()
+        return store.state.traktState.tvLists[.Trending] ?? [TraktShow]()
     }
     
     private var mostWatched: [TraktShow] {
-        return store.state.tvShowState.tvLists[.MostWatchedWeekly] ?? [TraktShow]()
+        return store.state.traktState.tvLists[.MostWatchedWeekly] ?? [TraktShow]()
     }
     
     private var anticipatedShows: [TraktShow] {
-        return store.state.tvShowState.tvLists[.Anticipated] ?? [TraktShow]()
+        return store.state.traktState.tvLists[.Anticipated] ?? [TraktShow]()
     }
             
     func fetchShowLists() {
-        store.dispatch(action: TVShowActions.FetchTraktShowList<[TraktShow]>(endpoint: .TV_Popular, showList: .Popular))
-        store.dispatch(action: TVShowActions.FetchTraktShowList<[TraktShowListResults]>(endpoint: .TV_Trending, showList: .Trending))
-        store.dispatch(action: TVShowActions.FetchTraktShowList<[TraktShowListResults]>(endpoint: .TV_MostWatchedWeekly, showList: .MostWatchedWeekly))
-        store.dispatch(action: TVShowActions.FetchTraktShowList<[TraktShowListResults]>(endpoint: .TV_Anticipated, showList: .Anticipated))
+        store.dispatch(action: TraktActions.FetchTraktShowList<[TraktShow]>(endpoint: .TV_Popular, showList: .Popular))
+        store.dispatch(action: TraktActions.FetchTraktShowList<[TraktShowListResults]>(endpoint: .TV_Trending, showList: .Trending))
+        store.dispatch(action: TraktActions.FetchTraktShowList<[TraktShowListResults]>(endpoint: .TV_MostWatchedWeekly, showList: .MostWatchedWeekly))
+        store.dispatch(action: TraktActions.FetchTraktShowList<[TraktShowListResults]>(endpoint: .TV_Anticipated, showList: .Anticipated))
     }
     
     private var noListsLoaded: Bool {
@@ -69,7 +69,7 @@ struct TVCategoryRow: View {
     
     private func getPosterPath(for show: TraktShow) -> String? {
         if let slug = show.ids?.slug {
-            return store.state.tvShowState.slugImages[slug]?.posterPath
+            return store.state.traktState.slugImages[slug]?.posterPath
         }
         
         return nil

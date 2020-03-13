@@ -18,6 +18,7 @@ struct AppState: FluxState, Codable {
     var peopleState: PeopleState
     var movieState: MovieState
     var userState: UserState
+    var traktState: TraktState
     
     init() {
         do {
@@ -29,18 +30,20 @@ struct AppState: FluxState, Codable {
         } catch let error {
             fatalError("Couldn't create save state data with error: \(error)")
         }
-        
+                
         if let data = try? Data(contentsOf: savePath),
             let savedState = try? decoder.decode(AppState.self, from: data) {
             self.tvShowState = savedState.tvShowState
             self.peopleState = savedState.peopleState
             self.movieState = savedState.movieState
             self.userState = savedState.userState
+            self.traktState = savedState.traktState
         } else {
             self.tvShowState = TVShowState()
             self.peopleState = PeopleState()
             self.movieState = MovieState()
             self.userState = UserState()
+            self.traktState = TraktState()
         }
     }
     
@@ -97,6 +100,9 @@ struct AppState: FluxState, Codable {
         // Save Users
         savingState.userState.customLists = userState.customLists
         
+        // Save Trakt State
+        savingState.traktState = traktState
+        
         guard let data = try? encoder.encode(savingState) else {
             return
         }
@@ -104,11 +110,12 @@ struct AppState: FluxState, Codable {
     }
     
     #if DEBUG
-    init(tvShowState: TVShowState, peopleState: PeopleState, movieState: MovieState, userState: UserState) {
+    init(tvShowState: TVShowState, peopleState: PeopleState, movieState: MovieState, userState: UserState, traktState: TraktState) {
         self.tvShowState = tvShowState
         self.peopleState = peopleState
         self.movieState = movieState
         self.userState = userState
+        self.traktState = traktState
     }
     #endif
 }

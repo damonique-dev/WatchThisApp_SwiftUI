@@ -87,7 +87,7 @@ struct TVCategoryRow: View {
                 ScrollView(.horizontal) {
                     HStack {
                         ForEach(shows) { show in
-                            NavigationLink(destination: TVShowDetailView(slug: show.slug!)) {
+                            NavigationLink(destination: TVShowDetailView(slug: show.slug!, showIds: show.ids!)) {
                                 RoundedImageCell(title: show.title!, posterPath: self.getPosterPath(for: show), height: CGFloat(200))
                             }
                         }

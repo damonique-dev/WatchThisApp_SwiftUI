@@ -47,12 +47,21 @@ struct TVShowActions {
                 switch result {
                 case let .success(response):
                     if self.endpoint == TraktApiClient.Endpoint.TV_Seasons(slug: slug) {
-                        dispatch(FetchSeasonImagesFromTMDB(showIds: self.ids, seasons: response as! [TraktSeason]))
-                        dispatch(SetTraktSeasons(showSlug: slug, seasons: response as! [TraktSeason]))
+                        let seasons = response as! [TraktSeason]
+                        dispatch(FetchSeasonImagesFromTMDB(showIds: self.ids, seasons: seasons))
+                        dispatch(SetTraktSeasons(showSlug: slug, seasons: seasons))
                     } else if self.endpoint == TraktApiClient.Endpoint.TV_Cast(slug: slug) {
                         let cast = (response as! TraktPeopleResults).cast
                         dispatch(FetchPeopleImagesFromTMDB(showIds: self.ids, cast: cast))
                         dispatch(SetTraktCast(showSlug: slug, cast: cast))
+                    } else if self.endpoint == TraktApiClient.Endpoint.TV_Related(slug: slug) {
+                        let shows = response as! [TraktShow]
+                        dispatch(FetchImagesFromTMDB(shows: shows))
+                        dispatch(SetTraktRelatedShows(showSlug: slug, shows: shows))
+                    } else if self.endpoint == TraktApiClient.Endpoint.TV_Details(slug: slug) {
+                        let show = response as! TraktShow
+                        dispatch(FetchImagesFromTMDB(shows: [show]))
+                        dispatch(SetTraktShow(slug: slug, traktShow: show))
                     } else {
                         print("Endpoint \"\(self.endpoint.path())\" action not defined.")
                     }
@@ -342,6 +351,11 @@ struct TVShowActions {
     struct SetTraktCast: Action {
         let showSlug: String
         let cast: [TraktCast]
+    }
+    
+    struct SetTraktRelatedShows: Action {
+        let showSlug: String
+        let shows: [TraktShow]
     }
     
     struct SetEntityImages: Action {

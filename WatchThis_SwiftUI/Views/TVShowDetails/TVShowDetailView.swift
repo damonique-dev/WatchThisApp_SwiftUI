@@ -15,20 +15,24 @@ struct TVShowDetailView: View {
     @State private var showVideoPlayer = false
     
     let slug: String
+    let showIds: Ids
     private var showDetail: TraktShow {
         return store.state.tvShowState.traktShows[slug] ?? TraktShow()
     }
     
     private func fetchShowDetails() {
         let showState = store.state.tvShowState
-//        if store.state.tvShowState.traktShows[slug] == nil {
-//            store.dispatch(action: TVShowActions.FetchTraktShow(slug: slug))
-//        }
+        if store.state.tvShowState.traktShows[slug] == nil {
+            store.dispatch(action: TVShowActions.FetchFromTraktApi<TraktShow>(ids: showIds, endpoint: .TV_Details(slug: slug)))
+        }
         if showState.traktShowCast[slug] == nil {
-            store.dispatch(action: TVShowActions.FetchFromTraktApi<TraktPeopleResults>(ids: showDetail.ids!, endpoint: .TV_Cast(slug: slug)))
+            store.dispatch(action: TVShowActions.FetchFromTraktApi<TraktPeopleResults>(ids: showIds, endpoint: .TV_Cast(slug: slug)))
         }
         if showState.traktSeasons[slug] == nil {
-            store.dispatch(action: TVShowActions.FetchFromTraktApi<[TraktSeason]>(ids: showDetail.ids!, endpoint: .TV_Seasons(slug: slug), extendedInfo: true))
+            store.dispatch(action: TVShowActions.FetchFromTraktApi<[TraktSeason]>(ids: showIds, endpoint: .TV_Seasons(slug: slug), extendedInfo: true))
+        }
+        if showState.traktRelatedShows[slug] == nil {
+            store.dispatch(action: TVShowActions.FetchFromTraktApi<[TraktShow]>(ids: showIds, endpoint: .TV_Related(slug: slug), extendedInfo: true))
         }
     }
     
@@ -46,7 +50,7 @@ struct TVShowDetailView: View {
         
     var body: some View {
         DetailView(id: 0, title: showDetail.title ?? "", itemType: .TVShow, video: video, imagePath: posterPath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
-            TVDetailScrollView(showActionSheet: self.$showActionSheet, showVideoPlayer: self.$showVideoPlayer, showDetail: self.showDetail, slug: self.slug)
+            TVDetailScrollView(showActionSheet: self.$showActionSheet, showVideoPlayer: self.$showVideoPlayer, slug: self.slug)
         }.onAppear() {
             self.fetchShowDetails()
         }

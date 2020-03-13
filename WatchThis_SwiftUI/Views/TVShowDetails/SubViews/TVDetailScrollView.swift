@@ -13,14 +13,16 @@ struct TVDetailScrollView: View {
     @EnvironmentObject var store: Store<AppState>
     @Binding var showActionSheet: Bool
     @Binding var showVideoPlayer: Bool
-    let showDetail: TraktShow
     let slug: String
     
+    private var showDetail: TraktShow {
+        return store.state.tvShowState.traktShows[slug] ?? TraktShow()
+    }
     private var cast: [TraktCast] {
         return store.state.tvShowState.traktShowCast[slug] ?? []
     }
-    private var similarShows: [TVShowDetails] {
-        return []
+    private var similarShows: [TraktShow] {
+        return store.state.tvShowState.traktRelatedShows[slug] ?? []
     }
     private var seasons: [TraktSeason] {
         return store.state.tvShowState.traktSeasons[slug] ?? []
@@ -46,6 +48,10 @@ struct TVDetailScrollView: View {
         }
         
         return nil
+    }
+    
+    private func getPosterPath(for show: TraktShow) -> String? {
+        return store.state.tvShowState.slugImages[show.slug!]?.posterPath
     }
     
     private var hasVideo: Bool {
@@ -97,11 +103,11 @@ struct TVDetailScrollView: View {
                         }
                     }
                     if similarShows.count > 0 {
-                        DetailCategoryRow(categoryTitle: "Similar Shows") {
+                        DetailCategoryRow(categoryTitle: "Related Shows") {
                             ForEach(self.similarShows) { show in
-//                                NavigationLink(destination: TVShowDetailView(showId: show.id)) {
-                                    RoundedImageCell(title: show.name, posterPath: show.posterPath, height: CGFloat(125))
-//                                }
+                                NavigationLink(destination: TVShowDetailView(slug: show.slug!, showIds: show.ids!)) {
+                                    RoundedImageCell(title: show.title ?? "", posterPath: self.getPosterPath(for: show), height: CGFloat(125))
+                                }
                             }
                         }
                     }

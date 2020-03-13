@@ -48,6 +48,8 @@ extension TraktApiClient {
         case TV_Anticipated
         case TV_Seasons(slug: String)
         case TV_Cast(slug: String)
+        case TV_Related(slug: String)
+        case TV_Details(slug: String)
         
         // Movie Endpoints
         case Movie_Trending
@@ -68,10 +70,15 @@ extension TraktApiClient {
                     return "/shows/watched/weekly"
                 case .TV_Anticipated:
                     return "/shows/anticipated"
+                case let .TV_Details(slug):
+                    return "/shows/\(slug)"
                 case let .TV_Seasons(slug):
                     return "/shows/\(slug)/seasons"
                 case let .TV_Cast(slug):
                     return "/shows/\(slug)/people"
+                case let .TV_Related(slug):
+                    return "/shows/\(slug)/related"
+                
                 
                 case .Movie_Trending:
                         return "/movies/trending"

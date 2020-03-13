@@ -47,6 +47,10 @@ func tvShowReducer(state: TVShowState, action: Action) -> TVShowState {
             state.traktImages[action.entity]![action.tmdbId] = action.slugImage
         case let action as TVShowActions.SetTraktCast:
             state.traktShowCast[action.showSlug] = action.cast
+        case let action as TVShowActions.SetTraktRelatedShows:
+            state.traktRelatedShows[action.showSlug] = action.shows
+        case let action as TVShowActions.SetTraktShow:
+            state.traktShows[action.slug] = action.traktShow
         default:
             break
     }

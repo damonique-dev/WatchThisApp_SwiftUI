@@ -35,6 +35,11 @@ func traktReducer(state: TraktState, action: Action) -> TraktState {
             state.traktShows[action.slug] = action.show
         case let action as TraktActions.SetPersonShowCredits:
             state.personShowCredits[action.slug] = action.credit
+        case let action as TraktActions.SetEpisodes:
+            if state.traktEpisodes[action.showSlug] == nil {
+                state.traktEpisodes[action.showSlug] = [:]
+            }
+            state.traktEpisodes[action.showSlug]![action.seasonNumber] = action.episodes
         default:
             break
     }

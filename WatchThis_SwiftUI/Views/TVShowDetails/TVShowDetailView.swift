@@ -16,8 +16,8 @@ struct TVShowDetailView: View {
     
     let slug: String
     let showIds: Ids
-    private var showDetail: TraktShow {
-        return store.state.traktState.traktShows[slug] ?? TraktShow()
+    private var showDetail: TraktShow? {
+        return store.state.traktState.traktShows[slug]
     }
     
     private func fetchShowDetails() {
@@ -49,7 +49,7 @@ struct TVShowDetailView: View {
     }
         
     var body: some View {
-        DetailView(id: 0, title: showDetail.title ?? "", itemType: .TVShow, video: video, imagePath: posterPath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
+        DetailView(id: 0, title: showDetail?.title ?? "", itemType: .TVShow, video: video, imagePath: posterPath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
             TVDetailScrollView(showActionSheet: self.$showActionSheet, showVideoPlayer: self.$showVideoPlayer, slug: self.slug)
         }.onAppear() {
             self.fetchShowDetails()

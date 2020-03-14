@@ -96,7 +96,7 @@ struct PeopleActions {
         let credits: [TraktShowCredits]
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             for credit in credits {
-                if let appState = state as? AppState, let tmdbId = credit.show.ids?.tmdb, let slug = credit.show.ids?.slug {
+                if let appState = state as? AppState, let tmdbId = credit.show.ids.tmdb, let slug = credit.show.ids.slug {
                     // Only fetch images if not already in state.
                     if appState.tvShowState.slugImages[slug] == nil {
                         TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.TV_ShowDetails(id: tmdbId), params: TMDB_Parameters)

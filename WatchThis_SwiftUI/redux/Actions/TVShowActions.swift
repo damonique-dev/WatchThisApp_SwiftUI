@@ -77,7 +77,7 @@ struct TVShowActions {
         let shows: [TraktShow]
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             for show in shows {
-                if let appState = state as? AppState, let tmdbId = show.ids?.tmdb, let slug = show.ids?.slug {
+                if let appState = state as? AppState, let tmdbId = show.ids.tmdb, let slug = show.ids.slug {
                     // Only fetch images if not already in state.
                     if appState.tvShowState.slugImages[slug] == nil {
                         TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.TV_ShowDetails(id: tmdbId), params: TMDB_Parameters)

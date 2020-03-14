@@ -77,11 +77,28 @@ struct TraktActions {
         }
     }
     
+    struct FetchSeasonEpisodes: AsyncAction {
+        let showIds: Ids
+        let seasonNumber: Int
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            TraktApiClient.sharedInstance().GET(endpoint: .TV_TVSeasonEpisodes(slug: showIds.slug!, seasonNumber: seasonNumber), params: Trakt_Parameters) { (result: Result<[TraktEpisode], APIError>) in
+                switch result {
+                case let .success(response):
+                    dispatch(SetEpisodes(showSlug: self.showIds.slug!, seasonNumber: self.seasonNumber, episodes: response))
+                    dispatch(FetchEpisodeImagesFromTMDB(showTmdbId: self.showIds.tmdb!, seasonNumber: self.seasonNumber, episodes: response))
+                case let .failure(error):
+                    print(error)
+                    break
+                }
+            }
+        }
+    }
+    
     struct FetchImagesFromTMDB: AsyncAction {
         let shows: [TraktShow]
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             for show in shows {
-                if let appState = state as? AppState, let tmdbId = show.ids?.tmdb, let slug = show.ids?.slug {
+                if let appState = state as? AppState, let tmdbId = show.ids.tmdb, let slug = show.ids.slug {
                     // Only fetch images if not already in state.
                     if appState.tvShowState.slugImages[slug] == nil {
                         TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.TV_ShowDetails(id: tmdbId), params: TMDB_Parameters)
@@ -152,6 +169,32 @@ struct TraktActions {
         }
     }
     
+    struct FetchEpisodeImagesFromTMDB: AsyncAction {
+        let showTmdbId: Int
+        let seasonNumber: Int
+        let episodes: [TraktEpisode]
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            for episode in episodes {
+                if let appState = state as? AppState, let tmdbId = episode.ids.tmdb {
+                    // Only fetch images if not already in state.
+                    if appState.tvShowState.traktImages[.Season]?[tmdbId] == nil {
+                        TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.TV_Episode_Details(id: showTmdbId, seasonNum: seasonNumber, episodeNum: episode.number), params: TMDB_Parameters)
+                        {
+                            (result: Result<Episode, APIError>) in
+                            switch result {
+                            case let .success(response):
+                                dispatch(SetEntityImages(entity: .Episode, tmdbId: tmdbId, slugImage: .init(backgroundPath: nil, posterPath: response.stillPath)))
+                            case let .failure(error):
+                                print(error)
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     struct SetTVShowList: Action {
         let list: TVShowList
         let shows: [TraktShow]
@@ -175,6 +218,12 @@ struct TraktActions {
     struct SetSeasons: Action {
         let showSlug: String
         let seasons: [TraktSeason]
+    }
+    
+    struct SetEpisodes: Action {
+        let showSlug: String
+        let seasonNumber: Int
+        let episodes: [TraktEpisode]
     }
     
     struct SetCast: Action {

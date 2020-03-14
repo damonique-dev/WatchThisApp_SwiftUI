@@ -25,24 +25,24 @@ struct TraktList: Codable {
 
 struct TraktShow: Codable, Identifiable {
     let id = UUID()
-    var title: String?
-    var year: Int?
-    var ids: Ids?
-    var overview: String?
-    var firstAired: String?
-    var airs: AirDate?
-    var runtime: Int?
-    var certification: String?
-    var network: String?
-    var trailer: String?
-    var homepage: String?
-    var status: String? // TODO: Change to enum and use icons
-    var rating: Double?
-    var airedEpisodes: Int?
-    var genres: [String]?
+    let title: String?
+    let year: Int?
+    let ids: Ids
+    let overview: String?
+    let firstAired: String?
+    let airs: AirDate?
+    let runtime: Int?
+    let certification: String?
+    let network: String?
+    let trailer: String?
+    let homepage: String?
+    let status: String? // TODO: Change to enum and use icons
+    let rating: Double?
+    let airedEpisodes: Int?
+    let genres: [String]?
     
     var slug: String? {
-        return ids!.slug
+        return ids.slug
     }
 }
 
@@ -55,6 +55,18 @@ struct TraktSeason: Codable, Identifiable {
     let title: String?
     let overview: String?
     let firstAired: String?
+}
+
+struct TraktEpisode: Codable, Identifiable {
+    let id = UUID()
+    let season: Int
+    let number: Int
+    let title: String?
+    let ids: Ids
+    let overview: String?
+    let rating: Double?
+    let firstAired: String?
+    let runtime: Int?
 }
 
 struct TraktPeopleResults: Codable {

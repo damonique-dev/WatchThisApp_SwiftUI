@@ -51,7 +51,7 @@ struct TVDetailScrollView: View {
     }
     
     private func getPosterPath(for show: TraktShow) -> String? {
-        return store.state.traktState.slugImages[show.slug!]?.posterPath
+        return store.state.traktState.slugImages[show.slug]?.posterPath
     }
     
     private var hasVideo: Bool {
@@ -71,7 +71,7 @@ struct TVDetailScrollView: View {
             .init(title: "Rating:", detail: showDetail?.certification),
 //            .init(title: "Next Air Date:", detail: showDetail.nextEpisodeToAir?.airDate),
             .init(title: "First Air Date:", detail: showDetail?.firstAired?.fromISOtoDateString(format: "EEEE, MMMM d yyyy")),
-//            .init(title: "Number of Seasons:", detail: getNumberStringOf(showDetail.numberOfSeasons)),
+            .init(title: "Number of Seasons:", detail: seasons.count == 0 ? nil : "\(seasons.count)"),
             .init(title: "Number of Episodes:", detail: getNumberStringOf(showDetail?.airedEpisodes)),
             .init(title: "Runtime:", detail: getRuntime()),
             .init(title: "Genres:", detail: getGenreList()),
@@ -105,7 +105,7 @@ struct TVDetailScrollView: View {
                     if similarShows.count > 0 {
                         DetailCategoryRow(categoryTitle: "Related Shows") {
                             ForEach(self.similarShows) { show in
-                                NavigationLink(destination: TVShowDetailView(slug: show.slug!, showIds: show.ids)) {
+                                NavigationLink(destination: TVShowDetailView(slug: show.slug, showIds: show.ids)) {
                                     RoundedImageCell(title: show.title ?? "", posterPath: self.getPosterPath(for: show), height: CGFloat(125))
                                 }
                             }

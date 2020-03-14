@@ -48,60 +48,49 @@ struct AppState: FluxState, Codable {
     }
     
     func archiveState() {
-        let shows = tvShowState.tvShow.filter { (arg) -> Bool in
-            let (key, _) = arg
+        let shows = traktState.traktShows.filter { (arg) -> Bool in
+            let (_, show) = arg
             for list in Array(userState.customLists.values) {
                 if list.items.contains(where: { (id, item) in
-                    return id == key && item.itemType == .TVShow
+                    return id == show.slug && item.itemType == .TVShow
                 }) {
                     return true
                 }
             }
-            return tvShowState.favoriteShows.contains(key)
+            return false
         }
-        let movies = movieState.movieDetails.filter { (arg) -> Bool in
-            let (key, _) = arg
+//        let movies = movieState.movieDetails.filter { (arg) -> Bool in
+//            let (key, _) = arg
+//            for list in Array(userState.customLists.values) {
+//                if list.items.contains(where: { (id, item) in
+//                    return id == key && item.itemType == .TVShow
+//                }) {
+//                    return true
+//                }
+//            }
+//            return movieState.favoriteMovies.contains(key)
+//        }
+        let people = traktState.people.filter { (arg) -> Bool in
+            let (_, person) = arg
             for list in Array(userState.customLists.values) {
                 if list.items.contains(where: { (id, item) in
-                    return id == key && item.itemType == .TVShow
+                    return id == person.slug && item.itemType == .TVShow
                 }) {
                     return true
                 }
             }
-            return movieState.favoriteMovies.contains(key)
+            return false
         }
-        let people = peopleState.people.filter { (arg) -> Bool in
-            let (key, _) = arg
-            for list in Array(userState.customLists.values) {
-                if list.items.contains(where: { (id, item) in
-                    return id == key && item.itemType == .TVShow
-                }) {
-                    return true
-                }
-            }
-            return peopleState.favoritePeople.contains(key)
-        }
+
         var savingState = AppState()
-        
-        // Save Shows
-        savingState.tvShowState.tvShow = shows
-        savingState.tvShowState.favoriteShows = tvShowState.favoriteShows
-        savingState.tvShowState.tvSearchQueries = tvShowState.tvSearchQueries
-        
-        // Save Movies
-        savingState.movieState.movieDetails = movies
-        savingState.movieState.favoriteMovies = movieState.favoriteMovies
-        savingState.movieState.movieSearchQueries = movieState.movieSearchQueries
-        
-        // Save People
-        savingState.peopleState.people = people
-        savingState.peopleState.favoritePeople = peopleState.favoritePeople
         
         // Save Users
         savingState.userState.customLists = userState.customLists
         
         // Save Trakt State
-        savingState.traktState = traktState
+        savingState.traktState.traktShows = shows
+//        savingState.traktState.traktMovies = movies
+        savingState.traktState.people = people
         
         guard let data = try? encoder.encode(savingState) else {
             return

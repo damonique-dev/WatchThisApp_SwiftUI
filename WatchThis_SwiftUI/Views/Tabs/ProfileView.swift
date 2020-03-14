@@ -56,16 +56,17 @@ struct CustomListRow: View {
         for item in Array(customList.items.values) {
             switch item.itemType {
             case .TVShow:
-                let detail = store.state.tvShowState.tvShowDetail[item.id]
-                items.append(ListItemIdAndImagePath(itemType: .TVShow, itemId: item.id, itemName:detail?.name, imagePath: detail?.posterPath))
+                let detail = store.state.traktState.traktShows[item.slug]!
+                let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
+                items.append(ListItemIdAndImagePath(itemType: .TVShow, slug: item.slug, ids: detail.ids, itemName:detail.title, imagePath: posterPath))
                 break
             case .Movie:
-                let detail = store.state.movieState.movieDetails[item.id]
-                items.append(ListItemIdAndImagePath(itemType: .Movie, itemId: item.id, itemName:detail?.title, imagePath: detail?.posterPath))
+//                let detail = store.state.movieState.movieDetails[item.slug]
+//                items.append(ListItemIdAndImagePath(itemType: .Movie, itemId: item.id, itemName:detail?.title, imagePath: detail?.posterPath))
                 break
             case .Person:
-                let detail = store.state.peopleState.people[item.id]
-                items.append(ListItemIdAndImagePath(itemType: .Person, itemId: item.id, itemName:detail?.name, imagePath: detail?.profilePath))
+//                let detail = store.state.traktState.
+//                items.append(ListItemIdAndImagePath(itemType: .Person, itemId: item.id, itemName:detail?.name, imagePath: detail?.profilePath))
                 break
             }
         }
@@ -104,14 +105,14 @@ struct CustomListRowCell: View {
     var body: some View {
         VStack {
             if item.itemType == ItemType.TVShow {
-//                NavigationLink(destination: TVShowDetailView(showId: item.itemId)) {
-                    RoundedImageCell(title: item.itemName ?? "", posterPath: item.imagePath, height: CGFloat(200))
-//                }
-            }
-            if item.itemType == ItemType.Movie {
-                NavigationLink(destination: MovieDetailsView(movieId: item.itemId)) {
+                NavigationLink(destination: TVShowDetailView(slug: item.slug, showIds: item.ids)) {
                     RoundedImageCell(title: item.itemName ?? "", posterPath: item.imagePath, height: CGFloat(200))
                 }
+            }
+            if item.itemType == ItemType.Movie {
+//                NavigationLink(destination: MovieDetailsView(movieId: item.itemId)) {
+                    RoundedImageCell(title: item.itemName ?? "", posterPath: item.imagePath, height: CGFloat(200))
+//                }
             }
             if item.itemType == ItemType.Person {
 //                NavigationLink(destination: PersonDetailsView(personId: item.itemId, personName: item.itemName ?? "")) {
@@ -124,7 +125,8 @@ struct CustomListRowCell: View {
 
 struct ListItemIdAndImagePath: Identifiable {
     let itemType: ItemType
-    let itemId: Int
+    let slug: String
+    let ids: Ids
     let itemName: String?
     let imagePath: String?
     

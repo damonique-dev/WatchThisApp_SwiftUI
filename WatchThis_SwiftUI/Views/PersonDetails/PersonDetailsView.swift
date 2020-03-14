@@ -34,7 +34,7 @@ struct PersonDetailsView: View {
     }
         
     var body: some View {
-        DetailView(id: personDetails.ids.tmdb ?? 0, title: personDetails.name ?? "", itemType: .Person, video: nil, imagePath: profilePath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
+        DetailView(slug: personDetails.ids.slug!, title: personDetails.name ?? "", itemType: .Person, imagePath: profilePath, trailerPath: nil, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
             PersonDetailScrollView(showActionSheet: self.$showActionSheet, personDetails: self.personDetails)
         }
         .onAppear() {

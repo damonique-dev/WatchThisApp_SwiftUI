@@ -27,6 +27,7 @@ struct TraktState: FluxState, Codable {
     var traktSeasons: [String: [TraktSeason]] = [:]
     var traktEpisodes: [String: [Int: [TraktEpisode]]] = [:]
     var traktRelatedShows: [String: [TraktShow]] = [:]
+    var people: [String: TraktPerson] = [:]
     
     var tvLists: [TVShowList : [TraktShow]] = [:]
     

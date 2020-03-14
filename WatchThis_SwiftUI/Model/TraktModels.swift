@@ -41,8 +41,8 @@ struct TraktShow: Codable, Identifiable {
     let airedEpisodes: Int?
     let genres: [String]?
     
-    var slug: String? {
-        return ids.slug
+    var slug: String {
+        return ids.slug!
     }
 }
 
@@ -88,6 +88,10 @@ struct TraktPerson: Codable, Identifiable {
     let birthday: String?
     let death: String?
     let birthplace: String?
+    
+    var slug: String {
+        return ids.slug!
+    }
 }
 
 struct TraktShowCreditsResults: Codable {

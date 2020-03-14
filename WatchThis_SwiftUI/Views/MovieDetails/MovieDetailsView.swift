@@ -34,7 +34,7 @@ struct MovieDetailsView: View {
     }
         
     var body: some View {
-        DetailView(id: movieId, title: movieDetails.title, itemType: .Movie, video: video, imagePath: movieDetails.posterPath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
+        DetailView(slug: "", title: movieDetails.title, itemType: .Movie, imagePath: movieDetails.posterPath, trailerPath: nil, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
             MovieDetailsScrollView(showActionSheet: self.$showActionSheet, showVideoPlayer: self.$showVideoPlayer, movieDetails: self.movieDetails)
         }.onAppear() {
             self.fetchMovieDetails()

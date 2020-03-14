@@ -11,11 +11,12 @@ import Foundation
 struct CustomList: Codable, Identifiable {
     var id: UUID
     var listName: String
-    var items: [Int: ListItem] = [:]
+    var items: [String: ListItem] = [:]
 }
 
 struct ListItem: Codable, Identifiable {
-    let id: Int
+    let id = UUID()
+    let slug: String
     let itemType: ItemType
 }
 

@@ -39,17 +39,9 @@ struct TVShowDetailView: View {
     private var posterPath: String? {
         return store.state.traktState.slugImages[slug]?.posterPath
     }
-    
-    private var video: Video? {
-//        if let videos = showDetail.trailer, {
-//            return videos[0]
-//        }
-        
-        return nil
-    }
         
     var body: some View {
-        DetailView(id: 0, title: showDetail?.title ?? "", itemType: .TVShow, video: video, imagePath: posterPath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
+        DetailView(slug: slug, title: showDetail?.title ?? "", itemType: .TVShow, imagePath: posterPath, trailerPath: showDetail?.trailer, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
             TVDetailScrollView(showActionSheet: self.$showActionSheet, showVideoPlayer: self.$showVideoPlayer, slug: self.slug)
         }.onAppear() {
             self.fetchShowDetails()

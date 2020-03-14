@@ -19,27 +19,27 @@ struct DetailView<Content: View>: View {
     @Binding var showActionSheet: Bool
     @Binding var showVideoPlayer: Bool
     
-    let id: Int
+    let slug: String
     let title: String
     let itemType: ItemType
-    let video: Video?
     let imagePath: String?
+    let trailerPath: String?
     let viewBuilder: () -> Content
     
-    init(id: Int, title: String, itemType: ItemType, video: Video?, imagePath: String?, showActionSheet: Binding<Bool> , showVideoPlayer: Binding<Bool>, @ViewBuilder builder: @escaping () -> Content) {
-        self.id = id
+    init(slug: String, title: String, itemType: ItemType, imagePath: String?, trailerPath: String?, showActionSheet: Binding<Bool> , showVideoPlayer: Binding<Bool>, @ViewBuilder builder: @escaping () -> Content) {
+        self.slug = slug
         self.itemType = itemType
         self.title = title
-        self.video = video
         self.imagePath = imagePath
         self._showActionSheet = showActionSheet
         self._showVideoPlayer = showVideoPlayer
         self.viewBuilder = builder
+        self.trailerPath = trailerPath
     }
     
     lazy var computedActionSheet: CustomListActionSheet = {
         let customLists = Array(store.state.userState.customLists.values)
-        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, showCustomListAlert: $showCustomListAlert, customLists: customLists, objectName: title, objectId: id, itemType: .TVShow)
+        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, showCustomListAlert: $showCustomListAlert, customLists: customLists, objectName: title, slug: slug, itemType: .TVShow)
     }()
     
     private var actionSheet: CustomListActionSheet {
@@ -53,8 +53,8 @@ struct DetailView<Content: View>: View {
             VStack {
                 viewBuilder()
             }
-            if showVideoPlayer && video != nil {
-                VideoPlayerView(showPlayer: $showVideoPlayer, video: video)
+            if showVideoPlayer && trailerPath != nil {
+                VideoPlayerView(showPlayer: $showVideoPlayer, trailerPath: trailerPath)
             }
         }
         .padding(.vertical, 44)
@@ -63,7 +63,7 @@ struct DetailView<Content: View>: View {
             let newListUUID = UUID()
             self.customListModel.response.listName = newListName
             self.store.dispatch(action: UserActions.CreateNewCustomList(listName: newListName, uuid: newListUUID))
-            self.store.dispatch(action: UserActions.AddToCustomList(customListUUID: newListUUID, itemType: self.itemType, itemId: self.id))
+            self.store.dispatch(action: UserActions.AddToCustomList(customListUUID: newListUUID, itemType: self.itemType, slug: self.slug))
             self.showCustomListConfirmation = true
         })
         .actionSheet(isPresented: $showActionSheet) {

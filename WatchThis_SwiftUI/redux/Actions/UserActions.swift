@@ -18,12 +18,12 @@ struct UserActions {
     struct AddToCustomList: Action {
         let customListUUID: UUID
         let itemType: ItemType
-        let itemId: Int
+        let slug: String
     }
     
     struct RemoveFromCustomList: Action {
         let customListUUID: UUID
         let itemType: ItemType
-        let itemId: Int
+        let slug: String
     }
 }

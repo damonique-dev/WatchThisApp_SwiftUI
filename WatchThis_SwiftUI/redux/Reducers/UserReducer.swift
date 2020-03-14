@@ -14,9 +14,9 @@ func userReducer(state: UserState, action: Action) -> UserState {
     
     switch(action) {
         case let action as UserActions.AddToCustomList:
-            state.customLists[action.customListUUID]?.items[action.itemId] = ListItem(id: action.itemId, itemType: action.itemType)
+            state.customLists[action.customListUUID]?.items[action.slug] = ListItem(slug: action.slug, itemType: action.itemType)
         case let action as UserActions.RemoveFromCustomList:
-            state.customLists[action.customListUUID]?.items.removeValue(forKey: action.itemId)
+            state.customLists[action.customListUUID]?.items.removeValue(forKey: action.slug)
         case let action as UserActions.CreateNewCustomList:
             state.customLists[action.uuid] = CustomList(id: action.uuid, listName: action.listName)
         default:

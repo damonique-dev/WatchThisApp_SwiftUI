@@ -36,10 +36,7 @@ struct PersonDetailScrollView: View {
     }
     
     private func tvCreditPosterPath(credit: TraktShowCredits) -> String? {
-        guard let slug = credit.show.slug else {
-            return nil
-        }
-        return store.state.traktState.slugImages[slug]?.posterPath
+        return store.state.traktState.slugImages[credit.show.slug]?.posterPath
     }
     
     private func getEpisodeCountText(credit: TraktShowCredits) -> String {
@@ -78,7 +75,7 @@ struct PersonDetailScrollView: View {
                     if tvCredits.count > 0 {
                         DetailCategoryRow(categoryTitle: "TV Credits") {
                             ForEach(self.tvCredits) { credit in
-                                NavigationLink(destination: TVShowDetailView(slug: credit.show.slug!, showIds: credit.show.ids)) {
+                                NavigationLink(destination: TVShowDetailView(slug: credit.show.slug, showIds: credit.show.ids)) {
                                     PersonCreditCell(posterPath: self.tvCreditPosterPath(credit: credit), imageText: credit.show.title, title: self.getEpisodeCountText(credit: credit), subTitle: credit.character)
                                 }
                             }

@@ -17,14 +17,14 @@ struct CustomListContent: Identifiable {
     var shouldCreateNewList = false
     var listName: String?
     let listId: UUID
-    let itemId: Int
+    let slug: String
     let itemType: ItemType
 }
 
 class CustomListModel: ObservableObject {
     let didChange = PassthroughSubject<CustomListContent, Never>()
     
-    @Published var response = CustomListContent(listId: UUID(), itemId: -1, itemType: .Movie) {
+    @Published var response = CustomListContent(listId: UUID(), slug: "", itemType: .Movie) {
         willSet {
             DispatchQueue.main.async {
                 self.didChange.send(newValue)
@@ -36,7 +36,7 @@ class CustomListModel: ObservableObject {
     init() {
         cancellable = didChange.eraseToAnyPublisher()
             .map {$0}
-            .filter { $0.itemId != -1 }
+            .filter { !$0.slug.isEmpty }
             .sink(receiveValue: { (response) in
                 if response.shouldAdd {
                     self.addToCustomList(response: response)
@@ -49,11 +49,11 @@ class CustomListModel: ObservableObject {
     }
     
     func addToCustomList(response: CustomListContent) {
-        store.dispatch(action: UserActions.AddToCustomList(customListUUID: response.listId, itemType: response.itemType, itemId: response.itemId))
+        store.dispatch(action: UserActions.AddToCustomList(customListUUID: response.listId, itemType: response.itemType, slug: response.slug))
     }
     
     func removeFromCustomList(response: CustomListContent) {
-        store.dispatch(action: UserActions.RemoveFromCustomList(customListUUID: response.listId, itemType: response.itemType, itemId: response.itemId))
+        store.dispatch(action: UserActions.RemoveFromCustomList(customListUUID: response.listId, itemType: response.itemType, slug: response.slug))
     }
     
     deinit {

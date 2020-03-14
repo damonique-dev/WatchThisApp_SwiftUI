@@ -12,7 +12,7 @@ import youtube_ios_player_helper
 
 struct VideoPlayerView: View {
     @Binding var showPlayer: Bool
-    let video: Video?
+    let trailerPath: String?
     
     var body: some View {
         ZStack {
@@ -23,7 +23,7 @@ struct VideoPlayerView: View {
                         .font(.system(size: 60))
                         .foregroundColor(.orange)
                 }.padding(.leading, 8)
-                VideoPlayerRepresentable(showPlayer: $showPlayer, video: video)
+                VideoPlayerRepresentable(showPlayer: $showPlayer, trailerPath: trailerPath)
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width * 9/16)
             }
         }

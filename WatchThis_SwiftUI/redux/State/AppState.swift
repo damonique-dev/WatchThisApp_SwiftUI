@@ -51,7 +51,7 @@ struct AppState: FluxState, Codable {
         let shows = traktState.traktShows.filter { (arg) -> Bool in
             let (_, show) = arg
             for list in Array(userState.customLists.values) {
-                if list.items.contains(where: { (id, item) in
+                if list.traktItems.contains(where: { (id, item) in
                     return id == show.slug && item.itemType == .TVShow
                 }) {
                     return true
@@ -73,7 +73,7 @@ struct AppState: FluxState, Codable {
         let people = traktState.people.filter { (arg) -> Bool in
             let (_, person) = arg
             for list in Array(userState.customLists.values) {
-                if list.items.contains(where: { (id, item) in
+                if list.traktItems.contains(where: { (id, item) in
                     return id == person.slug && item.itemType == .TVShow
                 }) {
                     return true

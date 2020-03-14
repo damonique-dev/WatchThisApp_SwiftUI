@@ -34,7 +34,7 @@ struct CustomListActionSheet {
         
         // Add/ Remove from existing lists buttons
         for list in customLists {
-            if list.items[slug] != nil {
+            if list.traktItems[slug] != nil {
                 buttonList.append(ActionSheet.Button.default(Text("Remove \"\(objectName)\" from \(list.listName)"), action: {
                     self.customListModel.response = CustomListContent(shouldRemove: true, listName: list.listName, listId: list.id, slug: self.slug, itemType: self.itemType)
                     self.showCustomListConfirmation = true

@@ -39,7 +39,7 @@ struct DetailView<Content: View>: View {
     
     lazy var computedActionSheet: CustomListActionSheet = {
         let customLists = Array(store.state.userState.customLists.values)
-        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, showCustomListAlert: $showCustomListAlert, customLists: customLists, objectName: title, slug: slug, itemType: .TVShow)
+        return CustomListActionSheet(customListModel: customListModel, showCustomListConfirmation: $showCustomListConfirmation, showCustomListAlert: $showCustomListAlert, customLists: customLists, objectName: title, slug: slug, itemType: self.itemType)
     }()
     
     private var actionSheet: CustomListActionSheet {

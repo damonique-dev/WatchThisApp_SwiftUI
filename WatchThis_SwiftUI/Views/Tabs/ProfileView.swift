@@ -65,8 +65,9 @@ struct CustomListRow: View {
 //                items.append(ListItemIdAndImagePath(itemType: .Movie, itemId: item.id, itemName:detail?.title, imagePath: detail?.posterPath))
                 break
             case .Person:
-//                let detail = store.state.traktState.
-//                items.append(ListItemIdAndImagePath(itemType: .Person, itemId: item.id, itemName:detail?.name, imagePath: detail?.profilePath))
+                let detail = store.state.traktState.people[item.slug]!
+                let posterPath = store.state.traktState.traktImages[.Person]?[detail.ids.tmdb!]?.posterPath
+                items.append(ListItemIdAndImagePath(itemType: .Person, slug: item.slug, ids: detail.ids, itemName:detail.name, imagePath: posterPath))
                 break
             }
         }
@@ -100,6 +101,7 @@ struct CustomListRow: View {
 }
 
 struct CustomListRowCell: View {
+    @EnvironmentObject var store: Store<AppState>
     let item: ListItemIdAndImagePath
     
     var body: some View {
@@ -115,9 +117,9 @@ struct CustomListRowCell: View {
 //                }
             }
             if item.itemType == ItemType.Person {
-//                NavigationLink(destination: PersonDetailsView(personId: item.itemId, personName: item.itemName ?? "")) {
+                NavigationLink(destination: PersonDetailsView(personDetails: store.state.traktState.people[item.slug]!)) {
                     RoundedImageCell(title: item.itemName ?? "", posterPath: item.imagePath, height: CGFloat(200))
-//                }
+                }
             }
         }
     }

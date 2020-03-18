@@ -8,13 +8,19 @@
 
 import Foundation
 
+enum TVShowList: String, Codable {
+    case Popular
+    case Trending
+    case MostWatchedWeekly
+    case Anticipated
+}
+
 struct TraktShowListResults: Codable {
     var show: TraktShow?
 }
 
 struct TraktMovieListResults: Codable {
-    var movie: TraktList?
-    var revenue: Int?
+    var movie: TraktMovie?
 }
 
 struct TraktList: Codable {
@@ -67,6 +73,28 @@ struct TraktEpisode: Codable, Identifiable {
     let rating: Double?
     let firstAired: String?
     let runtime: Int?
+}
+
+struct TraktMovie: Codable, Identifiable {
+    let id = UUID()
+    let title: String?
+    let year: Int?
+    let ids: Ids
+    let tagline: String?
+    let overview: String?
+    let released: String?
+    let runtime: Int?
+    let certification: String?
+    let network: String?
+    let trailer: String?
+    let homepage: String?
+    let status: String? // TODO: Change to enum and use icons
+    let rating: Double?
+    let genres: [String]?
+    
+    var slug: String {
+        return ids.slug!
+    }
 }
 
 struct TraktPeopleResults: Codable {
@@ -132,6 +160,6 @@ struct TraktImages: Codable {
 
 struct TraktSearchResult: Codable {
     var show: TraktShow?
-//    var movie: TraktMovie?
+    var movie: TraktMovie?
     var person: TraktPerson?
 }

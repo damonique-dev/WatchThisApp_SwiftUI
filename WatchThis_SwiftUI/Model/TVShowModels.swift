@@ -92,13 +92,6 @@ struct Episode: Codable, Identifiable {
     }
 }
 
-enum TVShowList: String, Codable {
-    case Popular
-    case Trending
-    case MostWatchedWeekly
-    case Anticipated
-}
-
 #if DEBUG
 let testTVShowDetail = TVShowDetails(
     id: 1416,

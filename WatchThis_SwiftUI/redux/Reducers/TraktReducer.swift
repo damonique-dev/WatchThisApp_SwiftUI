@@ -15,9 +15,8 @@ func traktReducer(state: TraktState, action: Action) -> TraktState {
     switch(action) {
         case let action as TraktActions.SetTVShowList:
             state.tvLists[action.list] = action.shows
-            for show in action.shows {
-                state.traktShows[show.slug] = show
-            }
+        case let action as TraktActions.SetMovieList:
+            state.movieLists[action.list] = action.movies
         case let action as TraktActions.SetSlugImage:
             state.slugImages[action.slug] = action.slugImage
         case let action as TraktActions.SetSeasons:
@@ -37,6 +36,8 @@ func traktReducer(state: TraktState, action: Action) -> TraktState {
             state.traktRelatedShows[action.showSlug] = action.shows
         case let action as TraktActions.SetShow:
             state.traktShows[action.slug] = action.show
+        case let action as TraktActions.SetMovie:
+            state.traktMovies[action.slug] = action.movie
         case let action as TraktActions.SetPersonShowCredits:
             state.personShowCredits[action.slug] = action.credit
         case let action as TraktActions.SetEpisodes:

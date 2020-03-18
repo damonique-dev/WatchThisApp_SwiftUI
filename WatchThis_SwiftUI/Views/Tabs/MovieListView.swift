@@ -12,31 +12,28 @@ import SwiftUIFlux
 struct MovieListView: View {
      @EnvironmentObject var store: Store<AppState>
     
-    private var boxOfficeMovies: [MovieDetails] {
-        let movieState = store.state.movieState
-        return movieState.movieLists[.TopGrossing]?.compactMap {movieState.movieDetails[$0]} ?? [MovieDetails]()
+    private var boxOfficeMovies: [TraktMovie] {
+        print()
+        return store.state.traktState.movieLists[.TopGrossing] ?? []
     }
     
-    private var trendingMovies: [MovieDetails] {
-        let movieState = store.state.movieState
-        return movieState.movieLists[.Trending]?.compactMap {movieState.movieDetails[$0]} ?? [MovieDetails]()
+    private var trendingMovies: [TraktMovie] {
+        return store.state.traktState.movieLists[.Trending] ?? []
     }
     
-    private var mostWatchedWeekly: [MovieDetails] {
-        let movieState = store.state.movieState
-        return movieState.movieLists[.MostWatchedWeekly]?.compactMap {movieState.movieDetails[$0]} ?? [MovieDetails]()
+    private var mostWatchedWeekly: [TraktMovie] {
+        return store.state.traktState.movieLists[.MostWatchedWeekly] ?? []
     }
     
-    private var anticipatedMovies: [MovieDetails] {
-        let movieState = store.state.movieState
-        return movieState.movieLists[.Anticipated]?.compactMap {movieState.movieDetails[$0]} ?? [MovieDetails]()
+    private var anticipatedMovies: [TraktMovie] {
+        return store.state.traktState.movieLists[.Anticipated] ?? []
     }
             
     func fetchMovieLists() {
-        store.dispatch(action: MovieActions.FetchTraktMovieList<[TraktMovieListResults]>(endpoint: .Movie_TopGrossing, movieList: .TopGrossing))
-        store.dispatch(action: MovieActions.FetchTraktMovieList<[TraktMovieListResults]>(endpoint: .Movie_Trending, movieList: .Trending))
-        store.dispatch(action: MovieActions.FetchTraktMovieList<[TraktMovieListResults]>(endpoint: .Movie_MostWatchedWeekly, movieList: .MostWatchedWeekly))
-        store.dispatch(action: MovieActions.FetchTraktMovieList<[TraktMovieListResults]>(endpoint: .Movie_Anticipated, movieList: .Anticipated))
+        store.dispatch(action: TraktActions.FetchTraktMovieList<[TraktMovieListResults]>(endpoint: .Movie_TopGrossing, movieList: .TopGrossing))
+        store.dispatch(action: TraktActions.FetchTraktMovieList<[TraktMovieListResults]>(endpoint: .Movie_Trending, movieList: .Trending))
+        store.dispatch(action: TraktActions.FetchTraktMovieList<[TraktMovieListResults]>(endpoint: .Movie_MostWatchedWeekly, movieList: .MostWatchedWeekly))
+        store.dispatch(action: TraktActions.FetchTraktMovieList<[TraktMovieListResults]>(endpoint: .Movie_Anticipated, movieList: .Anticipated))
     }
     
     private var noListsLoaded: Bool {
@@ -67,8 +64,14 @@ struct MovieListView: View {
 }
 
 struct MovieCategoryRow: View {
+    @EnvironmentObject var store: Store<AppState>
     let title: String
-    let movies: [MovieDetails]
+    let movies: [TraktMovie]
+    
+    private func getPosterPath(for movie: TraktMovie) -> String? {
+        return store.state.traktState.slugImages[movie.slug]?.posterPath
+    }
+    
     var body: some View {
         VStack(alignment: HorizontalAlignment.leading) {
             if !movies.isEmpty {
@@ -81,9 +84,9 @@ struct MovieCategoryRow: View {
                 ScrollView(.horizontal) {
                     HStack {
                         ForEach(movies, id: \.id) { movie in
-                            NavigationLink(destination: MovieDetailsView(movieId: movie.id) ) {
-                                RoundedImageCell(title: movie.title, posterPath: movie.posterPath, height: CGFloat(200))
-                            }
+//                            NavigationLink(destination: MovieDetailsView(movieId: movie.id) ) {
+                            RoundedImageCell(title: movie.title ?? "", posterPath: self.getPosterPath(for: movie), height: CGFloat(200))
+//                            }
                         }
                     }
                 }.frame(height: 200)

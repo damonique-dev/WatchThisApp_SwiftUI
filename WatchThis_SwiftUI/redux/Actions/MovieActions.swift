@@ -10,29 +10,6 @@ import Foundation
 import SwiftUIFlux
 
 struct MovieActions {
-    struct FetchTraktMovieList<T: Codable>: AsyncAction {
-        let endpoint: TraktApiClient.Endpoint
-        let movieList: MovieList
-        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            TraktApiClient.sharedInstance().GET(endpoint: endpoint, params: [:])
-            {
-                (result: Result<T, APIError>) in
-                switch result {
-                case let .success(response):
-                    if T.self == [TraktList].self {
-                        dispatch(FetchTMDBMoviesFromTrakt(list: response as! [TraktList], movieList: self.movieList))
-                    } else if T.self == [TraktMovieListResults].self {
-                        let list = (response as! [TraktMovieListResults]).compactMap {$0.movie}
-                        dispatch(FetchTMDBMoviesFromTrakt(list: list, movieList: self.movieList))
-                    }
-                case let .failure(error):
-                    print(error)
-                    break
-                }
-            }
-        }
-    }
-    
     struct FetchTMDBMoviesFromTrakt: AsyncAction {
         let list: [TraktList]
         let movieList: MovieList

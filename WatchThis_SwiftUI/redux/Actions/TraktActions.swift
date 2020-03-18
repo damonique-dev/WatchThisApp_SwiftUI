@@ -19,17 +19,43 @@ struct TraktActions {
                 case let .success(response):
                     if T.self == [TraktShow].self {
                         dispatch(SetTVShowList(list: self.showList, shows: response as! [TraktShow]))
-                        dispatch(FetchImagesFromTMDB(shows: response as! [TraktShow]))
+                        dispatch(FetchShowImagesFromTMDB(shows: response as! [TraktShow]))
                     } else if T.self == [TraktShowListResults].self {
                         let list = (response as! [TraktShowListResults]).compactMap {$0.show}
                         dispatch(SetTVShowList(list: self.showList, shows: list))
-                        dispatch(FetchImagesFromTMDB(shows: list))
+                        dispatch(FetchShowImagesFromTMDB(shows: list))
                     }
                     
                 case let .failure(error):
                     #if DEBUG
                     print(error)
                     #endif
+                    break
+                }
+            }
+        }
+    }
+    
+    struct FetchTraktMovieList<T: Codable>: AsyncAction {
+        let endpoint: TraktApiClient.Endpoint
+        let movieList: MovieList
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            TraktApiClient.sharedInstance().GET(endpoint: endpoint, params: [:])
+            {
+                (result: Result<T, APIError>) in
+                switch result {
+                case let .success(response):
+                    if T.self == [TraktMovie].self {
+                        let movies = response as! [TraktMovie]
+                        dispatch(SetMovieList(list: self.movieList, movies: movies))
+                        dispatch(FetchMovieImagesFromTMDB(movies: movies))
+                    } else if T.self == [TraktMovieListResults].self {
+                        let list = (response as! [TraktMovieListResults]).compactMap {$0.movie}
+                        dispatch(SetMovieList(list: self.movieList, movies: list))
+                        dispatch(FetchMovieImagesFromTMDB(movies: list))
+                    }
+                case let .failure(error):
+                    print(error)
                     break
                 }
             }
@@ -59,16 +85,16 @@ struct TraktActions {
                         dispatch(SetCast(showSlug: slug, cast: cast))
                     } else if self.endpoint == TraktApiClient.Endpoint.TV_Related(slug: slug) {
                         let shows = response as! [TraktShow]
-                        dispatch(FetchImagesFromTMDB(shows: shows))
+                        dispatch(FetchShowImagesFromTMDB(shows: shows))
                         dispatch(SetRelatedShows(showSlug: slug, shows: shows))
                     } else if self.endpoint == TraktApiClient.Endpoint.TV_Details(slug: slug) {
                         let show = response as! TraktShow
-                        dispatch(FetchImagesFromTMDB(shows: [show]))
+                        dispatch(FetchShowImagesFromTMDB(shows: [show]))
                     } else if self.endpoint == TraktApiClient.Endpoint.Person_TVCredits(slug: slug) {
                         let castlist = (response as! TraktShowCreditsResults).cast
                         dispatch(SetPersonShowCredits(slug: slug, credit: castlist))
                         let shows = castlist.map({$0.show})
-                        dispatch(FetchImagesFromTMDB(shows: shows))
+                        dispatch(FetchShowImagesFromTMDB(shows: shows))
                     } else {
                         print("Endpoint \"\(self.endpoint.path())\" action not defined.")
                     }
@@ -93,7 +119,7 @@ struct TraktActions {
                 case let .success(response):
                     if self.endpoint == TraktApiClient.Endpoint.Search_TV {
                         let shows = response.compactMap { $0.show }
-                        dispatch(FetchImagesFromTMDB(shows: shows))
+                        dispatch(FetchShowImagesFromTMDB(shows: shows))
                         dispatch(SetTVShowSearch(query: self.query, shows: shows))
                     } else if self.endpoint == TraktApiClient.Endpoint.Search_People {
                         let people = response.compactMap { $0.person }
@@ -131,7 +157,7 @@ struct TraktActions {
         }
     }
     
-    struct FetchImagesFromTMDB: AsyncAction {
+    struct FetchShowImagesFromTMDB: AsyncAction {
         let shows: [TraktShow]
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             for show in shows {
@@ -153,6 +179,35 @@ struct TraktActions {
                         }
                     }
                     dispatch(SetShow(slug: slug, show: show))
+                }
+            }
+        }
+    }
+    
+    struct FetchMovieImagesFromTMDB: AsyncAction {
+        let movies: [TraktMovie]
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            for movie in movies {
+                if let appState = state as? AppState, let tmdbId = movie.ids.tmdb, let slug = movie.ids.slug {
+                    // Only fetch images if not already in state.
+                    if appState.tvShowState.slugImages[slug] == nil {
+                        TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Movie_Details(id: tmdbId), params: TMDB_Parameters)
+                        {
+                            (result: Result<MovieDetails, APIError>) in
+                            switch result {
+                            case let .success(response):
+                                dispatch(SetSlugImage(slug: slug, slugImage: .init(backgroundPath: response.backdropPath, posterPath: response.posterPath)))
+                            case let .failure(error):
+                                #if DEBUG
+                                print("Images error: \(error)")
+                                #endif
+                                break
+                            }
+                        }
+                    }
+                    dispatch(SetMovie(slug: slug, movie: movie))
+                } else {
+                    print("Unable to get image \(movie.ids.tmdb) - \(movie.ids.slug)")
                 }
             }
         }
@@ -244,6 +299,11 @@ struct TraktActions {
         let shows: [TraktShow]
     }
     
+    struct SetMovieList: Action {
+        let list: MovieList
+        let movies: [TraktMovie]
+    }
+    
     struct SetShowSlug: Action {
         let showId: Int
         let slug: String
@@ -257,6 +317,11 @@ struct TraktActions {
     struct SetShow: Action {
         let slug: String
         let show: TraktShow
+    }
+    
+    struct SetMovie: Action {
+        let slug: String
+        let movie: TraktMovie
     }
     
     struct SetSeasons: Action {

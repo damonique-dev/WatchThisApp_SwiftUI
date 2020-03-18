@@ -30,9 +30,6 @@ class TraktApiClient {
     func GET<T: Codable>(endpoint: Endpoint, params: [String: String]?, completionHandler: @escaping (Result<T, APIError>) -> Void) {
         let url = URLFromParameters(endpoint: endpoint, parameters: params as [String : AnyObject]?)
         AF.request(url, headers: header).responseJSON { response in
-            if endpoint == .Search_People {
-                print(url)
-            }
             switch response.result {
                 case .success(let result):
                     do {
@@ -53,7 +50,7 @@ class TraktApiClient {
                     return
                 case .failure(let error):
                     #if DEBUG
-                    print("Error: \(error.destinationURL)")
+                    print("Error: \(error)")
                     #endif
                     DispatchQueue.main.async {
                         completionHandler(.failure(.networkError(error: error)))

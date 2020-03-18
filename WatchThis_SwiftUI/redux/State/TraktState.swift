@@ -28,15 +28,17 @@ struct TraktState: FluxState, Codable {
     var traktEpisodes: [String: [Int: [TraktEpisode]]] = [:]
     var traktRelatedShows: [String: [TraktShow]] = [:]
     var people: [String: TraktPerson] = [:]
+    var traktMovies: [String: TraktMovie] = [:]
     
     var tvLists: [TVShowList : [TraktShow]] = [:]
+    var movieLists: [MovieList : [TraktMovie]] = [:]
     
     var personShowCredits: [String: [TraktShowCredits]] = [:]
     //TODO: Add movie credits
     
     var tvShowSearch: [String: [TraktShow]] = [:]
     var peopleSearch: [String: [TraktPerson]] = [:]
-//    var movieSearch: [String: [TraktPerson]] = [:]
+    var movieSearch: [String: [TraktMovie]] = [:]
     
     var tvSearchQueries: [String] = []
     var movieSearchQueries: [String] = []

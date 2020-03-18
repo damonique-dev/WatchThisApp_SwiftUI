@@ -68,11 +68,7 @@ struct TVCategoryRow: View {
     let shows: [TraktShow]
     
     private func getPosterPath(for show: TraktShow) -> String? {
-        if let slug = show.ids.slug {
-            return store.state.traktState.slugImages[slug]?.posterPath
-        }
-        
-        return nil
+        return store.state.traktState.slugImages[show.slug]?.posterPath
     }
     
     var body: some View {

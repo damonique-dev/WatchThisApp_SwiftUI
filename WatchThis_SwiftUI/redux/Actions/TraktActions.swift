@@ -27,7 +27,9 @@ struct TraktActions {
                     }
                     
                 case let .failure(error):
+                    #if DEBUG
                     print(error)
+                    #endif
                     break
                 }
             }
@@ -52,7 +54,8 @@ struct TraktActions {
                         dispatch(SetSeasons(showSlug: slug, seasons: seasons))
                     } else if self.endpoint == TraktApiClient.Endpoint.TV_Cast(slug: slug) {
                         let cast = (response as! TraktPeopleResults).cast
-                        dispatch(FetchPeopleImagesFromTMDB(showIds: self.ids, cast: cast))
+                        let people = cast.map({ $0.person })
+                        dispatch(FetchPeopleImagesFromTMDB(people: people))
                         dispatch(SetCast(showSlug: slug, cast: cast))
                     } else if self.endpoint == TraktApiClient.Endpoint.TV_Related(slug: slug) {
                         let shows = response as! [TraktShow]
@@ -70,7 +73,39 @@ struct TraktActions {
                         print("Endpoint \"\(self.endpoint.path())\" action not defined.")
                     }
                 case let .failure(error):
+                    #if DEBUG
                     print(error)
+                    #endif
+                    break
+                }
+            }
+        }
+    }
+    
+    struct SearchTraktApi: AsyncAction {
+        let query: String
+        let endpoint: TraktApiClient.Endpoint
+        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
+            var params = Trakt_Parameters
+            params["query"] = query
+            TraktApiClient.sharedInstance().GET(endpoint: endpoint, params: params) { (result: Result<[TraktSearchResult], APIError>) in
+                switch result {
+                case let .success(response):
+                    if self.endpoint == TraktApiClient.Endpoint.Search_TV {
+                        let shows = response.compactMap { $0.show }
+                        dispatch(FetchImagesFromTMDB(shows: shows))
+                        dispatch(SetTVShowSearch(query: self.query, shows: shows))
+                    } else if self.endpoint == TraktApiClient.Endpoint.Search_People {
+                        let people = response.compactMap { $0.person }
+                        dispatch(FetchPeopleImagesFromTMDB(people: people))
+                        dispatch(SetPeopleSearch(query: self.query, people: people))
+                    } else {
+                        print("Endpoint \"\(self.endpoint.path())\" action not defined.")
+                    }
+                case let .failure(error):
+                    #if DEBUG
+                    print("Search error: \(error)")
+                    #endif
                     break
                 }
             }
@@ -87,7 +122,9 @@ struct TraktActions {
                     dispatch(SetEpisodes(showSlug: self.showIds.slug!, seasonNumber: self.seasonNumber, episodes: response))
                     dispatch(FetchEpisodeImagesFromTMDB(showTmdbId: self.showIds.tmdb!, seasonNumber: self.seasonNumber, episodes: response))
                 case let .failure(error):
+                    #if DEBUG
                     print(error)
+                    #endif
                     break
                 }
             }
@@ -108,7 +145,9 @@ struct TraktActions {
                             case let .success(response):
                                 dispatch(SetSlugImage(slug: slug, slugImage: .init(backgroundPath: response.backdropPath, posterPath: response.posterPath)))
                             case let .failure(error):
-                                print(error)
+                                #if DEBUG
+                                print("Images error: \(error)")
+                                #endif
                                 break
                             }
                         }
@@ -134,7 +173,9 @@ struct TraktActions {
                             case let .success(response):
                                 dispatch(SetEntityImages(entity: .Season, tmdbId: tmdbId, slugImage: .init(backgroundPath: nil, posterPath: response.posterPath)))
                             case let .failure(error):
+                                #if DEBUG
                                 print(error)
+                                #endif
                                 break
                             }
                         }
@@ -145,11 +186,10 @@ struct TraktActions {
     }
     
     struct FetchPeopleImagesFromTMDB: AsyncAction {
-        let showIds: Ids
-        let cast: [TraktCast]
+        let people: [TraktPerson]
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            for person in cast {
-                if let appState = state as? AppState, let tmdbId = person.person.ids.tmdb {
+            for person in people {
+                if let appState = state as? AppState, let tmdbId = person.ids.tmdb {
                     // Only fetch images if not already in state.
                     if appState.tvShowState.traktImages[.Person]?[tmdbId] == nil {
                         TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Person_Details(id: tmdbId), params: TMDB_Parameters)
@@ -159,7 +199,9 @@ struct TraktActions {
                             case let .success(response):
                                 dispatch(SetEntityImages(entity: .Person, tmdbId: tmdbId, slugImage: .init(backgroundPath: nil, posterPath: response.profilePath)))
                             case let .failure(error):
-                                print(error)
+                                #if DEBUG
+                                print("People Images error: \(error)")
+                                #endif
                                 break
                             }
                         }
@@ -185,7 +227,9 @@ struct TraktActions {
                             case let .success(response):
                                 dispatch(SetEntityImages(entity: .Episode, tmdbId: tmdbId, slugImage: .init(backgroundPath: nil, posterPath: response.stillPath)))
                             case let .failure(error):
+                                #if DEBUG
                                 print(error)
+                                #endif
                                 break
                             }
                         }
@@ -245,5 +289,20 @@ struct TraktActions {
     struct SetPersonShowCredits: Action {
         let slug: String
         let credit: [TraktShowCredits]
+    }
+    
+    struct SetTVShowSearch: Action {
+        let query: String
+        let shows: [TraktShow]
+    }
+    
+    struct SetPeopleSearch: Action {
+        let query: String
+        let people: [TraktPerson]
+    }
+    
+    struct SetMovieSearch: Action {
+        let query: String
+//        let movies: [TraktPerson]
     }
 }

@@ -21,16 +21,16 @@ struct SearchView: View {
     @State var isActiveBar = false
     @State var isSearching = false
     
-    private var tvResults: [TVShowDetails]? {
-        return store.state.tvShowState.tvShowSearch[searchModel.searchQuery]
+    private var tvResults: [TraktShow]? {
+        return store.state.traktState.tvShowSearch[searchModel.searchQuery]
     }
     
     private var movieResults: [MovieDetails]? {
-        return store.state.movieState.movieSearch[searchModel.searchQuery]
+        return []
     }
     
-    private var peopleResults: [PersonDetails]? {
-        return store.state.peopleState.peopleSearch[searchModel.searchQuery]
+    private var peopleResults: [TraktPerson]? {
+        return store.state.traktState.peopleSearch[searchModel.searchQuery]
     }
     
     private var searchResultsLoaded: Bool {
@@ -56,56 +56,76 @@ struct SearchView: View {
 struct SearchResultsScrollView: View {
     @EnvironmentObject var store: Store<AppState>
     @ObservedObject var searchModel: SearchModel
-    let tvResults: [TVShowDetails]?
+    let tvResults: [TraktShow]?
     let movieResults: [MovieDetails]?
-    let peopleResults: [PersonDetails]?
+    let peopleResults: [TraktPerson]?
     
     private var previousSearches: [String] {
+        migrateSearchQueries()
+        let traktState = store.state.traktState
         switch searchModel.searchCategory {
         case .TVshows:
-            return store.state.tvShowState.tvSearchQueries
+            return traktState.tvSearchQueries
         case .Movies:
-            return store.state.movieState.movieSearchQueries
+            return traktState.movieSearchQueries
         case .People:
-            return store.state.peopleState.peopleSearchQueries
+            return traktState.peopleSearchQueries
+        }
+    }
+    
+    private func migrateSearchQueries() {
+        if store.state.tvShowState.tvSearchQueries.count > store.state.traktState.tvSearchQueries.count {
+            store.state.traktState.tvSearchQueries = store.state.tvShowState.tvSearchQueries
+        }
+        if store.state.movieState.movieSearchQueries.count > store.state.traktState.movieSearchQueries.count {
+            store.state.traktState.movieSearchQueries = store.state.movieState.movieSearchQueries
+        }
+        if store.state.peopleState.peopleSearchQueries.count > store.state.traktState.peopleSearchQueries.count {
+            store.state.traktState.peopleSearchQueries = store.state.peopleState.peopleSearchQueries
         }
     }
     
     var body: some View {
-        ScrollView(.vertical) {
-            VStack {
-                if !searchModel.searchQuery.isEmpty {
-                    if searchModel.searchCategory == .TVshows {
-                        TVSearchResults(tvResults: tvResults ?? [])
-                    }
-                    if searchModel.searchCategory == .Movies {
-                        MovieSearchResults(movieResults: movieResults ?? [])
-                    }
-                    if searchModel.searchCategory == .People {
-                        PeopleSearchResults(peopleResults: peopleResults ?? [])
-                    }
-                } else {
-                    ForEach(previousSearches, id: \.self) { query in
-                        Button(action: {self.searchModel.searchQuery = query}) {
-                            PreviousSearchRow(query: query)
-                        }
-                    }.padding(.top)
+        VStack {
+            if !searchModel.searchQuery.isEmpty {
+                if searchModel.searchCategory == .TVshows {
+                    TVSearchResults(tvResults: tvResults ?? [])
                 }
+                if searchModel.searchCategory == .Movies {
+                    MovieSearchResults(movieResults: movieResults ?? [])
+                }
+                if searchModel.searchCategory == .People {
+                    PeopleSearchResults(peopleResults: peopleResults ?? [])
+                }
+            } else {
+                ForEach(previousSearches, id: \.self) { query in
+                    Button(action: {self.searchModel.searchQuery = query}) {
+                        PreviousSearchRow(query: query)
+                    }
+                }.padding(.top)
             }
+            Spacer()
         }
     }
 }
 
 struct TVSearchResults: View {
-    let tvResults: [TVShowDetails]
+    @EnvironmentObject var store: Store<AppState>
+    let tvResults: [TraktShow]
+    
+    private func getPosterPath(for show: TraktShow) -> String? {
+        return store.state.traktState.slugImages[show.slug]?.posterPath
+    }
     
     var body: some View {
-        VStack {
-            ForEach(tvResults) { show in
-//                NavigationLink(destination: TVShowDetailView(showId: show.id)) {
-                    SearchViewRow(item: show)
-                        .frame(height: 120)
-//                }
+        ScrollView(.vertical) {
+            VStack {
+                ForEach(tvResults) { show in
+                    NavigationLink(destination: TVShowDetailView(slug: show.slug, showIds: show.ids)) {
+                        SearchViewRow(title: show.title ?? "", overview: show.overview, posterPath: self.getPosterPath(for: show))
+                            .frame(height: 120)
+                    }
+                }
             }
         }
     }
@@ -115,11 +135,14 @@ struct MovieSearchResults: View {
     let movieResults: [MovieDetails]
     
     var body: some View {
-        VStack {
-            ForEach(movieResults) { movie in
-                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                    SearchViewRow(item: movie)
-                        .frame(height: 120)
+        ScrollView(.vertical) {
+            VStack {
+                ForEach(movieResults) { movie in
+                    //                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                    //                    SearchViewRow(item: movie)
+                    //                        .frame(height: 120)
+                    //                }
+                    Color.blue
                 }
             }
         }
@@ -127,15 +150,25 @@ struct MovieSearchResults: View {
 }
 
 struct PeopleSearchResults: View {
-    let peopleResults: [PersonDetails]
+    @EnvironmentObject var store: Store<AppState>
+    let peopleResults: [TraktPerson]
+    
+    private func getPosterPath(for person: TraktPerson) -> String? {
+        if let tmdbId = person.ids.tmdb {
+            return store.state.traktState.traktImages[.Person]?[tmdbId]?.posterPath
+        }
+        return nil
+    }
     
     var body: some View {
-        VStack {
-            ForEach(peopleResults) { person in
-//                NavigationLink(destination: PersonDetailsView(personId: person.id, personName: person.name!)) {
-                    PeopleSearchRow(item: person)
-                        .frame(height: 120)
-//                }
+        ScrollView(.vertical) {
+            VStack {
+                ForEach(peopleResults) { person in
+                    NavigationLink(destination: PersonDetailsView(personDetails: person)) {
+                        PeopleSearchRow(person: person, posterPath: self.getPosterPath(for: person))
+                            .frame(height: 120)
+                    }
+                }
             }
         }
     }

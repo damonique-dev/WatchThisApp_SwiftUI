@@ -18,7 +18,6 @@ enum PlaceholderImage: String {
 struct ImageLoaderView: View {
     @ObservedObject var imageLoader: ImageLoader
     @State var isImageLoaded = false
-//    @State var image: UIImage = UIImage()
     var contentMode = ContentMode.fit
     
     var placeholder: PlaceholderImage = .none

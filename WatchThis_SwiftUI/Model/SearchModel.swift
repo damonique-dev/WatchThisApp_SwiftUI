@@ -38,19 +38,9 @@ class SearchModel: ObservableObject {
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .filter { !$0.searchQuery.isEmpty }
             .sink(receiveValue: { (searchContent) in
-                store.dispatch(action: TVShowActions.SearchTVShows(query: searchContent.searchQuery))
-                store.dispatch(action: MovieActions.SearchMovies(query: searchContent.searchQuery))
-                store.dispatch(action: PeopleActions.SearchPeople(query: searchContent.searchQuery))
-                
-//                if searchContent.searchCategory == .TVshows {
-//                    store.dispatch(action: TVShowActions.SearchTVShows(query: searchContent.searchQuery))
-//                }
-//                if searchContent.searchCategory == .Movies {
-//                    store.dispatch(action: MovieActions.SearchMovies(query: searchContent.searchQuery))
-//                }
-//                if searchContent.searchCategory == .People {
-//                    store.dispatch(action: PeopleActions.SearchPeople(query: searchContent.searchQuery))
-//                }
+                store.dispatch(action: TraktActions.SearchTraktApi(query: searchContent.searchQuery, endpoint: .Search_TV))
+                store.dispatch(action: TraktActions.SearchTraktApi(query: searchContent.searchQuery, endpoint: .Search_People))
+                store.dispatch(action: TraktActions.SearchTraktApi(query: searchContent.searchQuery, endpoint: .Search_Movie))
             })
     }
     

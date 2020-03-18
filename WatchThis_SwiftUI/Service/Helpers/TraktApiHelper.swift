@@ -63,6 +63,10 @@ extension TraktApiClient {
         
         case TraktIds(id: Int)
         
+        case Search_TV
+        case Search_Movie
+        case Search_People
+        
         func path() -> String {
             switch self {
                 case .TV_Popular:
@@ -100,6 +104,13 @@ extension TraktApiClient {
                 
                 case let .TraktIds(id):
                     return "/search/tmdb/\(id)"
+                
+                case .Search_TV:
+                    return "/search/show"
+                case .Search_Movie:
+                    return "/search/movie"
+                case .Search_People:
+                    return "/search/person"
             }
         }
         

@@ -129,3 +129,9 @@ struct TraktImages: Codable {
     var backgroundPath: String?
     var posterPath: String?
 }
+
+struct TraktSearchResult: Codable {
+    var show: TraktShow?
+//    var movie: TraktMovie?
+    var person: TraktPerson?
+}

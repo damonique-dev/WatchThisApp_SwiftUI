@@ -44,9 +44,47 @@ func traktReducer(state: TraktState, action: Action) -> TraktState {
                 state.traktEpisodes[action.showSlug] = [:]
             }
             state.traktEpisodes[action.showSlug]![action.seasonNumber] = action.episodes
+        case let action as TraktActions.SetTVShowSearch:
+            state.tvShowSearch[action.query] = action.shows
+            state = addToSearchList(state: state, query: action.query, itemType: .TVShow)
+        case let action as TraktActions.SetPeopleSearch:
+            state.peopleSearch[action.query] = action.people
+            state = addToSearchList(state: state, query: action.query, itemType: .Person)
         default:
             break
     }
     
+    return state
+}
+
+private func addToSearchList(state: TraktState, query: String, itemType: ItemType) -> TraktState {
+    var state = state
+    var existingQueries = [String]()
+    switch itemType {
+        case .TVShow:
+            existingQueries = state.tvSearchQueries
+        case .Person:
+            existingQueries = state.peopleSearchQueries
+        case .Movie:
+            existingQueries = []
+    }
+    let index = existingQueries.firstIndex(of: query)
+    if index != nil {
+        existingQueries.remove(at: index!)
+    }
+    existingQueries.insert(query, at: 0)
+    if (existingQueries.count > 10) {
+        existingQueries =  Array(existingQueries.prefix(upTo: 10))
+    }
+    
+    switch itemType {
+        case .TVShow:
+            state.tvSearchQueries =  existingQueries
+        case .Person:
+            state.peopleSearchQueries =  existingQueries
+        case .Movie:
+            existingQueries = []
+    }
+
     return state
 }

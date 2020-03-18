@@ -8,22 +8,23 @@
 
 import SwiftUI
 
-struct SearchViewRow<T:Details>: View {
-    let item: T
+struct SearchViewRow: View {
+    let title: String
+    let overview: String?
+    let posterPath: String?
     let rectangleWidth = UIScreen.main.bounds.width - (100 * 8/11) - 50
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: item.posterPath,
-                                                                                         size: .original), contentMode: .fill)
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: posterPath, size: .original), contentMode: .fill, placeholder: .poster)
                     .frame(width: 100 * 8/11, height: 100)
                 VStack(alignment: .leading) {
-                    Text(item.title)
+                    Text(title)
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                    if item.overview != nil && !(item.overview?.isEmpty ?? true) {
-                        Text(item.overview!)
+                    if overview != nil && !(overview?.isEmpty ?? true) {
+                        Text(overview!)
                             .font(.body)
                             .foregroundColor(.white)
                             .lineLimit(3)
@@ -43,15 +44,17 @@ struct SearchViewRow<T:Details>: View {
 }
 
 struct PeopleSearchRow: View {
-    let item: PersonDetails
-    let rectangleWidth = UIScreen.main.bounds.width - (100 * 8/11) - 50
+    let person: TraktPerson
+    let posterPath: String?
+    
+    private let rectangleWidth = UIScreen.main.bounds.width - (100 * 8/11) - 50
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: item.profilePath,
-                                                                                         size: .original), contentMode: .fill)
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: posterPath,
+                                                                                       size: .original), contentMode: .fill, placeholder: .person)
                     .frame(width: 100 * 8/11, height: 100)
-                Text(item.name!)
+                Text(person.name!)
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.white)

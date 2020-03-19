@@ -29,6 +29,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 24)!],
                                                             for: .normal)
 
+        handleMigrations()
+        
         // Use a UIHostingController as window root view controller
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
@@ -45,6 +47,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func sceneDidEnterBackground(_ scene: UIScene) {
         store.state.archiveState()
+    }
+    
+    private func handleMigrations() {
+        for (_, customList) in store.state.userState.customLists {
+            if customList.items.count > customList.traktItems.count {
+                for (_, item) in customList.items {
+                    var params = [String:String]()
+                    switch item.itemType {
+                    case .TVShow:
+                        params["type"] = "show"
+                    case .Movie:
+                        params["type"] = "movie"
+                    case .Person:
+                        params["type"] = "person"
+                    }
+                    store.dispatch(action: TraktActions.FetchFromTraktApi<[TraktSearchResult]>(ids: .init(tmdb: item.id, slug: ""), endpoint: .TraktIds(id: item.id), params: params))
+                }
+            }
+        }
     }
 }
 

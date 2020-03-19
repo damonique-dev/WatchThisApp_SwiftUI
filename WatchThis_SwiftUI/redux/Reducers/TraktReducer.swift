@@ -40,6 +40,8 @@ func traktReducer(state: TraktState, action: Action) -> TraktState {
             state.traktShows[action.slug] = action.show
         case let action as TraktActions.SetMovie:
             state.traktMovies[action.slug] = action.movie
+        case let action as TraktActions.SetPerson:
+            state.people[action.slug] = action.person
         case let action as TraktActions.SetPersonShowCredits:
             state.personShowCredits[action.slug] = action.credit
         case let action as TraktActions.SetPersonMovieCredits:
@@ -58,6 +60,8 @@ func traktReducer(state: TraktState, action: Action) -> TraktState {
         case let action as TraktActions.SetMovieSearch:
             state.movieSearch[action.query] = action.movies
             state = addToSearchList(state: state, query: action.query, itemType: .Movie)
+        case let action as TraktActions.SetTmdbIdToSlug:
+            state.tmdbIdToSlug[action.id] = action.slug
         default:
             break
     }

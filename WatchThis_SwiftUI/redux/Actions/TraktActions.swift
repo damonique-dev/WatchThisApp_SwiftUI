@@ -66,12 +66,16 @@ struct TraktActions {
         let ids: Ids
         let endpoint: TraktApiClient.Endpoint
         var extendedInfo = true
+        var params = [String : String]()
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             guard let slug = ids.slug else {
                 return
             }
-            let params = extendedInfo ? Trakt_Parameters : [:]
-            TraktApiClient.sharedInstance().GET(endpoint: endpoint, params: params) { (result: Result<U, APIError>) in
+            var mutatedParams = params
+            if extendedInfo {
+                mutatedParams.merge(Trakt_Parameters) { (_, second) in second }
+            }
+            TraktApiClient.sharedInstance().GET(endpoint: endpoint, params: mutatedParams) { (result: Result<U, APIError>) in
                 switch result {
                 case let .success(response):
                     if self.endpoint == TraktApiClient.Endpoint.TV_Seasons(slug: slug) {
@@ -109,6 +113,20 @@ struct TraktActions {
                         let movies = response as! [TraktMovie]
                         dispatch(FetchMovieImagesFromTMDB(movies: movies))
                         dispatch(SetRelatedMovies(movieSlug: slug, movies: movies))
+                    } else if self.endpoint == TraktApiClient.Endpoint.TraktIds(id: self.ids.tmdb!) {
+                        let searchResults = (response as! [TraktSearchResult]).first
+                        if let show = searchResults?.show {
+                            dispatch(FetchShowImagesFromTMDB(shows: [show]))
+                            dispatch(SetTmdbIdToSlug(id: self.ids.tmdb!, slug: show.slug))
+                        }
+                        if let movie = searchResults?.movie {
+                            dispatch(FetchMovieImagesFromTMDB(movies: [movie]))
+                            dispatch(SetTmdbIdToSlug(id: self.ids.tmdb!, slug: movie.slug))
+                        }
+                        if let person = searchResults?.person {
+                            dispatch(FetchPeopleImagesFromTMDB(people: [person]))
+                            dispatch(SetTmdbIdToSlug(id: self.ids.tmdb!, slug: person.slug))
+                        }
                     } else {
                         print("Endpoint \"\(self.endpoint.path())\" action not defined.")
                     }
@@ -127,7 +145,7 @@ struct TraktActions {
         let endpoint: TraktApiClient.Endpoint
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
             var params = Trakt_Parameters
-            params["query"] = query
+            params["query"] = query.lowercased()
             TraktApiClient.sharedInstance().GET(endpoint: endpoint, params: params) { (result: Result<[TraktSearchResult], APIError>) in
                 switch result {
                 case let .success(response):
@@ -277,6 +295,7 @@ struct TraktActions {
                             }
                         }
                     }
+                    dispatch(SetPerson(slug: person.slug, person: person))
                 }
             }
         }
@@ -340,6 +359,11 @@ struct TraktActions {
         let movie: TraktMovie
     }
     
+    struct SetPerson: Action {
+        let slug: String
+        let person: TraktPerson
+    }
+    
     struct SetSeasons: Action {
         let showSlug: String
         let seasons: [TraktSeason]
@@ -395,5 +419,10 @@ struct TraktActions {
     struct SetMovieSearch: Action {
         let query: String
         let movies: [TraktMovie]
+    }
+    
+    struct SetTmdbIdToSlug: Action {
+        let id: Int
+        let slug: String
     }
 }

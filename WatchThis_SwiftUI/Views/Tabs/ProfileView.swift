@@ -14,7 +14,18 @@ struct ProfileView: View {
     @State var showSettings = false
     
     private var customLists: [CustomList] {
-        return Array(store.state.userState.customLists.values)
+        let lists = Array(store.state.userState.customLists.values)
+        // This handles the list migrations from TMDb to Trakt
+        for list in lists {
+            for (_, item) in list.items {
+                if let slug = store.state.traktState.tmdbIdToSlug[item.id] {
+                    if list.traktItems[slug] == nil {
+                        store.state.userState.customLists[list.id]?.traktItems[slug] = TraktListItem(slug: slug, itemType: item.itemType)
+                    }
+                }
+            }
+        }
+        return lists
     }
     
     var body: some View {
@@ -51,48 +62,27 @@ struct CustomListRow: View {
     @EnvironmentObject var store: Store<AppState>
     let customList: CustomList
     
-    lazy var computedListItemsFromTMDb: [ListItemIdAndImagePath] = {
-        var items = [ListItemIdAndImagePath]()
-        for item in Array(customList.items.values) {
-            switch item.itemType {
-            case .TVShow:
-                let detail = store.state.tvShowState.tvShowDetail[item.id]
-//                items.append(ListItemIdAndImagePath(itemType: .TVShow, itemId: item.id, itemName:detail?.name, imagePath: detail?.posterPath))
-                break
-            case .Movie:
-                let detail = store.state.movieState.movieDetails[item.id]
-//                items.append(ListItemIdAndImagePath(itemType: .Movie, itemId: item.id, itemName:detail?.title, imagePath: detail?.posterPath))
-                break
-            case .Person:
-                let detail = store.state.peopleState.people[item.id]
-//                items.append(ListItemIdAndImagePath(itemType: .Person, itemId: item.id, itemName:detail?.name, imagePath: detail?.profilePath))
-                break
-            }
-        }
-        return items
-    }()
-    
     lazy var computedListItems: [ListItemIdAndImagePath] = {
         var items = [ListItemIdAndImagePath]()
-        if customList.items.count > customList.traktItems.count {
-            #warning("Handle custom list migration before launch!!")
-        }
         for item in Array(customList.traktItems.values) {
             switch item.itemType {
             case .TVShow:
-                let detail = store.state.traktState.traktShows[item.slug]!
-                let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
-                items.append(ListItemIdAndImagePath(itemType: .TVShow, slug: item.slug, ids: detail.ids, itemName: detail.title, imagePath: posterPath))
+                if let detail = store.state.traktState.traktShows[item.slug] {
+                    let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
+                    items.append(ListItemIdAndImagePath(itemType: .TVShow, slug: item.slug, ids: detail.ids, itemName: detail.title, imagePath: posterPath))
+                }
                 break
             case .Movie:
-                let detail = store.state.traktState.traktMovies[item.slug]!
-                let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
-                items.append(ListItemIdAndImagePath(itemType: .Movie, slug: item.slug, ids: detail.ids, itemName: detail.title, imagePath: posterPath))
+                if let detail = store.state.traktState.traktMovies[item.slug] {
+                    let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
+                    items.append(ListItemIdAndImagePath(itemType: .Movie, slug: item.slug, ids: detail.ids, itemName: detail.title, imagePath: posterPath))
+                }
                 break
             case .Person:
-                let detail = store.state.traktState.people[item.slug]!
-                let posterPath = store.state.traktState.traktImages[.Person]?[detail.ids.tmdb!]?.posterPath
-                items.append(ListItemIdAndImagePath(itemType: .Person, slug: item.slug, ids: detail.ids, itemName:detail.name, imagePath: posterPath))
+                if let detail = store.state.traktState.people[item.slug] {
+                    let posterPath = store.state.traktState.traktImages[.Person]?[detail.ids.tmdb!]?.posterPath
+                    items.append(ListItemIdAndImagePath(itemType: .Person, slug: item.slug, ids: detail.ids, itemName:detail.name, imagePath: posterPath))
+                }
                 break
             }
         }

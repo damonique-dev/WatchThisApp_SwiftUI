@@ -15,7 +15,7 @@ enum TraktEntity: String, Codable {
 
 struct TraktState: FluxState, Codable {
     // [TMDBId: Slug]
-    var tvShowSlugId: [Int: String] = [:]
+    var tmdbIdToSlug: [Int: String] = [:]
     
     // Keys are SlugIds from Trakt.
     var slugImages: [String: TraktImages] = [:]

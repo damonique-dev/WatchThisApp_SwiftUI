@@ -13,7 +13,6 @@ struct MovieListView: View {
      @EnvironmentObject var store: Store<AppState>
     
     private var boxOfficeMovies: [TraktMovie] {
-        print()
         return store.state.traktState.movieLists[.TopGrossing] ?? []
     }
     
@@ -84,9 +83,9 @@ struct MovieCategoryRow: View {
                 ScrollView(.horizontal) {
                     HStack {
                         ForEach(movies, id: \.id) { movie in
-//                            NavigationLink(destination: MovieDetailsView(movieId: movie.id) ) {
-                            RoundedImageCell(title: movie.title ?? "", posterPath: self.getPosterPath(for: movie), height: CGFloat(200))
-//                            }
+                            NavigationLink(destination: MovieDetailsView(slug: movie.slug, movieIds: movie.ids) ) {
+                                RoundedImageCell(title: movie.title ?? "", posterPath: self.getPosterPath(for: movie), height: CGFloat(200))
+                            }
                         }
                     }
                 }.frame(height: 200)

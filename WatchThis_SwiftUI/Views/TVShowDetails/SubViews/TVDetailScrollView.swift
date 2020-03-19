@@ -19,7 +19,7 @@ struct TVDetailScrollView: View {
         return store.state.traktState.traktShows[slug]
     }
     private var cast: [TraktCast] {
-        return store.state.traktState.traktShowCast[slug] ?? []
+        return store.state.traktState.traktCast[slug] ?? []
     }
     private var similarShows: [TraktShow] {
         return store.state.traktState.traktRelatedShows[slug] ?? []

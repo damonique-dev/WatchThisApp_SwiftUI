@@ -25,8 +25,8 @@ struct SearchView: View {
         return store.state.traktState.tvShowSearch[searchModel.searchQuery]
     }
     
-    private var movieResults: [MovieDetails]? {
-        return []
+    private var movieResults: [TraktMovie]? {
+        return store.state.traktState.movieSearch[searchModel.searchQuery]
     }
     
     private var peopleResults: [TraktPerson]? {
@@ -34,7 +34,19 @@ struct SearchView: View {
     }
     
     private var searchResultsLoaded: Bool {
-        return tvResults != nil && movieResults != nil && peopleResults != nil
+        if searchModel.searchCategory == .TVshows {
+            return tvResults != nil
+        }
+        
+        if searchModel.searchCategory == .Movies {
+            return movieResults != nil
+        }
+        
+        if searchModel.searchCategory == .People {
+            return peopleResults != nil
+        }
+        
+        return false
     }
     
     var body: some View {
@@ -57,19 +69,19 @@ struct SearchResultsScrollView: View {
     @EnvironmentObject var store: Store<AppState>
     @ObservedObject var searchModel: SearchModel
     let tvResults: [TraktShow]?
-    let movieResults: [MovieDetails]?
+    let movieResults: [TraktMovie]?
     let peopleResults: [TraktPerson]?
     
     private var previousSearches: [String] {
         migrateSearchQueries()
         let traktState = store.state.traktState
         switch searchModel.searchCategory {
-        case .TVshows:
-            return traktState.tvSearchQueries
-        case .Movies:
-            return traktState.movieSearchQueries
-        case .People:
-            return traktState.peopleSearchQueries
+            case .TVshows:
+                return traktState.tvSearchQueries
+            case .Movies:
+                return traktState.movieSearchQueries
+            case .People:
+                return traktState.peopleSearchQueries
         }
     }
     
@@ -132,17 +144,21 @@ struct TVSearchResults: View {
 }
 
 struct MovieSearchResults: View {
-    let movieResults: [MovieDetails]
+    @EnvironmentObject var store: Store<AppState>
+    let movieResults: [TraktMovie]
+    
+    private func getPosterPath(for movie: TraktMovie) -> String? {
+           return store.state.traktState.slugImages[movie.slug]?.posterPath
+       }
     
     var body: some View {
         ScrollView(.vertical) {
             VStack {
                 ForEach(movieResults) { movie in
-                    //                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                    //                    SearchViewRow(item: movie)
-                    //                        .frame(height: 120)
-                    //                }
-                    Color.blue
+                    NavigationLink(destination: MovieDetailsView(slug: movie.slug, movieIds: movie.ids)) {
+                        SearchViewRow(title: movie.title ?? "", overview: movie.overview, posterPath: self.getPosterPath(for: movie))
+                            .frame(height: 120)
+                    }
                 }
             }
         }

@@ -16,6 +16,6 @@ struct PeopleState: FluxState, Codable {
     var peopleSearchQueries: [String] = []
     var peopleSearch: [String: [PersonDetails]] = [:]
     
-    var personShowCredits: [String: [TraktShowCredits]] = [:]
+    var personShowCredits: [String: [TraktCredits]] = [:]
     //TODO: Add movie credits
 }

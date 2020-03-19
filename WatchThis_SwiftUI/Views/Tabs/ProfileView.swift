@@ -82,11 +82,12 @@ struct CustomListRow: View {
             case .TVShow:
                 let detail = store.state.traktState.traktShows[item.slug]!
                 let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
-                items.append(ListItemIdAndImagePath(itemType: .TVShow, slug: item.slug, ids: detail.ids, itemName:detail.title, imagePath: posterPath))
+                items.append(ListItemIdAndImagePath(itemType: .TVShow, slug: item.slug, ids: detail.ids, itemName: detail.title, imagePath: posterPath))
                 break
             case .Movie:
-//                let detail = store.state.movieState.movieDetails[item.slug]
-//                items.append(ListItemIdAndImagePath(itemType: .Movie, itemId: item.id, itemName:detail?.title, imagePath: detail?.posterPath))
+                let detail = store.state.traktState.traktMovies[item.slug]!
+                let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
+                items.append(ListItemIdAndImagePath(itemType: .Movie, slug: item.slug, ids: detail.ids, itemName: detail.title, imagePath: posterPath))
                 break
             case .Person:
                 let detail = store.state.traktState.people[item.slug]!
@@ -136,9 +137,9 @@ struct CustomListRowCell: View {
                 }
             }
             if item.itemType == ItemType.Movie {
-//                NavigationLink(destination: MovieDetailsView(movieId: item.itemId)) {
+                NavigationLink(destination: MovieDetailsView(slug: item.slug, movieIds: item.ids)) {
                     RoundedImageCell(title: item.itemName ?? "", posterPath: item.imagePath, height: CGFloat(200))
-//                }
+                }
             }
             if item.itemType == ItemType.Person {
                 NavigationLink(destination: PersonDetailsView(personDetails: store.state.traktState.people[item.slug]!)) {

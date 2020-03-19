@@ -23,18 +23,19 @@ struct TraktState: FluxState, Codable {
     var traktImages: [TraktEntity : [Int: TraktImages]] = [:]
     
     var traktShows: [String: TraktShow] = [:]
-    var traktShowCast: [String: [TraktCast]] = [:]
+    var traktCast: [String: [TraktCast]] = [:]
     var traktSeasons: [String: [TraktSeason]] = [:]
     var traktEpisodes: [String: [Int: [TraktEpisode]]] = [:]
     var traktRelatedShows: [String: [TraktShow]] = [:]
     var people: [String: TraktPerson] = [:]
     var traktMovies: [String: TraktMovie] = [:]
+    var traktRelatedMovies: [String: [TraktMovie]] = [:]
     
     var tvLists: [TVShowList : [TraktShow]] = [:]
     var movieLists: [MovieList : [TraktMovie]] = [:]
     
-    var personShowCredits: [String: [TraktShowCredits]] = [:]
-    //TODO: Add movie credits
+    var personShowCredits: [String: [TraktCredits]] = [:]
+    var personMovieCredits: [String: [TraktCredits]] = [:]
     
     var tvShowSearch: [String: [TraktShow]] = [:]
     var peopleSearch: [String: [TraktPerson]] = [:]

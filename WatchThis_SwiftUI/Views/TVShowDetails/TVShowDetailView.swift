@@ -25,7 +25,7 @@ struct TVShowDetailView: View {
         if state.traktShows[slug] == nil {
             store.dispatch(action: TraktActions.FetchFromTraktApi<TraktShow>(ids: showIds, endpoint: .TV_Details(slug: slug)))
         }
-        if state.traktShowCast[slug] == nil {
+        if state.traktCast[slug] == nil {
             store.dispatch(action: TraktActions.FetchFromTraktApi<TraktPeopleResults>(ids: showIds, endpoint: .TV_Cast(slug: slug)))
         }
         if state.traktSeasons[slug] == nil {

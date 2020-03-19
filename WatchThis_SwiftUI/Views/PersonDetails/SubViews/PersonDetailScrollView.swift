@@ -14,18 +14,18 @@ struct PersonDetailScrollView: View {
     @Binding var showActionSheet: Bool
     let personDetails: TraktPerson
     
-    private var tvCredits: [TraktShowCredits] {
+    private var tvCredits: [TraktCredits] {
         guard let slug = personDetails.ids.slug else {
             return []
         }
         return store.state.traktState.personShowCredits[slug] ?? []
     }
     
-    private var movieCredits: [PersonCredit] {
-        guard let _ = personDetails.ids.slug else {
+    private var movieCredits: [TraktCredits] {
+        guard let slug = personDetails.ids.slug else {
             return []
         }
-        return []
+        return store.state.traktState.personMovieCredits[slug] ?? []
     }
     
     private var profilePath: String? {
@@ -35,11 +35,21 @@ struct PersonDetailScrollView: View {
         return nil
     }
     
-    private func tvCreditPosterPath(credit: TraktShowCredits) -> String? {
-        return store.state.traktState.slugImages[credit.show.slug]?.posterPath
+    private func creditPosterPath(credit: TraktCredits, itemType: ItemType) -> String? {
+        if itemType == .TVShow {
+            if let showSlug = credit.show?.slug {
+                return store.state.traktState.slugImages[showSlug]?.posterPath
+            }
+        }
+        if itemType == .Movie {
+            if let movieSlug = credit.movie?.slug {
+                return store.state.traktState.slugImages[movieSlug]?.posterPath
+            }
+        }
+        return nil
     }
     
-    private func getEpisodeCountText(credit: TraktShowCredits) -> String {
+    private func getEpisodeCountText(credit: TraktCredits) -> String {
         let count = credit.episodeCount ?? 0
         return count == 1 ? "1 Episode" : "\(count) Episodes"
     }
@@ -75,17 +85,21 @@ struct PersonDetailScrollView: View {
                     if tvCredits.count > 0 {
                         DetailCategoryRow(categoryTitle: "TV Credits") {
                             ForEach(self.tvCredits) { credit in
-                                NavigationLink(destination: TVShowDetailView(slug: credit.show.slug, showIds: credit.show.ids)) {
-                                    PersonCreditCell(posterPath: self.tvCreditPosterPath(credit: credit), imageText: credit.show.title, title: self.getEpisodeCountText(credit: credit), subTitle: credit.character)
+                                if credit.show != nil {
+                                    NavigationLink(destination: TVShowDetailView(slug: credit.show!.slug, showIds: credit.show!.ids)) {
+                                        PersonCreditCell(posterPath: self.creditPosterPath(credit: credit, itemType: .TVShow), imageText: credit.show!.title, title: self.getEpisodeCountText(credit: credit), subTitle: credit.character)
+                                    }
                                 }
                             }
                         }
                     }
                     if movieCredits.count > 0 {
                         DetailCategoryRow(categoryTitle: "Movie Credits") {
-                            ForEach(self.movieCredits) { movie in
-                                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                                    RoundedImageCell(title: movie.title ?? "", posterPath: movie.posterPath, height: CGFloat(125))
+                            ForEach(self.movieCredits) { credit in
+                                if credit.movie != nil {
+                                    NavigationLink(destination: MovieDetailsView(slug: credit.movie!.slug, movieIds: credit.movie!.ids)) {
+                                        PersonCreditCell(posterPath: self.creditPosterPath(credit: credit, itemType: .Movie), imageText: credit.movie!.title, title: "", subTitle: credit.character)
+                                    }
                                 }
                             }
                         }

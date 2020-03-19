@@ -122,16 +122,16 @@ struct TraktPerson: Codable, Identifiable {
     }
 }
 
-struct TraktShowCreditsResults: Codable {
-    let cast: [TraktShowCredits]
+struct TraktCreditsResults: Codable {
+    let cast: [TraktCredits]
 }
 
-struct TraktShowCredits: Codable, Identifiable {
+struct TraktCredits: Codable, Identifiable {
     let id = UUID()
     let character: String?
-    let show: TraktShow
+    let show: TraktShow?
+    let movie: TraktMovie?
     let episodeCount: Int?
-    let seriesRegular: Bool
 }
 
 struct Ids: Codable {

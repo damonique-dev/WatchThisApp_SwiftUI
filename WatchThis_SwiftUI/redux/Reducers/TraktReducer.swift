@@ -27,19 +27,23 @@ func traktReducer(state: TraktState, action: Action) -> TraktState {
             }
             state.traktImages[action.entity]![action.tmdbId] = action.slugImage
         case let action as TraktActions.SetCast:
-            state.traktShowCast[action.showSlug] = action.cast
+            state.traktCast[action.showSlug] = action.cast
             for cast in action.cast {
                 let person = cast.person
                 state.people[person.slug] = person
             }
         case let action as TraktActions.SetRelatedShows:
             state.traktRelatedShows[action.showSlug] = action.shows
+        case let action as TraktActions.SetRelatedMovies:
+            state.traktRelatedMovies[action.movieSlug] = action.movies
         case let action as TraktActions.SetShow:
             state.traktShows[action.slug] = action.show
         case let action as TraktActions.SetMovie:
             state.traktMovies[action.slug] = action.movie
         case let action as TraktActions.SetPersonShowCredits:
             state.personShowCredits[action.slug] = action.credit
+        case let action as TraktActions.SetPersonMovieCredits:
+            state.personMovieCredits[action.slug] = action.credit
         case let action as TraktActions.SetEpisodes:
             if state.traktEpisodes[action.showSlug] == nil {
                 state.traktEpisodes[action.showSlug] = [:]
@@ -51,6 +55,9 @@ func traktReducer(state: TraktState, action: Action) -> TraktState {
         case let action as TraktActions.SetPeopleSearch:
             state.peopleSearch[action.query] = action.people
             state = addToSearchList(state: state, query: action.query, itemType: .Person)
+        case let action as TraktActions.SetMovieSearch:
+            state.movieSearch[action.query] = action.movies
+            state = addToSearchList(state: state, query: action.query, itemType: .Movie)
         default:
             break
     }
@@ -67,7 +74,7 @@ private func addToSearchList(state: TraktState, query: String, itemType: ItemTyp
         case .Person:
             existingQueries = state.peopleSearchQueries
         case .Movie:
-            existingQueries = []
+            existingQueries = state.movieSearchQueries
     }
     let index = existingQueries.firstIndex(of: query)
     if index != nil {
@@ -84,7 +91,7 @@ private func addToSearchList(state: TraktState, query: String, itemType: ItemTyp
         case .Person:
             state.peopleSearchQueries =  existingQueries
         case .Movie:
-            existingQueries = []
+            state.movieSearchQueries = existingQueries
     }
 
     return state

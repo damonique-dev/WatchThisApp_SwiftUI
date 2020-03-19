@@ -53,6 +53,7 @@ extension TraktApiClient {
         case TV_TVSeasonEpisodes(slug: String, seasonNumber: Int)
         
         case Person_TVCredits(slug: String)
+        case Person_MovieCredits(slug: String)
         
         // Movie Endpoints
         case Movie_Trending
@@ -60,6 +61,9 @@ extension TraktApiClient {
         case Movie_TopGrossing // In US Box office from past weekend
         case Movie_Anticipated
         case Movie_MostWatchedWeekly
+        case Movie_Cast(slug: String)
+        case Movie_Related(slug: String)
+        case Movie_Details(slug: String)
         
         case TraktIds(id: Int)
         
@@ -90,6 +94,8 @@ extension TraktApiClient {
                 
                 case let .Person_TVCredits(slug):
                     return "/people/\(slug)/shows"
+                case let .Person_MovieCredits(slug):
+                    return "/people/\(slug)/movies"
                 
                 case .Movie_Trending:
                         return "/movies/trending"
@@ -101,6 +107,12 @@ extension TraktApiClient {
                     return "/movies/anticipated"
                 case .Movie_MostWatchedWeekly:
                     return "/movies/watched/weekly"
+                case let .Movie_Details(slug):
+                   return "/movies/\(slug)"
+                case let .Movie_Cast(slug):
+                   return "/movies/\(slug)/people"
+                case let .Movie_Related(slug):
+                   return "/movies/\(slug)/related"
                 
                 case let .TraktIds(id):
                     return "/search/tmdb/\(id)"

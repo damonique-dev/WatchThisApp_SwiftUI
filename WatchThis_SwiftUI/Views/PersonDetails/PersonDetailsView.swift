@@ -29,7 +29,10 @@ struct PersonDetailsView: View {
         }
         
         if store.state.traktState.personShowCredits[slug] == nil {
-            store.dispatch(action: TraktActions.FetchFromTraktApi<TraktShowCreditsResults>(ids: personDetails.ids, endpoint: .Person_TVCredits(slug: slug)))
+            store.dispatch(action: TraktActions.FetchFromTraktApi<TraktCreditsResults>(ids: personDetails.ids, endpoint: .Person_TVCredits(slug: slug)))
+        }
+        if store.state.traktState.personMovieCredits[slug] == nil {
+            store.dispatch(action: TraktActions.FetchFromTraktApi<TraktCreditsResults>(ids: personDetails.ids, endpoint: .Person_MovieCredits(slug: slug)))
         }
     }
         

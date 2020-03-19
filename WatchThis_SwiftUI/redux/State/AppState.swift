@@ -59,17 +59,17 @@ struct AppState: FluxState, Codable {
             }
             return false
         }
-//        let movies = movieState.movieDetails.filter { (arg) -> Bool in
-//            let (key, _) = arg
-//            for list in Array(userState.customLists.values) {
-//                if list.items.contains(where: { (id, item) in
-//                    return id == key && item.itemType == .TVShow
-//                }) {
-//                    return true
-//                }
-//            }
-//            return movieState.favoriteMovies.contains(key)
-//        }
+        let movies = traktState.traktMovies.filter { (arg) -> Bool in
+            let (_, movie) = arg
+            for list in Array(userState.customLists.values) {
+                if list.traktItems.contains(where: { (id, item) in
+                    return id == movie.slug && item.itemType == .Movie
+                }) {
+                    return true
+                }
+            }
+            return false
+        }
         let people = traktState.people.filter { (arg) -> Bool in
             let (_, person) = arg
             for list in Array(userState.customLists.values) {
@@ -89,7 +89,7 @@ struct AppState: FluxState, Codable {
         
         // Save Trakt State
         savingState.traktState.traktShows = shows
-//        savingState.traktState.traktMovies = movies
+        savingState.traktState.traktMovies = movies
         savingState.traktState.people = people
         
         guard let data = try? encoder.encode(savingState) else {

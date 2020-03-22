@@ -73,7 +73,6 @@ struct SearchResultsScrollView: View {
     let peopleResults: [TraktPerson]?
     
     private var previousSearches: [String] {
-        migrateSearchQueries()
         let traktState = store.state.traktState
         switch searchModel.searchCategory {
             case .TVshows:
@@ -82,18 +81,6 @@ struct SearchResultsScrollView: View {
                 return traktState.movieSearchQueries
             case .People:
                 return traktState.peopleSearchQueries
-        }
-    }
-    
-    private func migrateSearchQueries() {
-        if store.state.tvShowState.tvSearchQueries.count > store.state.traktState.tvSearchQueries.count {
-            store.state.traktState.tvSearchQueries = store.state.tvShowState.tvSearchQueries
-        }
-        if store.state.movieState.movieSearchQueries.count > store.state.traktState.movieSearchQueries.count {
-            store.state.traktState.movieSearchQueries = store.state.movieState.movieSearchQueries
-        }
-        if store.state.peopleState.peopleSearchQueries.count > store.state.traktState.peopleSearchQueries.count {
-            store.state.traktState.peopleSearchQueries = store.state.peopleState.peopleSearchQueries
         }
     }
     
@@ -186,11 +173,3 @@ struct PeopleSearchResults: View {
         }
     }
 }
-
-#if DEBUG
-struct SearchView_Previews: PreviewProvider {
-    static var previews: some View {
-        SearchView().environmentObject(sampleStore)
-    }
-}
-#endif

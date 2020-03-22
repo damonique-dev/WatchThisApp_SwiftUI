@@ -96,10 +96,3 @@ struct MovieCategoryRow: View {
     }
 }
 
-#if DEBUG
-struct MovieListView_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieListView().environmentObject(sampleStore)
-    }
-}
-#endif

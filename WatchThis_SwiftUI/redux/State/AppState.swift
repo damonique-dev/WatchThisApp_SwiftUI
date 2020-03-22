@@ -14,9 +14,6 @@ fileprivate let encoder = JSONEncoder()
 fileprivate let decoder = JSONDecoder()
 
 struct AppState: FluxState, Codable {
-    var tvShowState: TVShowState
-    var peopleState: PeopleState
-    var movieState: MovieState
     var userState: UserState
     var traktState: TraktState
     
@@ -33,15 +30,9 @@ struct AppState: FluxState, Codable {
                 
         if let data = try? Data(contentsOf: savePath),
             let savedState = try? decoder.decode(AppState.self, from: data) {
-            self.tvShowState = savedState.tvShowState
-            self.peopleState = savedState.peopleState
-            self.movieState = savedState.movieState
             self.userState = savedState.userState
             self.traktState = savedState.traktState
         } else {
-            self.tvShowState = TVShowState()
-            self.peopleState = PeopleState()
-            self.movieState = MovieState()
             self.userState = UserState()
             self.traktState = TraktState()
         }
@@ -99,10 +90,7 @@ struct AppState: FluxState, Codable {
     }
     
     #if DEBUG
-    init(tvShowState: TVShowState, peopleState: PeopleState, movieState: MovieState, userState: UserState, traktState: TraktState) {
-        self.tvShowState = tvShowState
-        self.peopleState = peopleState
-        self.movieState = movieState
+    init(userState: UserState, traktState: TraktState) {
         self.userState = userState
         self.traktState = traktState
     }

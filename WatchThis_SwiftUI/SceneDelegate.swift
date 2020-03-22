@@ -79,19 +79,3 @@ let store = Store<AppState>(reducer: appStateReducer,
 middleware: [],
 state: AppState())
 
-#if DEBUG
-let testCast = [1416: [
-    Cast(id: 1, name: "Sample Name", character: "Sample Character", profilePath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg"),
-    Cast(id: 1, name: "Sample Name", character: "Sample Character", profilePath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg"),
-    Cast(id: 1, name: "Sample Name", character: "Sample Character", profilePath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg"),
-    Cast(id: 1, name: "Sample Name", character: "Sample Character", profilePath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg"),
-    Cast(id: 1, name: "Sample Name", character: "Sample Character", profilePath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg"),
-    Cast(id: 1, name: "Sample Name", character: "Sample Character", profilePath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg"),
-    Cast(id: 1, name: "Sample Name", character: "Sample Character", profilePath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg"),
-    Cast(id: 1, name: "Sample Name", character: "Sample Character", profilePath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg"),
-    Cast(id: 1, name: "Sample Name", character: "Sample Character", profilePath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg"),
-    Cast(id: 1, name: "Sample Name", character: "Sample Character", profilePath: "/eqgIOObafPJitt8JNh1LuO2fvqu.jpg")]]
-let sampleStore = Store<AppState>(reducer: appStateReducer, state: AppState(tvShowState: TVShowState(tvShowCast: testCast), peopleState: PeopleState(),
-                                                                            movieState: MovieState(), userState: UserState(), traktState: TraktState()))
-#endif
-

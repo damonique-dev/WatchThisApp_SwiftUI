@@ -15,6 +15,15 @@ enum TVShowList: String, Codable {
     case Anticipated
 }
 
+enum MovieList: String, Codable {
+    case Popular
+    case Trending
+    case MostWatchedWeekly
+    case TopGrossing
+    case NowShowing
+    case Anticipated
+}
+
 struct TraktShowListResults: Codable {
     var show: TraktShow?
 }
@@ -168,4 +177,5 @@ struct TMDbImagesResponse: Codable {
     var backdropPath: String?
     var posterPath: String?
     var profilePath: String?
+    var stillPath: String?
 }

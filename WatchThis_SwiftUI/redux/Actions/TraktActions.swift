@@ -227,7 +227,7 @@ struct TraktActions {
             for id in ids {
                 if let appState = state as? AppState, let tmdbId = id.tmdb, let slug = id.slug {
                     // Only fetch images if not already in state.
-                    if appState.tvShowState.slugImages[slug] == nil {
+                    if appState.traktState.slugImages[slug] == nil {
                         var endpoint: TMDBClient.Endpoint
                         switch itemType {
                             case .TVShow:
@@ -265,10 +265,10 @@ struct TraktActions {
             for season in seasons {
                 if let appState = state as? AppState, let tmdbId = season.ids.tmdb, let showTmdbId = showIds.tmdb {
                     // Only fetch images if not already in state.
-                    if appState.tvShowState.traktImages[.Season]?[tmdbId] == nil {
+                    if appState.traktState.traktImages[.Season]?[tmdbId] == nil {
                         TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.TV_Seasons_Details(id: showTmdbId, seasonNum: season.number), params: TMDB_Parameters)
                         {
-                            (result: Result<Season, APIError>) in
+                            (result: Result<TMDbImagesResponse, APIError>) in
                             switch result {
                             case let .success(response):
                                 dispatch(SetEntityImages(entity: .Season, tmdbId: tmdbId, slugImage: .init(backgroundPath: nil, posterPath: response.posterPath)))
@@ -293,10 +293,10 @@ struct TraktActions {
             for episode in episodes {
                 if let appState = state as? AppState, let tmdbId = episode.ids.tmdb {
                     // Only fetch images if not already in state.
-                    if appState.tvShowState.traktImages[.Season]?[tmdbId] == nil {
+                    if appState.traktState.traktImages[.Season]?[tmdbId] == nil {
                         TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.TV_Episode_Details(id: showTmdbId, seasonNum: seasonNumber, episodeNum: episode.number), params: TMDB_Parameters)
                         {
-                            (result: Result<Episode, APIError>) in
+                            (result: Result<TMDbImagesResponse, APIError>) in
                             switch result {
                             case let .success(response):
                                 dispatch(SetEntityImages(entity: .Episode, tmdbId: tmdbId, slugImage: .init(backgroundPath: nil, posterPath: response.stillPath)))

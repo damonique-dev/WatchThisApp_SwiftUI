@@ -95,11 +95,3 @@ struct TVCategoryRow: View {
             .padding(.horizontal, 8)
     }
 }
-
-#if DEBUG
-struct ShowHomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        TVShowListView().environmentObject(sampleStore)
-    }
-}
-#endif

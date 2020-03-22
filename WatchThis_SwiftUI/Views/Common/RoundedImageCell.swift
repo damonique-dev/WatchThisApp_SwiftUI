@@ -31,11 +31,3 @@ struct RoundedImageCell: View {
         .padding(8)
     }
 }
-
-#if DEBUG
-struct ShowCell_Previews: PreviewProvider {
-    static var previews: some View {
-        RoundedImageCell(title: testTVShowDetail.name, posterPath: testTVShowDetail.posterPath, height: CGFloat(200)).environmentObject(sampleStore)
-    }
-}
-#endif

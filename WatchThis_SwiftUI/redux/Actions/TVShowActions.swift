@@ -130,13 +130,14 @@ struct TVShowActions {
             for person in cast {
                 if let appState = state as? AppState, let tmdbId = person.person.ids.tmdb {
                     // Only fetch images if not already in state.
-                    if appState.tvShowState.traktImages[.Person]?[tmdbId] == nil {
+                    let slug = person.person.slug
+                    if appState.tvShowState.slugImages[slug] == nil {
                         TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Person_Details(id: tmdbId), params: TMDB_Parameters)
                         {
                             (result: Result<Person, APIError>) in
                             switch result {
                             case let .success(response):
-                                dispatch(SetEntityImages(entity: .Person, tmdbId: tmdbId, slugImage: .init(backgroundPath: nil, posterPath: response.profilePath)))
+                                dispatch(SetSlugImage(slug: slug, slugImage: .init(backgroundPath: nil, posterPath: response.profilePath)))
                             case let .failure(error):
                                 print(error)
                                 break

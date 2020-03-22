@@ -80,7 +80,7 @@ struct CustomListRow: View {
                 break
             case .Person:
                 if let detail = store.state.traktState.people[item.slug] {
-                    let posterPath = store.state.traktState.traktImages[.Person]?[detail.ids.tmdb!]?.posterPath
+                    let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
                     items.append(ListItemIdAndImagePath(itemType: .Person, slug: item.slug, ids: detail.ids, itemName:detail.name, imagePath: posterPath))
                 }
                 break

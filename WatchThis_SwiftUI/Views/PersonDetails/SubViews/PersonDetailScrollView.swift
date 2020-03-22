@@ -29,10 +29,7 @@ struct PersonDetailScrollView: View {
     }
     
     private var profilePath: String? {
-        if let tmdbId = personDetails.ids.tmdb {
-            return store.state.traktState.traktImages[.Person]?[tmdbId]?.posterPath
-        }
-        return nil
+        return store.state.traktState.slugImages[personDetails.slug]?.posterPath
     }
     
     private func creditPosterPath(credit: TraktCredits, itemType: ItemType) -> String? {

@@ -170,10 +170,7 @@ struct PeopleSearchResults: View {
     let peopleResults: [TraktPerson]
     
     private func getPosterPath(for person: TraktPerson) -> String? {
-        if let tmdbId = person.ids.tmdb {
-            return store.state.traktState.traktImages[.Person]?[tmdbId]?.posterPath
-        }
-        return nil
+        return store.state.traktState.slugImages[person.slug]?.posterPath
     }
     
     var body: some View {

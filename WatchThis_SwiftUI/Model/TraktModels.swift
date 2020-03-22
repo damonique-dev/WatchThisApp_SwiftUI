@@ -163,3 +163,9 @@ struct TraktSearchResult: Codable {
     var movie: TraktMovie?
     var person: TraktPerson?
 }
+
+struct TMDbImagesResponse: Codable {
+    var backdropPath: String?
+    var posterPath: String?
+    var profilePath: String?
+}

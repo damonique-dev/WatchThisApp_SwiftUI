@@ -17,15 +17,19 @@ struct TraktActions {
             TraktApiClient.sharedInstance().GET(endpoint: endpoint, params: Trakt_Parameters) { (result: Result<T, APIError>) in
                 switch result {
                 case let .success(response):
+                    var shows = [TraktShow]()
+                    var ids = [Ids]()
                     if T.self == [TraktShow].self {
-                        dispatch(SetTVShowList(list: self.showList, shows: response as! [TraktShow]))
-                        dispatch(FetchShowImagesFromTMDB(shows: response as! [TraktShow]))
+                        shows = response as! [TraktShow]
+                        ids = shows.compactMap({ $0.ids })
                     } else if T.self == [TraktShowListResults].self {
-                        let list = (response as! [TraktShowListResults]).compactMap {$0.show}
-                        dispatch(SetTVShowList(list: self.showList, shows: list))
-                        dispatch(FetchShowImagesFromTMDB(shows: list))
+                        shows = (response as! [TraktShowListResults]).compactMap {$0.show}
+                        ids = shows.compactMap({ $0.ids })
                     }
                     
+                    dispatch(SetTVShowList(list: self.showList, shows: shows))
+                    dispatch(FetchImagesFromTMDB(ids: ids, itemType: .TVShow))
+                    shows.forEach({ dispatch(SetShow(slug: $0.slug, show: $0)) })
                 case let .failure(error):
                     #if DEBUG
                     print(error)
@@ -45,15 +49,19 @@ struct TraktActions {
                 (result: Result<T, APIError>) in
                 switch result {
                 case let .success(response):
+                    var movies = [TraktMovie]()
+                    var ids = [Ids]()
                     if T.self == [TraktMovie].self {
-                        let movies = response as! [TraktMovie]
-                        dispatch(SetMovieList(list: self.movieList, movies: movies))
-                        dispatch(FetchMovieImagesFromTMDB(movies: movies))
+                        movies = response as! [TraktMovie]
+                        ids = movies.compactMap({ $0.ids })
                     } else if T.self == [TraktMovieListResults].self {
-                        let list = (response as! [TraktMovieListResults]).compactMap {$0.movie}
-                        dispatch(SetMovieList(list: self.movieList, movies: list))
-                        dispatch(FetchMovieImagesFromTMDB(movies: list))
+                        movies = (response as! [TraktMovieListResults]).compactMap {$0.movie}
+                        ids = movies.compactMap({ $0.ids })
                     }
+                    
+                    dispatch(SetMovieList(list: self.movieList, movies: movies))
+                    dispatch(FetchImagesFromTMDB(ids: ids, itemType: .Movie))
+                    movies.forEach({ dispatch(SetMovie(slug: $0.slug, movie: $0)) })
                 case let .failure(error):
                     print(error)
                     break
@@ -85,47 +93,62 @@ struct TraktActions {
                     } else if self.endpoint == TraktApiClient.Endpoint.TV_Cast(slug: slug) || self.endpoint == TraktApiClient.Endpoint.Movie_Cast(slug: slug) {
                         let cast = (response as! TraktPeopleResults).cast
                         let people = cast.map({ $0.person })
-                        dispatch(FetchPeopleImagesFromTMDB(people: people))
+                        let ids = people.compactMap({ $0.ids })
+                        dispatch(FetchImagesFromTMDB(ids: ids, itemType: .Person))
                         dispatch(SetCast(showSlug: slug, cast: cast))
+                        people.forEach({ dispatch(SetPerson(slug: $0.slug, person: $0)) })
                     } else if self.endpoint == TraktApiClient.Endpoint.TV_Related(slug: slug) {
                         let shows = response as! [TraktShow]
-                        dispatch(FetchShowImagesFromTMDB(shows: shows))
+                        let ids = shows.compactMap({ $0.ids })
+                        dispatch(FetchImagesFromTMDB(ids: ids, itemType: .TVShow))
                         dispatch(SetRelatedShows(showSlug: slug, shows: shows))
+                        shows.forEach({ dispatch(SetShow(slug: $0.slug, show: $0)) })
                     } else if self.endpoint == TraktApiClient.Endpoint.TV_Details(slug: slug) {
                         let show = response as! TraktShow
-                        dispatch(FetchShowImagesFromTMDB(shows: [show]))
+                        dispatch(FetchImagesFromTMDB(ids: [show.ids], itemType: .TVShow))
+                        dispatch(SetShow(slug: show.slug, show: show))
                     } else if self.endpoint == TraktApiClient.Endpoint.Person_TVCredits(slug: slug) {
                         let castlist = (response as! TraktCreditsResults).cast
                         dispatch(SetPersonShowCredits(slug: slug, credit: castlist))
                         
                         let shows = castlist.compactMap({$0.show})
-                        dispatch(FetchShowImagesFromTMDB(shows: shows))
+                        let ids = shows.compactMap({ $0.ids })
+                        dispatch(FetchImagesFromTMDB(ids: ids, itemType: .TVShow))
+                        shows.forEach({ dispatch(SetShow(slug: $0.slug, show: $0)) })
                     } else if self.endpoint == TraktApiClient.Endpoint.Person_MovieCredits(slug: slug) {
                         let castlist = (response as! TraktCreditsResults).cast
                         dispatch(SetPersonMovieCredits(slug: slug, credit: castlist))
                         
                         let movies = castlist.compactMap({$0.movie})
-                        dispatch(FetchMovieImagesFromTMDB(movies: movies))
+                        let ids = movies.compactMap({ $0.ids })
+                        dispatch(FetchImagesFromTMDB(ids: ids, itemType: .Movie))
+                        movies.forEach({ dispatch(SetMovie(slug: $0.slug, movie: $0)) })
                     } else if self.endpoint == TraktApiClient.Endpoint.Movie_Details(slug: slug) {
                         let movie = response as! TraktMovie
-                        dispatch(FetchMovieImagesFromTMDB(movies: [movie]))
+                        dispatch(FetchImagesFromTMDB(ids: [movie.ids], itemType: .Movie))
+                        dispatch(SetMovie(slug: movie.slug, movie: movie))
                     } else if self.endpoint == TraktApiClient.Endpoint.Movie_Related(slug: slug) {
                         let movies = response as! [TraktMovie]
-                        dispatch(FetchMovieImagesFromTMDB(movies: movies))
+                        let ids = movies.compactMap({ $0.ids })
+                        dispatch(FetchImagesFromTMDB(ids: ids, itemType: .Movie))
                         dispatch(SetRelatedMovies(movieSlug: slug, movies: movies))
+                        movies.forEach({ dispatch(SetMovie(slug: $0.slug, movie: $0)) })
                     } else if self.endpoint == TraktApiClient.Endpoint.TraktIds(id: self.ids.tmdb!) {
                         let searchResults = (response as! [TraktSearchResult]).first
                         if let show = searchResults?.show {
-                            dispatch(FetchShowImagesFromTMDB(shows: [show]))
+                            dispatch(FetchImagesFromTMDB(ids: [show.ids], itemType: .TVShow))
                             dispatch(SetTmdbIdToSlug(id: self.ids.tmdb!, slug: show.slug))
+                            dispatch(SetShow(slug: show.slug, show: show))
                         }
                         if let movie = searchResults?.movie {
-                            dispatch(FetchMovieImagesFromTMDB(movies: [movie]))
+                            dispatch(FetchImagesFromTMDB(ids: [movie.ids], itemType: .Movie))
                             dispatch(SetTmdbIdToSlug(id: self.ids.tmdb!, slug: movie.slug))
+                            dispatch(SetMovie(slug: movie.slug, movie: movie))
                         }
                         if let person = searchResults?.person {
-                            dispatch(FetchPeopleImagesFromTMDB(people: [person]))
+                            dispatch(FetchImagesFromTMDB(ids: [person.ids], itemType: .Person))
                             dispatch(SetTmdbIdToSlug(id: self.ids.tmdb!, slug: person.slug))
+                            dispatch(SetPerson(slug: person.slug, person: person))
                         }
                     } else {
                         print("Endpoint \"\(self.endpoint.path())\" action not defined.")
@@ -151,15 +174,18 @@ struct TraktActions {
                 case let .success(response):
                     if self.endpoint == TraktApiClient.Endpoint.Search_TV {
                         let shows = response.compactMap { $0.show }
-                        dispatch(FetchShowImagesFromTMDB(shows: shows))
+                        let ids = shows.compactMap({ $0.ids })
+                        dispatch(FetchImagesFromTMDB(ids: ids, itemType: .TVShow))
                         dispatch(SetTVShowSearch(query: self.query, shows: shows))
                     } else if self.endpoint == TraktApiClient.Endpoint.Search_People {
                         let people = response.compactMap { $0.person }
-                        dispatch(FetchPeopleImagesFromTMDB(people: people))
+                        let ids = people.compactMap({ $0.ids })
+                        dispatch(FetchImagesFromTMDB(ids: ids, itemType: .Person))
                         dispatch(SetPeopleSearch(query: self.query, people: people))
                     } else if self.endpoint == TraktApiClient.Endpoint.Search_Movie {
                         let movies = response.compactMap { $0.movie }
-                        dispatch(FetchMovieImagesFromTMDB(movies: movies))
+                        let ids = movies.compactMap({ $0.ids })
+                        dispatch(FetchImagesFromTMDB(ids: ids, itemType: .Movie))
                         dispatch(SetMovieSearch(query: self.query, movies: movies))
                     } else {
                         print("Endpoint \"\(self.endpoint.path())\" action not defined.")
@@ -193,55 +219,40 @@ struct TraktActions {
         }
     }
     
-    struct FetchShowImagesFromTMDB: AsyncAction {
-        let shows: [TraktShow]
+    struct FetchImagesFromTMDB: AsyncAction {
+        let ids: [Ids]
+        let itemType: ItemType
+        
         func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            for show in shows {
-                if let appState = state as? AppState, let tmdbId = show.ids.tmdb, let slug = show.ids.slug {
+            for id in ids {
+                if let appState = state as? AppState, let tmdbId = id.tmdb, let slug = id.slug {
                     // Only fetch images if not already in state.
                     if appState.tvShowState.slugImages[slug] == nil {
-                        TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.TV_ShowDetails(id: tmdbId), params: TMDB_Parameters)
-                        {
-                            (result: Result<TVShowDetails, APIError>) in
+                        var endpoint: TMDBClient.Endpoint
+                        switch itemType {
+                            case .TVShow:
+                                endpoint = TMDBClient.Endpoint.TV_ShowDetails(id: tmdbId)
+                            case .Movie:
+                                endpoint = TMDBClient.Endpoint.Movie_Details(id: tmdbId)
+                            case .Person:
+                                endpoint = TMDBClient.Endpoint.Person_Details(id: tmdbId)
+                        }
+                        TMDBClient.sharedInstance.GET(endpoint: endpoint, params: TMDB_Parameters) { (result: Result<TMDbImagesResponse, APIError>) in
                             switch result {
                             case let .success(response):
-                                dispatch(SetSlugImage(slug: slug, slugImage: .init(backgroundPath: response.backdropPath, posterPath: response.posterPath)))
+                                var posterPath = response.posterPath
+                                if self.itemType == .Person {
+                                    posterPath = response.profilePath
+                                }
+                                dispatch(SetSlugImage(slug: slug, slugImage: .init(backgroundPath: response.backdropPath, posterPath: posterPath)))
                             case let .failure(error):
                                 #if DEBUG
-                                print("Show Images error: \(error)")
+                                print("\(self.itemType) Images error: \(error)")
                                 #endif
                                 break
                             }
                         }
                     }
-                    dispatch(SetShow(slug: slug, show: show))
-                }
-            }
-        }
-    }
-    
-    struct FetchMovieImagesFromTMDB: AsyncAction {
-        let movies: [TraktMovie]
-        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            for movie in movies {
-                if let appState = state as? AppState, let tmdbId = movie.ids.tmdb, let slug = movie.ids.slug {
-                    // Only fetch images if not already in state.
-                    if appState.tvShowState.slugImages[slug] == nil {
-                        TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Movie_Details(id: tmdbId), params: TMDB_Parameters)
-                        {
-                            (result: Result<MovieDetails, APIError>) in
-                            switch result {
-                            case let .success(response):
-                                dispatch(SetSlugImage(slug: slug, slugImage: .init(backgroundPath: response.backdropPath, posterPath: response.posterPath)))
-                            case let .failure(error):
-                                #if DEBUG
-                                print("Movie Images error: \(error)")
-                                #endif
-                                break
-                            }
-                        }
-                    }
-                    dispatch(SetMovie(slug: slug, movie: movie))
                 }
             }
         }
@@ -269,33 +280,6 @@ struct TraktActions {
                             }
                         }
                     }
-                }
-            }
-        }
-    }
-    
-    struct FetchPeopleImagesFromTMDB: AsyncAction {
-        let people: [TraktPerson]
-        func execute(state: FluxState?, dispatch: @escaping DispatchFunction) {
-            for person in people {
-                if let appState = state as? AppState, let tmdbId = person.ids.tmdb {
-                    // Only fetch images if not already in state.
-                    if appState.traktState.slugImages[person.slug] == nil {
-                        TMDBClient.sharedInstance.GET(endpoint: TMDBClient.Endpoint.Person_Details(id: tmdbId), params: TMDB_Parameters)
-                        {
-                            (result: Result<Person, APIError>) in
-                            switch result {
-                            case let .success(response):
-                                dispatch(SetSlugImage(slug: person.slug, slugImage: .init(backgroundPath: nil, posterPath: response.profilePath)))
-                            case let .failure(error):
-                                #if DEBUG
-                                print("People Images error: \(error)")
-                                #endif
-                                break
-                            }
-                        }
-                    }
-                    dispatch(SetPerson(slug: person.slug, person: person))
                 }
             }
         }

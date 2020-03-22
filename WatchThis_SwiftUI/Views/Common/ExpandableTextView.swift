@@ -24,7 +24,11 @@ struct ExpandableTextView: View {
     }
     
     private func determineTruncation(_ geometry: GeometryProxy, with font: Font) {
-        let total = self.text.boundingRect(
+        if text.isEmpty {
+            truncated = false
+            return
+        }
+        let total = text.boundingRect(
             with: CGSize(
                 width: geometry.size.width,
                 height: .greatestFiniteMagnitude
@@ -35,7 +39,7 @@ struct ExpandableTextView: View {
         )
         
         if total.size.height > geometry.size.height {
-            self.truncated = true
+            truncated = true
         }
     }
     

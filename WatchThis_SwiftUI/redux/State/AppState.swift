@@ -72,6 +72,11 @@ struct AppState: FluxState, Codable {
             }
             return false
         }
+        
+        var slugImages: [String: TraktImages] = [:]
+        shows.forEach({ slugImages[$0.key] = traktState.slugImages[$0.key] })
+        movies.forEach({ slugImages[$0.key] = traktState.slugImages[$0.key] })
+        people.forEach({ slugImages[$0.key] = traktState.slugImages[$0.key] })
 
         var savingState = AppState()
         
@@ -82,6 +87,7 @@ struct AppState: FluxState, Codable {
         savingState.traktState.traktShows = shows
         savingState.traktState.traktMovies = movies
         savingState.traktState.people = people
+        savingState.traktState.slugImages = slugImages
         
         guard let data = try? encoder.encode(savingState) else {
             return

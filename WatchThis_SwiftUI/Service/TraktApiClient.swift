@@ -50,7 +50,7 @@ class TraktApiClient {
                     return
                 case .failure(let error):
                     #if DEBUG
-                    print("Error: \(error)")
+                    print("Error with endpoint \(endpoint.path()): \(error)")
                     #endif
                     DispatchQueue.main.async {
                         completionHandler(.failure(.networkError(error: error)))

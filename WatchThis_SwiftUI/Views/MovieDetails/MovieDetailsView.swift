@@ -14,38 +14,34 @@ struct MovieDetailsView: View {
     @State private var showActionSheet = false
     @State private var showVideoPlayer = false
     
-    let movieId: Int
-    private var movieDetails: MovieDetails {
-        return store.state.movieState.movieDetails[movieId] ?? MovieDetails(id: movieId, title: "")
+    let slug: String
+    let movieIds: Ids
+    private var movieDetails: TraktMovie? {
+        return store.state.traktState.traktMovies[slug]
     }
     
     private func fetchMovieDetails() {
-        if store.state.movieState.movieDetails[movieId] == nil {
-            store.dispatch(action: MovieActions.FetchMovieDetails(id: movieDetails.id))
+        let state = store.state.traktState
+        if state.traktMovies[slug] == nil {
+            store.dispatch(action: TraktActions.FetchFromTraktApi<TraktMovie>(ids: movieIds, endpoint: .Movie_Details(slug: slug)))
+        }
+        if state.traktCast[slug] == nil {
+            store.dispatch(action: TraktActions.FetchFromTraktApi<TraktPeopleResults>(ids: movieIds, endpoint: .Movie_Cast(slug: slug)))
+        }
+        if state.traktRelatedShows[slug] == nil {
+            store.dispatch(action: TraktActions.FetchFromTraktApi<[TraktMovie]>(ids: movieIds, endpoint: .Movie_Related(slug: slug)))
         }
     }
     
-    private var video: Video? {
-        if let videos = movieDetails.videos?.results, !videos.isEmpty {
-            return videos[0]
-        }
-        
-        return nil
+    private var posterPath: String? {
+        return store.state.traktState.slugImages[slug]?.posterPath
     }
         
     var body: some View {
-        DetailView(id: movieId, title: movieDetails.title, itemType: .Movie, video: video, imagePath: movieDetails.posterPath, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
-            MovieDetailsScrollView(showActionSheet: self.$showActionSheet, showVideoPlayer: self.$showVideoPlayer, movieDetails: self.movieDetails)
+        DetailView(slug: slug, title: movieDetails?.title ?? "", itemType: .Movie, imagePath: posterPath, trailerPath: movieDetails?.trailer, showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer) {
+            MovieDetailsScrollView(showActionSheet: self.$showActionSheet, showVideoPlayer: self.$showVideoPlayer, slug: self.slug)
         }.onAppear() {
             self.fetchMovieDetails()
         }
     }
 }
-
-#if DEBUG
-struct MovieDetailsView_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieDetailsView(movieId: testMovieDetails.id).environmentObject(sampleStore)
-    }
-}
-#endif

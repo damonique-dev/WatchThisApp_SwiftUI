@@ -11,34 +11,35 @@ import SwiftUIFlux
 
 struct SeasonDetailView: View {
     @EnvironmentObject var store: Store<AppState>
-    @State var rowExpanstionState: [Int:Bool] = [:]
+    @State var rowExpanstionState: [UUID:Bool] = [:]
     
-    let showId: Int
-    let seasonId: Int
-    
-    private var seasonDetails: Season {
-        return store.state.tvShowState.tvShowSeasons[showId]?[seasonId] ?? Season()
-    }
+    let showSlug: String
+    let seasonDetails: TraktSeason
     
     private var imagePath: String? {
-        return seasonDetails.posterPath
+        if let tmdbId = seasonDetails.ids.tmdb {
+            return store.state.traktState.traktImages[.Season]?[tmdbId]?.posterPath
+        }
+        return nil
     }
     
     private func fetchSeasonDetails() {
-        if store.state.tvShowState.tvShowSeasons[showId]?[seasonId] == nil {
-            store.dispatch(action: TVShowActions.FetchTVShowSeasonDetails(id: showId, seasonId: seasonId))
+        if store.state.traktState.traktEpisodes[showSlug]?[seasonDetails.number] == nil {
+            if let showIds = store.state.traktState.traktShows[showSlug]?.ids {
+                store.dispatch(action: TraktActions.FetchSeasonEpisodes(showIds: showIds, seasonNumber: seasonDetails.number))
+            }
         }
     }
     
-    private func getHeaderText(episode: Episode) -> String {
-        return "Episode \(episode.episodeNumber ?? 0): \(episode.name ?? "")"
+    private func getHeaderText(episode: TraktEpisode) -> String {
+        return "Episode \(episode.number): \(episode.title ?? "")"
     }
     
-    private var episodes: [Episode] {
-        return seasonDetails.episodes ?? []
+    private var episodes: [TraktEpisode] {
+        return store.state.traktState.traktEpisodes[showSlug]?[seasonDetails.number] ?? []
     }
     
-    private func isExpanded(_ section:Int) -> Bool {
+    private func isExpanded(_ section: UUID) -> Bool {
         rowExpanstionState[section] ?? false
     }
     
@@ -48,28 +49,32 @@ struct SeasonDetailView: View {
             ScrollView(.vertical) {
                 VStack(alignment: .leading) {
                     SeasonDetailsHeader(seasonDetails: seasonDetails)
-                    Text("Episodes:")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.leading)
-                        .padding(.leading, 8)
-                    ForEach(episodes, id: \.id) { episode in
-                        VStack {
-                            EpisodeSectionHeader(headerText: self.getHeaderText(episode: episode), isExpanded: self.isExpanded(episode.id))
-                                .font(.headline)
-                                .onTapGesture {
-                                    self.rowExpanstionState[episode.id] = !self.isExpanded(episode.id)
-                            }
-                            if self.isExpanded(episode.id) {
-                                EpisodeRow(episode: episode)
-                            }
-                        }.padding(.top, -6)
+                    if episodes.count > 0 {
+                        Text("Episodes:")
+                            .font(.title)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.leading)
+                            .padding(.leading, 8)
+                        ForEach(episodes, id: \.id) { episode in
+                            VStack {
+                                EpisodeSectionHeader(headerText: self.getHeaderText(episode: episode), isExpanded: self.isExpanded(episode.id))
+                                    .font(.headline)
+                                    .onTapGesture {
+                                        self.rowExpanstionState[episode.id] = !self.isExpanded(episode.id)
+                                }
+                                if self.isExpanded(episode.id) {
+                                    EpisodeRow(episode: episode)
+                                }
+                            }.padding(.top, -6)
+                        }
                     }
                 }
-            }.padding(.bottom, 16)
+                .frame(width: UIScreen.main.bounds.width - 16)
+                .padding(.vertical, 16)
+            }
         }
         .padding(.vertical, 44)
-        .navigationBarTitle(Text("\(seasonDetails.name ?? "")"))
+        .navigationBarTitle(Text("\(seasonDetails.title ?? "")"))
         .onAppear() {
             self.fetchSeasonDetails()
         }
@@ -77,34 +82,42 @@ struct SeasonDetailView: View {
 }
 
 struct SeasonDetailsHeader: View {
-    let seasonDetails: Season
+    @EnvironmentObject var store: Store<AppState>
+    let seasonDetails: TraktSeason
     
     private let imageWidth = UIScreen.main.bounds.width/3
     private let imageHeight = (UIScreen.main.bounds.width/3) * 11/8
     
-    private var cast: [Cast] {
-        return seasonDetails.credits?.cast ?? []
+    private var cast: [TraktCast] {
+        return []
+    }
+    
+    private var posterPath: String? {
+        if let tmdbId = seasonDetails.ids.tmdb {
+            return store.state.traktState.traktImages[.Season]?[tmdbId]?.posterPath
+        }
+        return nil
     }
     
     var body: some View {
-        VStack {
-            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: seasonDetails.posterPath,
-                                                                                 size: .original))
-            .frame(width: imageWidth, height: imageHeight)
-            Text("\(seasonDetails.overview ?? "")")
-                .font(.body)
-                .foregroundColor(.white)
-                .fixedSize(horizontal: false, vertical: true)
-            if cast.count > 0 {
-                DetailCategoryRow(categoryTitle: "Cast") {
-                    ForEach(self.cast) { cast in
-                        NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
-                            CastCellView(person: cast)
+        HStack {
+            Spacer()
+            VStack {
+                ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: posterPath, size: .original))
+                    .frame(width: imageWidth, height: imageHeight)
+                ExpandableTextView(title: seasonDetails.title ?? "", text: "\(seasonDetails.overview ?? "")", imagePath: posterPath, font: .headline, color: .white)
+                if cast.count > 0 {
+                    DetailCategoryRow(categoryTitle: "Cast") {
+                        ForEach(self.cast) { cast in
+                            NavigationLink(destination: PersonDetailsView(personDetails: cast.person)) {
+                                CastCellView(person: cast)
+                            }
                         }
                     }
                 }
-            }
-        }.padding(.horizontal, 8)
+            }.padding(.horizontal, 8)
+            Spacer()
+        }
     }
 }
 
@@ -130,27 +143,48 @@ struct EpisodeSectionHeader: View {
 }
 
 struct EpisodeRow: View {
-    let episode: Episode
+    @EnvironmentObject var store: Store<AppState>
+    let episode: TraktEpisode
     
     private let imageWidth = UIScreen.main.bounds.width - 32
     
-    private var guestStars: [Cast] {
-        return episode.guestStars ?? []
+    private var guestStars: [TraktCast] {
+        return []
     }
+    
+    private var posterPath: String? {
+        if let tmdbId = episode.ids.tmdb {
+            return store.state.traktState.traktImages[.Episode]?[tmdbId]?.posterPath
+        }
+        return nil
+    }
+    
+    private func getRuntime() -> String {
+        if let runtime = episode.runtime {
+            return "\(runtime) minutes"
+        }
+        return ""
+    }
+    
+    private var details: [OverviewDetail] {
+            return [
+                .init(title: "First Air Date:", detail: episode.firstAired?.fromISOtoDateString(format: "EEEE, MMMM d yyyy")),
+                .init(title: "Runtime:", detail: getRuntime()),
+            ]
+        }
 
     var body: some View {
         VStack {
-            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: episode.stillPath,
-                                                                                     size: .original))
+            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: posterPath, size: .original))
                 .frame(width: imageWidth, height: imageWidth * 8/11)
-            Text("\(episode.overview ?? "")")
-                .font(.body)
-                .foregroundColor(.white)
-                .fixedSize(horizontal: false, vertical: true)
+            ExpandableTextView(title: episode.title ?? "", text: "\(episode.overview ?? "")", imagePath: posterPath, font: .body, color: .white)
+            ForEach(details, id: \.self) { detail in
+                DetailsLabel(title: detail.title, detail: detail.detail)
+            }
             if guestStars.count > 0 {
                 DetailCategoryRow(categoryTitle: "Guest Stars") {
                     ForEach(self.guestStars) { cast in
-                        NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+                        NavigationLink(destination: PersonDetailsView(personDetails: cast.person)) {
                             CastCellView(person: cast)
                         }
                     }
@@ -159,3 +193,11 @@ struct EpisodeRow: View {
         }.padding(.bottom, 8)
     }
 }
+
+//#if DEBUG
+//struct SeasonDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SeasonDetailView(showId: 1416, seasonId: 1).environmentObject(sampleStore)
+//    }
+//}
+//#endif

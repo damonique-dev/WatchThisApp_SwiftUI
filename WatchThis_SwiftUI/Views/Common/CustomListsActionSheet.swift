@@ -14,7 +14,7 @@ struct CustomListActionSheet {
     @Binding var showCustomListAlert: Bool
     private let customLists: [CustomList]
     private let objectName: String
-    private let objectId: Int
+    private let slug: String
     private let itemType: ItemType
     
     var title: Text {
@@ -28,19 +28,19 @@ struct CustomListActionSheet {
         
         // Create list button
         buttonList.append(ActionSheet.Button.default(Text("Create a new list"), action: {
-            self.customListModel.response = CustomListContent(shouldCreateNewList: true, listId: UUID(), itemId: self.objectId, itemType: .TVShow)
+            self.customListModel.response = CustomListContent(shouldCreateNewList: true, listId: UUID(), slug: self.slug, itemType: .TVShow)
             self.showCustomListAlert = true
         }))
         
         // Add/ Remove from existing lists buttons
         for list in customLists {
-            if list.items[objectId] != nil {
+            if list.traktItems[slug] != nil {
                 buttonList.append(ActionSheet.Button.default(Text("Remove \"\(objectName)\" from \(list.listName)"), action: {
-                    self.customListModel.response = CustomListContent(shouldRemove: true, listName: list.listName, listId: list.id, itemId: self.objectId, itemType: self.itemType)
+                    self.customListModel.response = CustomListContent(shouldRemove: true, listName: list.listName, listId: list.id, slug: self.slug, itemType: self.itemType)
                     self.showCustomListConfirmation = true
                 }))
             } else {
-                buttonList.append(ActionSheet.Button.default(Text("Add \"\(objectName)\" to \(list.listName)"), action: { self.customListModel.response = CustomListContent(shouldAdd: true, listName: list.listName, listId: list.id, itemId: self.objectId, itemType: self.itemType)
+                buttonList.append(ActionSheet.Button.default(Text("Add \"\(objectName)\" to \(list.listName)"), action: { self.customListModel.response = CustomListContent(shouldAdd: true, listName: list.listName, listId: list.id, slug: self.slug, itemType: self.itemType)
                     self.showCustomListConfirmation = true
                 }))
             }
@@ -52,13 +52,13 @@ struct CustomListActionSheet {
         return buttonList
     }
     
-    init(customListModel: CustomListModel, showCustomListConfirmation: Binding<Bool>, showCustomListAlert: Binding<Bool>, customLists: [CustomList], objectName: String, objectId: Int, itemType: ItemType) {
+    init(customListModel: CustomListModel, showCustomListConfirmation: Binding<Bool>, showCustomListAlert: Binding<Bool>, customLists: [CustomList], objectName: String, slug: String, itemType: ItemType) {
         self.customListModel = customListModel
         self._showCustomListConfirmation = showCustomListConfirmation
         self._showCustomListAlert = showCustomListAlert
         self.customLists = customLists
         self.objectName = objectName
-        self.objectId = objectId
+        self.slug = slug
         self.itemType = itemType
     }
 }

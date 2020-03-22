@@ -14,10 +14,8 @@ fileprivate let encoder = JSONEncoder()
 fileprivate let decoder = JSONDecoder()
 
 struct AppState: FluxState, Codable {
-    var tvShowState: TVShowState
-    var peopleState: PeopleState
-    var movieState: MovieState
     var userState: UserState
+    var traktState: TraktState
     
     init() {
         do {
@@ -29,73 +27,67 @@ struct AppState: FluxState, Codable {
         } catch let error {
             fatalError("Couldn't create save state data with error: \(error)")
         }
-        
+                
         if let data = try? Data(contentsOf: savePath),
             let savedState = try? decoder.decode(AppState.self, from: data) {
-            self.tvShowState = savedState.tvShowState
-            self.peopleState = savedState.peopleState
-            self.movieState = savedState.movieState
             self.userState = savedState.userState
+            self.traktState = savedState.traktState
         } else {
-            self.tvShowState = TVShowState()
-            self.peopleState = PeopleState()
-            self.movieState = MovieState()
             self.userState = UserState()
+            self.traktState = TraktState()
         }
     }
     
     func archiveState() {
-        let shows = tvShowState.tvShow.filter { (arg) -> Bool in
-            let (key, _) = arg
+        let shows = traktState.traktShows.filter { (arg) -> Bool in
+            let (_, show) = arg
             for list in Array(userState.customLists.values) {
-                if list.items.contains(where: { (id, item) in
-                    return id == key && item.itemType == .TVShow
+                if list.traktItems.contains(where: { (id, item) in
+                    return id == show.slug && item.itemType == .TVShow
                 }) {
                     return true
                 }
             }
-            return tvShowState.favoriteShows.contains(key)
+            return false
         }
-        let movies = movieState.movieDetails.filter { (arg) -> Bool in
-            let (key, _) = arg
+        let movies = traktState.traktMovies.filter { (arg) -> Bool in
+            let (_, movie) = arg
             for list in Array(userState.customLists.values) {
-                if list.items.contains(where: { (id, item) in
-                    return id == key && item.itemType == .TVShow
+                if list.traktItems.contains(where: { (id, item) in
+                    return id == movie.slug && item.itemType == .Movie
                 }) {
                     return true
                 }
             }
-            return movieState.favoriteMovies.contains(key)
+            return false
         }
-        let people = peopleState.people.filter { (arg) -> Bool in
-            let (key, _) = arg
+        let people = traktState.people.filter { (arg) -> Bool in
+            let (_, person) = arg
             for list in Array(userState.customLists.values) {
-                if list.items.contains(where: { (id, item) in
-                    return id == key && item.itemType == .TVShow
+                if list.traktItems.contains(where: { (id, item) in
+                    return id == person.slug && item.itemType == .Person
                 }) {
                     return true
                 }
             }
-            return peopleState.favoritePeople.contains(key)
+            return false
         }
+        
+        var slugImages: [String: TraktImages] = [:]
+        shows.forEach({ slugImages[$0.key] = traktState.slugImages[$0.key] })
+        movies.forEach({ slugImages[$0.key] = traktState.slugImages[$0.key] })
+        people.forEach({ slugImages[$0.key] = traktState.slugImages[$0.key] })
+
         var savingState = AppState()
-        
-        // Save Shows
-        savingState.tvShowState.tvShow = shows
-        savingState.tvShowState.favoriteShows = tvShowState.favoriteShows
-        savingState.tvShowState.tvSearchQueries = tvShowState.tvSearchQueries
-        
-        // Save Movies
-        savingState.movieState.movieDetails = movies
-        savingState.movieState.favoriteMovies = movieState.favoriteMovies
-        savingState.movieState.movieSearchQueries = movieState.movieSearchQueries
-        
-        // Save People
-        savingState.peopleState.people = people
-        savingState.peopleState.favoritePeople = peopleState.favoritePeople
         
         // Save Users
         savingState.userState.customLists = userState.customLists
+        
+        // Save Trakt State
+        savingState.traktState.traktShows = shows
+        savingState.traktState.traktMovies = movies
+        savingState.traktState.people = people
+        savingState.traktState.slugImages = slugImages
         
         guard let data = try? encoder.encode(savingState) else {
             return
@@ -104,11 +96,9 @@ struct AppState: FluxState, Codable {
     }
     
     #if DEBUG
-    init(tvShowState: TVShowState, peopleState: PeopleState, movieState: MovieState, userState: UserState) {
-        self.tvShowState = tvShowState
-        self.peopleState = peopleState
-        self.movieState = movieState
+    init(userState: UserState, traktState: TraktState) {
         self.userState = userState
+        self.traktState = traktState
     }
     #endif
 }

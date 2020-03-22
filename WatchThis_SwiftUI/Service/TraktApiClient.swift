@@ -27,7 +27,7 @@ class TraktApiClient {
         return Singleton.sharedInstance
     }
     
-    func GetList<T: Codable>(endpoint: Endpoint, params: [String: String]?, completionHandler: @escaping (Result<T, APIError>) -> Void) {
+    func GET<T: Codable>(endpoint: Endpoint, params: [String: String]?, completionHandler: @escaping (Result<T, APIError>) -> Void) {
         let url = URLFromParameters(endpoint: endpoint, parameters: params as [String : AnyObject]?)
         AF.request(url, headers: header).responseJSON { response in
             switch response.result {
@@ -42,7 +42,7 @@ class TraktApiClient {
                     } catch let error {
                         DispatchQueue.main.async {
                             #if DEBUG
-                            print("Get Trakt List - JSON Decoding Error: \(error)")
+                            print("Get Trakt - JSON Decoding Error: \(error)")
                             #endif
                             completionHandler(.failure(.jsonDecodingError(error: error)))
                         }
@@ -50,7 +50,7 @@ class TraktApiClient {
                     return
                 case .failure(let error):
                     #if DEBUG
-                    print("Error: \(error)")
+                    print("Error with endpoint \(endpoint.path()): \(error)")
                     #endif
                     DispatchQueue.main.async {
                         completionHandler(.failure(.networkError(error: error)))

@@ -1,28 +1,27 @@
 //
-//  SeasonCell.swift
+//  PersonCreditCell.swift
 //  WatchThis_SwiftUI
 //
-//  Created by Damonique Thomas on 9/1/19.
-//  Copyright © 2019 Damonique Thomas. All rights reserved.
+//  Created by Damonique Blake on 3/13/20.
+//  Copyright © 2020 Damonique Thomas. All rights reserved.
 //
 
 import SwiftUI
 import SwiftUIFlux
 
-struct SeasonCell: View {
+struct PersonCreditCell: View {
     @EnvironmentObject var store: Store<AppState>
-    let season: TraktSeason
+    let posterPath: String?
+    let imageText: String?
+    let title: String?
+    let subTitle: String?
     
-    private var posterPath: String? {
-        if let tmdbId = season.ids.tmdb {
-            return store.state.traktState.traktImages[.Season]?[tmdbId]?.posterPath
-        }
-        return nil
-    }
+    private let width = UIScreen.main.bounds.width/3
+    private let imageWidth = UIScreen.main.bounds.width/3 - 30
     
     var body: some View {
         ZStack {
-            Text("\(season.title ?? "")")
+            Text("\(imageText ?? "")")
                 .font(Font.system(.headline, design: .rounded))
                 .fontWeight(.semibold)
                 .frame(width: 125 * 8/11, height: 125)
@@ -31,18 +30,21 @@ struct SeasonCell: View {
             VStack {
                 ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: posterPath,
                                                                                        size: .original), placeholder: .poster)
-                    .frame(width: 125 * 8/11, height: 125)
+                    .frame(width: imageWidth, height: imageWidth * 11/8)
                     .cornerRadius(15)
-                Text("\(season.title ?? "")")
+                Text("\(title ?? "")")
                     .font(Font.system(.callout, design: .rounded))
                     .fontWeight(.bold)
                     .foregroundColor(.orange)
-                    .lineLimit(2)
-                Text("\(season.episodeCount ?? 0) Episodes")
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("\(subTitle ?? "")")
                     .font(Font.system(.caption, design: .rounded))
                     .foregroundColor(.white)
-                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-        }
+        }.frame(width: width, height: width * 11/8 + 40)
     }
 }
+

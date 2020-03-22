@@ -12,7 +12,8 @@ import youtube_ios_player_helper
 
 struct VideoPlayerRepresentable: UIViewRepresentable {
     @Binding var showPlayer: Bool
-    let video: Video?
+    private let youtubeUrl = "http://youtube.com/watch?v="
+    let trailerPath: String?
     
     func makeCoordinator() -> Coordinator {
         return Coordinator(showPlayer: $showPlayer)
@@ -25,9 +26,12 @@ struct VideoPlayerRepresentable: UIViewRepresentable {
     }
 
     func updateUIView(_ view: YTPlayerView, context: Context) {
-        if let key = video?.key {
-            view.load(withVideoId: key)
-        }
+        guard let trailerPath = trailerPath else { return }
+        guard let range = trailerPath.range(of: youtubeUrl) else { return }
+        
+        let key = String(trailerPath[range.upperBound...])
+        view.load(withVideoId: key)
+
         if !showPlayer {
             view.stopVideo()
         }
@@ -35,18 +39,13 @@ struct VideoPlayerRepresentable: UIViewRepresentable {
     
     class Coordinator: NSObject, YTPlayerViewDelegate {
         @Binding var showPlayer: Bool
+        @State private var isInitialLoad = true
         
         init(showPlayer: Binding<Bool>) {
             _showPlayer = showPlayer
         }
         
-        func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
-            // call play video when the player is finished loading.
-            playerView.playVideo()
-        }
-        
         func playerView(_ playerView: YTPlayerView, didChangeTo state: YTPlayerState) {
-            print("YTPlayerState: \(state.rawValue)")
             switch state {
             case .ended:
                 showPlayer = false

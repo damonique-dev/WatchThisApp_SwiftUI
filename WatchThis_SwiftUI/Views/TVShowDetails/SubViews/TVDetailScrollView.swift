@@ -13,33 +13,36 @@ struct TVDetailScrollView: View {
     @EnvironmentObject var store: Store<AppState>
     @Binding var showActionSheet: Bool
     @Binding var showVideoPlayer: Bool
-    let showDetail: TVShowDetails
+    let slug: String
     
-    private var cast: [Cast] {
-        return store.state.tvShowState.tvShowDetail[showDetail.id]?.credits?.cast ?? []
+    private var showDetail: TraktShow? {
+        return store.state.traktState.traktShows[slug]
     }
-    private var similarShows: [TVShowDetails] {
-        return store.state.tvShowState.tvShowDetail[showDetail.id]?.similar?.results ?? []
+    private var cast: [TraktCast] {
+        return store.state.traktState.traktCast[slug] ?? []
     }
-    private var seasons: [Season] {
-        return store.state.tvShowState.tvShowDetail[showDetail.id]?.seasons ?? []
+    private var similarShows: [TraktShow] {
+        return store.state.traktState.traktRelatedShows[slug] ?? []
+    }
+    private var seasons: [TraktSeason] {
+        return store.state.traktState.traktSeasons[slug] ?? []
     }
     
-    func getRuntime() -> String {
-        if let runtime = showDetail.episodeRunTime?.first {
+    private func getRuntime() -> String {
+        if let runtime = showDetail?.runtime {
             return "\(runtime) minutes"
         }
         return ""
     }
     
-    func getGenreList() -> String {
-        if let genres = showDetail.genres {
-            return genres.map({$0.name!}).joined(separator: ", ")
+    private func getGenreList() -> String {
+        if let genres = showDetail?.genres {
+            return genres.joined(separator: ", ")
         }
         return ""
     }
     
-    func getNumberStringOf(_ number: Int?) -> String? {
+    private func getNumberStringOf(_ number: Int?) -> String? {
         if let number  = number {
             return "\(number)"
         }
@@ -47,20 +50,29 @@ struct TVDetailScrollView: View {
         return nil
     }
     
+    private func getPosterPath(for show: TraktShow) -> String? {
+        return store.state.traktState.slugImages[show.slug]?.posterPath
+    }
+    
     private var hasVideo: Bool {
-        if let videos = showDetail.videos?.results, !videos.isEmpty {
-            return true
-        }
-        
-        return false
+        return showDetail?.trailer != nil
+    }
+    
+    private var posterPath: String? {
+        return store.state.traktState.slugImages[slug]?.posterPath
+    }
+    
+    private var backgroundPath: String? {
+        return store.state.traktState.slugImages[slug]?.backgroundPath
     }
     
     private var details: [OverviewDetail] {
         return [
-            .init(title: "Airs:", detail: showDetail.lastAirDate),
-            .init(title: "First Air Date:", detail: showDetail.firstAirDate),
-            .init(title: "Number of Seasons:", detail: getNumberStringOf(showDetail.numberOfSeasons)),
-            .init(title: "Number of Episodes:", detail: getNumberStringOf(showDetail.numberOfEpisodes)),
+            .init(title: "Rating:", detail: showDetail?.certification),
+//            .init(title: "Next Air Date:", detail: showDetail.nextEpisodeToAir?.airDate),
+            .init(title: "First Air Date:", detail: showDetail?.firstAired?.fromISOtoDateString(format: "EEEE, MMMM d yyyy")),
+            .init(title: "Number of Seasons:", detail: seasons.count == 0 ? nil : "\(seasons.count)"),
+            .init(title: "Number of Episodes:", detail: getNumberStringOf(showDetail?.airedEpisodes)),
             .init(title: "Runtime:", detail: getRuntime()),
             .init(title: "Genres:", detail: getGenreList()),
         ]
@@ -70,12 +82,12 @@ struct TVDetailScrollView: View {
         ScrollView(.vertical) {
             ZStack {
                 VStack {
-                    DetailHeaderView(showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer, title: showDetail.name, posterPath: showDetail.posterPath, backdropPath: showDetail.backdropPath, itemType: .TVShow, rating: showDetail.voteAverage, hasVideo: hasVideo)
-                    DetailOverviewView(overview: showDetail.overview, details: details)
+                    DetailHeaderView(showActionSheet: $showActionSheet, showVideoPlayer: $showVideoPlayer, title: showDetail?.title ?? "", posterPath: posterPath, backdropPath: backgroundPath, itemType: .TVShow, rating: showDetail?.rating, hasVideo: hasVideo)
+                    DetailOverviewView(title: showDetail?.title, overview: showDetail?.overview, details: details, posterPath: posterPath)
                     if cast.count > 0 {
                         DetailCategoryRow(categoryTitle: "Cast") {
                             ForEach(self.cast) { cast in
-                                NavigationLink(destination: PersonDetailsView(personId: cast.id, personName: cast.name)) {
+                                NavigationLink(destination: PersonDetailsView(personDetails: cast.person)) {
                                     CastCellView(person: cast)
                                 }
                             }
@@ -84,17 +96,17 @@ struct TVDetailScrollView: View {
                     if seasons.count > 0 {
                         DetailCategoryRow(categoryTitle: "Seasons") {
                             ForEach(self.seasons) { season in
-                                NavigationLink(destination: SeasonDetailView(showId: self.showDetail.id, seasonId: season.id)) {
+                                NavigationLink(destination: SeasonDetailView(showSlug: self.slug, seasonDetails: season)) {
                                     SeasonCell(season: season)
                                 }
                             }
                         }
                     }
                     if similarShows.count > 0 {
-                        DetailCategoryRow(categoryTitle: "Similar Shows") {
+                        DetailCategoryRow(categoryTitle: "Related Shows") {
                             ForEach(self.similarShows) { show in
-                                NavigationLink(destination: TVShowDetailView(showId: show.id)) {
-                                    RoundedImageCell(title: show.name, posterPath: show.posterPath, height: CGFloat(125))
+                                NavigationLink(destination: TVShowDetailView(slug: show.slug, showIds: show.ids)) {
+                                    RoundedImageCell(title: show.title ?? "", posterPath: self.getPosterPath(for: show), height: CGFloat(125))
                                 }
                             }
                         }

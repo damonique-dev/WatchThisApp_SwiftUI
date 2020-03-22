@@ -46,6 +46,14 @@ extension TraktApiClient {
         case TV_Trending
         case TV_MostWatchedWeekly
         case TV_Anticipated
+        case TV_Seasons(slug: String)
+        case TV_Cast(slug: String)
+        case TV_Related(slug: String)
+        case TV_Details(slug: String)
+        case TV_TVSeasonEpisodes(slug: String, seasonNumber: Int)
+        
+        case Person_TVCredits(slug: String)
+        case Person_MovieCredits(slug: String)
         
         // Movie Endpoints
         case Movie_Trending
@@ -53,8 +61,15 @@ extension TraktApiClient {
         case Movie_TopGrossing // In US Box office from past weekend
         case Movie_Anticipated
         case Movie_MostWatchedWeekly
+        case Movie_Cast(slug: String)
+        case Movie_Related(slug: String)
+        case Movie_Details(slug: String)
         
-         case TraktIds(id: Int)
+        case TraktIds(id: Int)
+        
+        case Search_TV
+        case Search_Movie
+        case Search_People
         
         func path() -> String {
             switch self {
@@ -66,6 +81,22 @@ extension TraktApiClient {
                     return "/shows/watched/weekly"
                 case .TV_Anticipated:
                     return "/shows/anticipated"
+                case let .TV_Details(slug):
+                    return "/shows/\(slug)"
+                case let .TV_Seasons(slug):
+                    return "/shows/\(slug)/seasons"
+                case let .TV_Cast(slug):
+                    return "/shows/\(slug)/people"
+                case let .TV_Related(slug):
+                    return "/shows/\(slug)/related"
+                case let .TV_TVSeasonEpisodes(slug, seasonNumber):
+                    return "/shows/\(slug)/seasons/\(seasonNumber)"
+                
+                case let .Person_TVCredits(slug):
+                    return "/people/\(slug)/shows"
+                case let .Person_MovieCredits(slug):
+                    return "/people/\(slug)/movies"
+                
                 case .Movie_Trending:
                         return "/movies/trending"
                 case .Movie_Popular:
@@ -76,9 +107,27 @@ extension TraktApiClient {
                     return "/movies/anticipated"
                 case .Movie_MostWatchedWeekly:
                     return "/movies/watched/weekly"
+                case let .Movie_Details(slug):
+                   return "/movies/\(slug)"
+                case let .Movie_Cast(slug):
+                   return "/movies/\(slug)/people"
+                case let .Movie_Related(slug):
+                   return "/movies/\(slug)/related"
+                
                 case let .TraktIds(id):
                     return "/search/tmdb/\(id)"
+                
+                case .Search_TV:
+                    return "/search/show"
+                case .Search_Movie:
+                    return "/search/movie"
+                case .Search_People:
+                    return "/search/person"
             }
+        }
+        
+        static func ==(lhs: Endpoint, rhs: Endpoint) -> Bool {
+            return lhs.path() == rhs.path()
         }
     }
     
@@ -94,7 +143,7 @@ extension TraktApiClient {
             let queryItem = URLQueryItem(name: key, value: "\(value)")
             components.queryItems!.append(queryItem)
         }
-        
+                
         return components.url!.absoluteString
     }
 }

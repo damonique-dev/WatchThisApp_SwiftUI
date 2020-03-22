@@ -11,58 +11,51 @@ import UIKit
 import Combine
 
 class ImageLoaderCache {
-    class func sharedInstance() -> ImageLoaderCache {
-        struct Singleton {
-            static var sharedInstance = ImageLoaderCache()
-        }
-        return Singleton.sharedInstance
-    }
-    
+    static var sharedInstance = ImageLoaderCache()
+
+    private init() {}
+
     var loaders: NSCache<NSString, ImageLoader> = NSCache()
-            
-    func loaderFor(path: String?, size: ImageService.Size) -> ImageLoader {
+
+    func loaderFor(path: String?, size: TMDbImageSize) -> ImageLoader {
         let key = NSString(string: "\(path ?? "missing")#\(size.rawValue)")
         if let loader = loaders.object(forKey: key) {
             return loader
         } else {
-            let loader = ImageLoader(path: path, size: size)
+            let url = size.path(urlPath: path ?? "")
+            let loader = ImageLoader(url: url)
             loaders.setObject(loader, forKey: key)
             return loader
         }
     }
 }
 
-final class ImageLoader: ObservableObject {
-    let path: String?
-    let size: ImageService.Size
-    
-    var objectWillChange: AnyPublisher<UIImage?, Never> = Publishers.Sequence<[UIImage?], Never>(sequence: []).eraseToAnyPublisher()
-    
-    @Published var image: UIImage? = nil
-    
-    var cancellable: AnyCancellable?
-        
-    init(path: String?, size: ImageService.Size) {
-        self.size = size
-        self.path = path
-        
-        self.objectWillChange = $image.handleEvents(receiveSubscription: { [weak self] sub in
-            self?.loadImage()
-        }, receiveCancel: { [weak self] in
-            self?.cancellable?.cancel()
-        }).eraseToAnyPublisher()
-    }
-    
-    private func loadImage() {
-        guard let poster = path, image == nil else {
-            return
+class ImageLoader: ObservableObject {
+    var didChange = PassthroughSubject<UIImage, Never>()
+    @Published public var image: UIImage?
+
+    init(url:URL?) {
+        guard let url = url else { return }
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data else { return }
+            DispatchQueue.main.async {
+                if let image = UIImage(data: data) {
+                    self.image = image
+                    self.didChange.send(image)
+                }
+            }
         }
-        cancellable = ImageService.sharedInstance().fetchImage(urlPath: poster, size: size)
-            .receive(on: DispatchQueue.main)
-            .assign(to: \ImageLoader.image, on: self)
+        task.resume()
     }
-    
-    deinit {
-        cancellable?.cancel()
+}
+
+public enum TMDbImageSize: String, Codable {
+    case small = "https://image.tmdb.org/t/p/w154"
+    case medium = "https://image.tmdb.org/t/p/w500"
+    case cast = "https://image.tmdb.org/t/p/w185"
+    case original = "https://image.tmdb.org/t/p/original"
+
+    func path(urlPath: String) -> URL? {
+        return URL(string: rawValue)?.appendingPathComponent(urlPath)
     }
 }

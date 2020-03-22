@@ -38,6 +38,7 @@ extension TMDBClient {
         case Search_TV
         case TV_Similar(id: Int)
         case TV_Seasons_Details(id: Int, seasonNum: Int)
+        case TV_Episode_Details(id: Int, seasonNum: Int, episodeNum: Int)
         
         // People Endpoints
         case Person_Details(id: Int)
@@ -66,6 +67,8 @@ extension TMDBClient {
                     return "/search/tv"
                 case let .TV_Similar(id):
                     return "/tv/\(String(id))/similar"
+                case let .TV_Episode_Details(id, seasonNum, episodeNum):
+                    return "/tv/\(id)/season/\(seasonNum)/episode/\(episodeNum)"
                 
                 case let .Person_Details(id):
                     return "/person/\(String(id))"

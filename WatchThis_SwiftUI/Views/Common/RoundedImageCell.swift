@@ -23,19 +23,11 @@ struct RoundedImageCell: View {
                 .foregroundColor(.white)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(16)
-            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance().loaderFor(path: posterPath,
-                                                                                     size: .original))
+            ImageLoaderView(imageLoader: ImageLoaderCache.sharedInstance.loaderFor(path: posterPath,
+                                                                                   size: .original), placeholder: .poster)
                 .cornerRadius(15)
         }
         .frame(width: height * 8/11, height: height)
         .padding(8)
     }
 }
-
-#if DEBUG
-struct ShowCell_Previews: PreviewProvider {
-    static var previews: some View {
-        RoundedImageCell(title: testTVShowDetail.name, posterPath: testTVShowDetail.posterPath, height: CGFloat(200)).environmentObject(sampleStore)
-    }
-}
-#endif

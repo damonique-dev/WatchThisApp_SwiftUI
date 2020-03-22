@@ -14,7 +14,18 @@ struct ProfileView: View {
     @State var showSettings = false
     
     private var customLists: [CustomList] {
-        return Array(store.state.userState.customLists.values)
+        let lists = Array(store.state.userState.customLists.values)
+        // This handles the list migrations from TMDb to Trakt
+        for list in lists {
+            for (_, item) in list.items {
+                if let slug = store.state.traktState.tmdbIdToSlug[item.id] {
+                    if list.traktItems[slug] == nil {
+                        store.state.userState.customLists[list.id]?.traktItems[slug] = TraktListItem(slug: slug, itemType: item.itemType)
+                    }
+                }
+            }
+        }
+        return lists
     }
     
     var body: some View {
@@ -53,19 +64,25 @@ struct CustomListRow: View {
     
     lazy var computedListItems: [ListItemIdAndImagePath] = {
         var items = [ListItemIdAndImagePath]()
-        for item in Array(customList.items.values) {
+        for item in Array(customList.traktItems.values) {
             switch item.itemType {
             case .TVShow:
-                let detail = store.state.tvShowState.tvShowDetail[item.id]
-                items.append(ListItemIdAndImagePath(itemType: .TVShow, itemId: item.id, itemName:detail?.name, imagePath: detail?.posterPath))
+                if let detail = store.state.traktState.traktShows[item.slug] {
+                    let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
+                    items.append(ListItemIdAndImagePath(itemType: .TVShow, slug: item.slug, ids: detail.ids, itemName: detail.title, imagePath: posterPath))
+                }
                 break
             case .Movie:
-                let detail = store.state.movieState.movieDetails[item.id]
-                items.append(ListItemIdAndImagePath(itemType: .Movie, itemId: item.id, itemName:detail?.title, imagePath: detail?.posterPath))
+                if let detail = store.state.traktState.traktMovies[item.slug] {
+                    let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
+                    items.append(ListItemIdAndImagePath(itemType: .Movie, slug: item.slug, ids: detail.ids, itemName: detail.title, imagePath: posterPath))
+                }
                 break
             case .Person:
-                let detail = store.state.peopleState.people[item.id]
-                items.append(ListItemIdAndImagePath(itemType: .Person, itemId: item.id, itemName:detail?.name, imagePath: detail?.profilePath))
+                if let detail = store.state.traktState.people[item.slug] {
+                    let posterPath = store.state.traktState.slugImages[item.slug]?.posterPath
+                    items.append(ListItemIdAndImagePath(itemType: .Person, slug: item.slug, ids: detail.ids, itemName:detail.name, imagePath: posterPath))
+                }
                 break
             }
         }
@@ -99,22 +116,23 @@ struct CustomListRow: View {
 }
 
 struct CustomListRowCell: View {
+    @EnvironmentObject var store: Store<AppState>
     let item: ListItemIdAndImagePath
     
     var body: some View {
         VStack {
             if item.itemType == ItemType.TVShow {
-                NavigationLink(destination: TVShowDetailView(showId: item.itemId)) {
+                NavigationLink(destination: TVShowDetailView(slug: item.slug, showIds: item.ids)) {
                     RoundedImageCell(title: item.itemName ?? "", posterPath: item.imagePath, height: CGFloat(200))
                 }
             }
             if item.itemType == ItemType.Movie {
-                NavigationLink(destination: MovieDetailsView(movieId: item.itemId)) {
+                NavigationLink(destination: MovieDetailsView(slug: item.slug, movieIds: item.ids)) {
                     RoundedImageCell(title: item.itemName ?? "", posterPath: item.imagePath, height: CGFloat(200))
                 }
             }
             if item.itemType == ItemType.Person {
-                NavigationLink(destination: PersonDetailsView(personId: item.itemId, personName: item.itemName ?? "")) {
+                NavigationLink(destination: PersonDetailsView(personDetails: store.state.traktState.people[item.slug]!)) {
                     RoundedImageCell(title: item.itemName ?? "", posterPath: item.imagePath, height: CGFloat(200))
                 }
             }
@@ -124,7 +142,8 @@ struct CustomListRowCell: View {
 
 struct ListItemIdAndImagePath: Identifiable {
     let itemType: ItemType
-    let itemId: Int
+    let slug: String
+    let ids: Ids
     let itemName: String?
     let imagePath: String?
     

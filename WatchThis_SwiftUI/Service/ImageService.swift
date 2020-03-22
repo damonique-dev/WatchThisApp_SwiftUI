@@ -10,12 +10,9 @@ import UIKit
 import Combine
 
 class ImageService {
-    class func sharedInstance() -> ImageService {
-        struct Singleton {
-            static var sharedInstance = ImageService()
-        }
-        return Singleton.sharedInstance
-    }
+    static let sharedInstance = ImageService()
+    
+    private init() {}
     
     enum Size: String, Codable {
         case small = "https://image.tmdb.org/t/p/w154"
@@ -29,17 +26,18 @@ class ImageService {
     }
     
     enum ImageError: Error {
-        case decodingError(error: Error)
+        case error(error: Error)
     }
     
-    func fetchImage(urlPath: String, size: Size) -> AnyPublisher<UIImage?, Never> {
+    func fetchImage(urlPath: String, size: Size) -> AnyPublisher<UIImage?, ImageError> {
         let url = size.path(urlPath: urlPath)
         return URLSession.shared.dataTaskPublisher(for: url)
             .tryMap { (data, response) -> UIImage? in
                 return UIImage(data: data)
-        }.catch { error in
-            return Just(nil)
-        }
-        .eraseToAnyPublisher()
+            }
+            .mapError { error -> ImageError in
+                return ImageError.error(error: error)
+            }
+            .eraseToAnyPublisher()
     }
 }

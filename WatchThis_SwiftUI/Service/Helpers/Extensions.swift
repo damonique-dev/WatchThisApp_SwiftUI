@@ -39,3 +39,19 @@ extension Color {
         static let Translucent = Color(white: 1, opacity: 0.0)
     }
 }
+
+extension String {
+    func fromISOtoDateString(format: String = "EEEE, MMM d yyyy h:mm a") -> String? {
+        let trimmedIsoString = self.replacingOccurrences(of: "\\.\\d+", with: "", options: .regularExpression)
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        guard let date = isoFormatter.date(from: trimmedIsoString) else {
+            return nil
+        }
+                
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = format
+        
+        return dateFormatterPrint.string(from: date)
+    }
+}

@@ -74,7 +74,7 @@ struct AppState: FluxState, Codable {
             let (_, person) = arg
             for list in Array(userState.customLists.values) {
                 if list.traktItems.contains(where: { (id, item) in
-                    return id == person.slug && item.itemType == .TVShow
+                    return id == person.slug && item.itemType == .Person
                 }) {
                     return true
                 }
